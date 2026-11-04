@@ -1,130 +1,214 @@
 import * as XLSX from "xlsx";
-import type { Site } from "@/lib/types";
+import type { FiscalYear, Site } from "@/lib/types";
 
 type SheetRecord = Record<string, unknown>;
 
-const field = (row: SheetRecord, ...names: string[]) => {
+export type WorkbookResult = {
+  sites: Site[];
+  sheetName: string;
+  skippedRows: number;
+};
+
+export class WorkbookDataError extends Error {
+  constructor(
+    public readonly code: "empty-workbook" | "missing-project-column" | "missing-financial-columns" | "missing-projects" | "source-unavailable",
+  ) {
+    super(code);
+    this.name = "WorkbookDataError";
+  }
+}
+
+const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1100&q=85";
+const normalizeHeader = (header: string) => header.trim().replace(/\s+/g, " ").toLowerCase();
+
+function findField(row: SheetRecord, ...aliases: string[]) {
   const keys = Object.keys(row);
-  const key = names
-    .map((name) => keys.find((candidate) =>
-      candidate.trim().replace(/\s+/g, " ").toLowerCase() === name.replace(/\s+/g, " ").toLowerCase(),
-    ))
+  const key = aliases
+    .map((alias) => keys.find((candidate) => normalizeHeader(candidate) === normalizeHeader(alias)))
     .find(Boolean);
   return key ? row[key] : undefined;
-};
+}
 
-const hasField = (row: SheetRecord, ...names: string[]) =>
-  Object.keys(row).some((candidate) =>
-    names.some((name) => candidate.trim().replace(/\s+/g, " ").toLowerCase() === name.replace(/\s+/g, " ").toLowerCase()),
-  );
+function findYearColumns(headers: string[]) {
+  const years = new Map<string, { label: string; allocation?: string; release?: string; utilized?: string }>();
 
-const numberField = (row: SheetRecord, ...names: string[]) => {
-  const value = Number(field(row, ...names));
-  return Number.isFinite(value) ? value : 0;
-};
+  for (const header of headers) {
+    const normalized = header.trim().replace(/\s+/g, " ");
+    const match = normalized.match(/\b(20\d{2})\s*[-–—]\s*(20\d{2})\b/);
+    if (!match) continue;
 
-const makeId = (name: string, index: number) =>
-  `${name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "project"}-${index}`;
+    const kind = /allocat/i.test(normalized)
+      ? "allocation"
+      : /release/i.test(normalized)
+        ? "release"
+        : /utili[sz]/i.test(normalized)
+          ? "utilized"
+          : null;
+    if (!kind) continue;
 
-const categoryFor = (name: string) => {
-  const text = name.toLowerCase();
-  if (/heritage|baradari|mosque|restor/.test(text)) return "Heritage";
-  if (/museum|cultur/.test(text)) return "Culture & museums";
-  if (/eco|forest|resort/.test(text)) return "Eco tourism";
-  if (/chairlift|glass bridge|sky walk|adventure/.test(text)) return "Adventure tourism";
-  if (/app|portal|digital/.test(text)) return "Digital tourism";
-  return "Visitor infrastructure";
-};
-
-export async function parseExcelWorkbook(file: File): Promise<Site[]> {
-  if (!/\.(xlsx|xls)$/i.test(file.name)) {
-    throw new Error("unsupported-format");
-  }
-  if (file.size > 20 * 1024 * 1024) throw new Error("file-too-large");
-  const workbook = XLSX.read(await file.arrayBuffer(), { type: "array", cellDates: true });
-  const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-  if (!firstSheet) throw new Error("empty-workbook");
-
-  const records = XLSX.utils.sheet_to_json<SheetRecord>(firstSheet, { defval: null });
-  const validRecords = records.filter((row) => {
-    const name = field(row, "Name", "Project Name", "Scheme Name");
-    return typeof name === "string" && name.trim().length > 0;
-  });
-  if (!validRecords.length) throw new Error("missing-projects");
-
-  return validRecords.map((row, index) => {
-    const name = String(field(row, "Name", "Project Name", "Scheme Name")).trim();
-    const description = String(field(row, "Description") ?? name).trim();
-    const approvedCost = numberField(row, "Total Approval Cost", "Approved Cost");
-    const utilized = numberField(row, "Total Funds Utilization All Fys In Millions", "Funds Utilized");
-    const allocation = numberField(row, "Total Funds Allocation In Millions", "Allocated");
-    const release = numberField(row, "Total FD Release In Millions", "Released");
-    const sourceProgress = field(row, "Project Overall Financial Progress %", "Financial Progress");
-    const progress = sourceProgress === undefined || sourceProgress === null
-      ? (approvedCost ? utilized / approvedCost : 0)
-      : Number(sourceProgress) || 0;
-    const region = String(field(row, "Province", "Region") ?? "Region not specified");
-    const district = String(field(row, "District", "Location") ?? region);
-    const years = [
-      {
-        label: "2024–25",
-        allocation: ["Funds Allocation 2024-2025 In Millions"],
-        release: ["FD Release 2024-2025 In Millions"],
-        utilized: ["Funds Utilized 2024-2025 In Millions"],
-      },
-      {
-        label: "2025–26",
-        allocation: ["Funds Allocation 2025-2026 In Millions"],
-        release: ["FD Release 2025-2026 In Millions"],
-        utilized: ["Funds Utilized 2025-2026 In Millions"],
-      },
-      {
-        label: "2026–27",
-        allocation: ["Funds Allocation 2026-2027 In Millions"],
-        release: ["FD Release 2026-2027 In Millions"],
-        utilized: ["Funds Utilized 2026-2027 In Millions"],
-      },
-    ].filter((year) =>
-      [year.allocation, year.release, year.utilized].some((names) => hasField(row, ...names)),
-    ).map((year) => ({
-      label: year.label,
-      allocation: numberField(row, ...year.allocation),
-      release: numberField(row, ...year.release),
-      utilized: numberField(row, ...year.utilized),
-    }));
-    return {
-      id: makeId(name, index + 1),
-      code: String(field(row, "GS No", "Project ID") ?? ""),
-      name,
-      description,
-      district,
-      region,
-      category: categoryFor(name),
-      image: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1100&q=85",
-      gestationPeriod: String(field(row, "Gestation Period") ?? ""),
-      approvedCost,
-      allocated: allocation,
-      released: release,
-      utilized,
-      overallProgress: Math.max(0, Math.min(1, progress)),
-      currentYearProgress: numberField(row, "Project CFY Financial Progress %"),
-      fiscalYears: years,
-      imported: true,
+    const key = `${match[1]}-${match[2]}`;
+    const year = years.get(key) ?? {
+      label: `${match[1]}–${match[2].slice(-2)}`,
     };
-  });
-}
-
-export function readImportedSites(): Site[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const value = window.localStorage.getItem("tourism-insights:imported-sites");
-    return value ? (JSON.parse(value) as Site[]) : [];
-  } catch {
-    return [];
+    year[kind] = header;
+    years.set(key, year);
   }
+
+  return [...years.values()];
 }
 
-export function saveImportedSites(imported: Site[]) {
-  window.localStorage.setItem("tourism-insights:imported-sites", JSON.stringify(imported));
-  window.dispatchEvent(new Event("tourism-insights:imported-sites"));
+function readAmount(value: unknown): number {
+  if (typeof value === "number") return Number.isFinite(value) ? value : 0;
+  if (typeof value === "string" && value.trim()) {
+    const parsed = Number(value.replace(/,/g, "").trim());
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+  return 0;
+}
+
+function readProgress(value: unknown, utilized: number, approved: number): number {
+  if (typeof value === "string" && value.trim().endsWith("%")) {
+    const percentage = Number(value.trim().slice(0, -1));
+    if (Number.isFinite(percentage)) return Math.max(0, Math.min(1, percentage / 100));
+  }
+  if (value !== undefined && value !== null && value !== "") {
+    const reported = Number(value);
+    if (Number.isFinite(reported)) return Math.max(0, Math.min(1, reported > 1 ? reported / 100 : reported));
+  }
+  return approved > 0 ? Math.max(0, Math.min(1, utilized / approved)) : 0;
+}
+
+function stableSiteId(row: SheetRecord, name: string, district: string, index: number) {
+  const code = findField(row, "GS No");
+  if (code !== undefined && code !== null && String(code).trim()) {
+    return `scheme-${String(code).trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-")}`;
+  }
+  const projectId = findField(row, "Project ID", "Site ID", "Project Code");
+  if (projectId !== undefined && projectId !== null && String(projectId).trim()) {
+    return `project-${String(projectId).trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-")}`;
+  }
+  const slug = `${name}-${district}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  return `${slug || "project"}-${index + 1}`;
+}
+
+function identityFor(row: SheetRecord, site: Site) {
+  const gsNumber = findField(row, "GS No");
+  if (gsNumber !== undefined && gsNumber !== null && String(gsNumber).trim()) {
+    return `gs:${String(gsNumber).trim().toLowerCase()}`;
+  }
+  const projectId = findField(row, "Project ID", "Site ID", "Project Code");
+  if (projectId !== undefined && projectId !== null && String(projectId).trim()) {
+    return `id:${String(projectId).trim().toLowerCase()}`;
+  }
+  return `name:${site.name.trim().toLowerCase()}|${site.district.trim().toLowerCase()}`;
+}
+
+function toSite(
+  row: SheetRecord,
+  index: number,
+  years: ReturnType<typeof findYearColumns>,
+): Site | null {
+  const rawName = findField(row, "Name", "Project Name", "Site Name", "Scheme Name");
+  if (typeof rawName !== "string" || !rawName.trim()) return null;
+
+  const name = rawName.trim();
+  const description = String(findField(row, "Description") ?? name).trim() || name;
+  const district = String(findField(row, "District", "Location") ?? "Not specified").trim() || "Not specified";
+  const approvedCost = readAmount(findField(row, "Total Approval Cost", "Approved Cost"));
+  const allocated = readAmount(findField(row, "Total Funds Allocation In Millions", "Allocated"));
+  const released = readAmount(findField(row, "Total FD Release In Millions", "Released"));
+  const utilized = readAmount(findField(row, "Total Funds Utilization All Fys In Millions", "Funds Utilized"));
+  const fiscalYears: FiscalYear[] = years.map((year) => ({
+    label: year.label,
+    allocation: readAmount(year.allocation ? row[year.allocation] : 0),
+    release: readAmount(year.release ? row[year.release] : 0),
+    utilized: readAmount(year.utilized ? row[year.utilized] : 0),
+  }));
+  const sourceImage = findField(row, "Image", "Image URL", "Photo URL");
+  const image = typeof sourceImage === "string" && /^https:\/\/\S+$/i.test(sourceImage.trim())
+    ? sourceImage.trim()
+    : DEFAULT_IMAGE;
+  const sourceCategory = findField(row, "Category", "Project Type", "Site Type");
+
+  return {
+    id: stableSiteId(row, name, district, index),
+    projectId: String(findField(row, "Project ID") ?? ""),
+    code: String(findField(row, "GS No") ?? ""),
+    name,
+    description,
+    district,
+    region: String(findField(row, "Province", "Region") ?? "Punjab").trim() || "Punjab",
+    category: typeof sourceCategory === "string" && sourceCategory.trim() ? sourceCategory.trim() : "Tourism project",
+    image,
+    gestationPeriod: String(findField(row, "Gestation Period") ?? "").trim(),
+    approvedCost,
+    allocated,
+    released,
+    utilized,
+    overallProgress: readProgress(findField(row, "Project Overall Financial Progress %", "Financial Progress"), utilized, approvedCost),
+    currentYearProgress: readProgress(findField(row, "Project CFY Financial Progress %", "Current Year Financial Progress"), 0, 0),
+    fiscalYears,
+  };
+}
+
+function combineDuplicateRows(existing: Site, incoming: Site): Site {
+  const yearTotals = new Map(existing.fiscalYears.map((year) => [year.label, { ...year }]));
+  for (const year of incoming.fiscalYears) {
+    const total = yearTotals.get(year.label) ?? { ...year, allocation: 0, release: 0, utilized: 0 };
+    total.allocation += year.allocation;
+    total.release += year.release;
+    total.utilized += year.utilized;
+    yearTotals.set(year.label, total);
+  }
+
+  const approvedCost = existing.approvedCost + incoming.approvedCost;
+  const utilized = existing.utilized + incoming.utilized;
+  return {
+    ...existing,
+    approvedCost,
+    allocated: existing.allocated + incoming.allocated,
+    released: existing.released + incoming.released,
+    utilized,
+    overallProgress: approvedCost > 0 ? Math.max(0, Math.min(1, utilized / approvedCost)) : 0,
+    fiscalYears: [...yearTotals.values()],
+  };
+}
+
+export function parseWorkbook(buffer: ArrayBuffer | Uint8Array): WorkbookResult {
+  let workbook: XLSX.WorkBook;
+  try {
+    workbook = XLSX.read(buffer, { type: "array", cellDates: true });
+  } catch {
+    throw new WorkbookDataError("empty-workbook");
+  }
+  const sheetName = workbook.SheetNames[0];
+  const sheet = sheetName ? workbook.Sheets[sheetName] : undefined;
+  if (!sheet) throw new WorkbookDataError("empty-workbook");
+
+  const records = XLSX.utils.sheet_to_json<SheetRecord>(sheet, { defval: null });
+  const headers = records[0] ? Object.keys(records[0]) : [];
+  if (!headers.some((header) => ["name", "project name", "site name", "scheme name"].includes(normalizeHeader(header)))) {
+    throw new WorkbookDataError("missing-project-column");
+  }
+  const yearColumns = findYearColumns(headers);
+  const hasFinancialColumns = headers.some((header) =>
+    /total approval cost|approved cost|total funds allocation|total fd release|total funds utilization|financial progress/i.test(header),
+  ) || yearColumns.length > 0;
+  if (!hasFinancialColumns) throw new WorkbookDataError("missing-financial-columns");
+
+  const grouped = new Map<string, Site>();
+  let skippedRows = 0;
+  records.forEach((row, index) => {
+    const site = toSite(row, index, yearColumns);
+    if (!site) {
+      if (Object.values(row).some((value) => value !== null && value !== "")) skippedRows += 1;
+      return;
+    }
+    const identity = identityFor(row, site);
+    const existing = grouped.get(identity);
+    grouped.set(identity, existing ? combineDuplicateRows(existing, site) : site);
+  });
+
+  if (!grouped.size) throw new WorkbookDataError("missing-projects");
+  return { sites: [...grouped.values()], sheetName, skippedRows };
 }

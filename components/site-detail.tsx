@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useState } from "react";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -61,7 +61,7 @@ function ProjectDetail({ site }: { site: Site }) {
   const summary = useMemo(() => getPortfolioSummary([site]), [site]);
   return (
     <div className="page-stack">
-      <PageTopline section="Project detail" date={site.sourceUpdated ?? "Local workbook"} />
+      <PageTopline section="Project detail" date="Master workbook" />
       <Link href="/" className="back-link"><ArrowLeft size={15} /> All tourism projects</Link>
 
       <section className="detail-hero">
@@ -181,45 +181,15 @@ function ProjectDetail({ site }: { site: Site }) {
 }
 
 export function SiteDetail({ site, siteId }: { site: Site | null; siteId: string }) {
-  const savedProjects = useSyncExternalStore(
-    (onChange) => {
-      window.addEventListener("storage", onChange);
-      window.addEventListener("tourism-insights:imported-sites", onChange);
-      return () => {
-        window.removeEventListener("storage", onChange);
-        window.removeEventListener("tourism-insights:imported-sites", onChange);
-      };
-    },
-    () => window.localStorage.getItem("tourism-insights:imported-sites") ?? "[]",
-    () => "__loading__",
-  );
-  const checked = savedProjects !== "__loading__";
-  const localSite = useMemo(() => {
-    if (!checked) return null;
-    try {
-      return (JSON.parse(savedProjects) as Site[]).find((item) => item.id === siteId) ?? null;
-    } catch {
-      return null;
-    }
-  }, [checked, savedProjects, siteId]);
-  const resolved = site ?? localSite;
-  if (!resolved && !checked && !site) {
-    return (
-      <div className="page-stack">
-        <PageTopline section="Project detail" />
-        <div className="detail-loading" aria-label="Loading imported project"><span /><span /><span /></div>
-      </div>
-    );
-  }
-  if (!resolved) {
+  if (!site) {
     return (
       <div className="detail-error">
         <span className="empty-icon"><FileSpreadsheet size={22} /></span>
-        <h1>Project data isn’t available</h1>
-        <p>This project may have been removed from this browser. Return to the portfolio or import its Excel workbook again.</p>
+        <h1>Project not found in the master workbook</h1>
+        <p>Project {siteId} isn’t present in the current master dataset. Return to the portfolio to choose an available project.</p>
         <Link href="/" className="button button-primary"><ArrowLeft size={15} /> Back to projects</Link>
       </div>
     );
   }
-  return <ProjectDetail site={resolved} />;
+  return <ProjectDetail site={site} />;
 }

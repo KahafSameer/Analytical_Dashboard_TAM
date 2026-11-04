@@ -59,7 +59,7 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
         <div className="sidebar-bottom">
           <div className="sidebar-region">
             <span className="region-indicator" />
-            <div><strong>Punjab portfolio</strong><small>{siteCount} projects · 1 region</small></div>
+            <div><strong>Tourism portfolio</strong><small>{siteCount} projects in source</small></div>
             <ChevronDown size={14} />
           </div>
           <button className="profile-button" onClick={() => setSettingsOpen((open) => !open)} aria-expanded={settingsOpen}>
@@ -70,7 +70,7 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
           {settingsOpen && (
             <div className="profile-popover">
               <strong>Prototype workspace</strong>
-              <span>Source: Scheme Details · Nov 2026</span>
+              <span>Source: master Excel workbook</span>
               <span>Currency: Pakistani rupees (millions)</span>
             </div>
           )}
@@ -90,7 +90,7 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
   );
 }
 
-export function PageTopline({ section, date = "03 Nov 2026" }: { section: string; date?: string }) {
+export function PageTopline({ section, date = "Master workbook" }: { section: string; date?: string }) {
   return (
     <div className="page-topline">
       <div className="breadcrumb"><span>Workspace</span><span className="breadcrumb-separator">/</span><strong>{section}</strong></div>
