@@ -1,0 +1,3295 @@
+[
+  {
+    "id": "scheme-2414",
+    "projectId": "1e6356b7-0521-40d5-b669-5eafdb396096",
+    "code": "2414",
+    "name": "Uplifting of Kamran Baradari Lahore",
+    "description": "Uplifting of Kamran Baradari Lahore",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "31 Mar 2026 - 30 Jun 2027",
+    "approvedCost": 498.439,
+    "allocated": 50,
+    "released": 50,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 50,
+        "release": 50,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2691",
+    "projectId": "6b14fdff-0ff5-4c2e-ac85-8a142d369817",
+    "code": "2691",
+    "name": "Establishment of Museum at Hafizabad",
+    "description": "Establishment of Museum at Hafizabad, District Hafizabad",
+    "district": "Hafizabad",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2022 - 29 Jun 2027",
+    "approvedCost": 106.938,
+    "allocated": 106.934,
+    "released": 50.102999999999994,
+    "utilized": 48.552,
+    "overallProgress": 0.45402008640520675,
+    "currentYearProgress": 0.904441894771349,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 35.744,
+        "utilized": 34.784
+      },
+      {
+        "label": "2025?26",
+        "allocation": 100.833,
+        "release": 8.258,
+        "utilized": 8.25
+      },
+      {
+        "label": "2026?27",
+        "allocation": 6.101,
+        "release": 6.101,
+        "utilized": 5.518
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2692",
+    "projectId": "5aa3e3cd-7598-40bf-89dd-2e867a9de3ca",
+    "code": "2692",
+    "name": "Missing Facilities for Tourists at TDCP Patriata Chairlift Cable Car System New Murree",
+    "description": "Provision of Missing Facilities for Tourists at TDCP Patriata Chairlift Cable Car System New Murree",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2024 - 31 Dec 2026",
+    "approvedCost": 97.166,
+    "allocated": 76.605,
+    "released": 77.94,
+    "utilized": 76.604,
+    "overallProgress": 0.7883827676347693,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 50,
+        "utilized": 50
+      },
+      {
+        "label": "2025?26",
+        "allocation": 76.604,
+        "release": 27.939,
+        "utilized": 26.604
+      },
+      {
+        "label": "2026?27",
+        "allocation": 0.001,
+        "release": 0.001,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2693",
+    "projectId": "94494ff6-adb6-402a-924a-0bba42956ff0",
+    "code": "2693",
+    "name": "Feasibility Study for Construction of Sky Walk Glass Bridge at Murree",
+    "description": "Feasibility Study for Construction of Sky Walk Glass Bridge at Murree",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2024 - 01 Jul 2027",
+    "approvedCost": 72.152,
+    "allocated": 77.213,
+    "released": 64.47399999999999,
+    "utilized": 63.972,
+    "overallProgress": 0.8866282292937133,
+    "currentYearProgress": 0.9999,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 13.24,
+        "release": 0.5,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 53.973,
+        "release": 53.974,
+        "utilized": 53.973
+      },
+      {
+        "label": "2026?27",
+        "allocation": 10,
+        "release": 10,
+        "utilized": 9.999
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2694",
+    "projectId": "9e72cfd6-f8f5-4426-99f3-d284f10813d1",
+    "code": "2694",
+    "name": "Heritage Sites of District Gujrat",
+    "description": "Preservation/Restoration and Development of Heritage Sites of District Gujrat (Old Water Tank Bani Bangla, Kharian,Historic Mosque at Mouza Qila Dar District Gujrat etc.)",
+    "district": "Gujrat",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2027",
+    "approvedCost": 135.271,
+    "allocated": 30.336,
+    "released": 35.168,
+    "utilized": 30.33,
+    "overallProgress": 0.2242165726578498,
+    "currentYearProgress": 0.9997,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 10.336,
+        "release": 15.168,
+        "utilized": 10.336
+      },
+      {
+        "label": "2026?27",
+        "allocation": 20,
+        "release": 20,
+        "utilized": 19.994
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2695",
+    "projectId": "60f20307-89fb-441e-8390-97639c09cb63",
+    "code": "2695",
+    "name": "Magnificent Punjab App & Portal",
+    "description": "Development of Magnificent Punjab – Tourism App & Portal",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 283.527,
+    "allocated": 51.5,
+    "released": 51.5,
+    "utilized": 31.5,
+    "overallProgress": 0.11110053010824367,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 31.5,
+        "release": 31.5,
+        "utilized": 31.5
+      },
+      {
+        "label": "2026?27",
+        "allocation": 20,
+        "release": 20,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2696",
+    "projectId": "617001c4-7f95-4240-ac7f-de59e0c2c048",
+    "code": "2696",
+    "name": "Upgradation of Tourist Rest House Dhanoi",
+    "description": "Improvement, Revitalization, and Upgradation of Tourist Rest House Dhanoi, Kotli Sattian , District Murree",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2028",
+    "approvedCost": 195.847,
+    "allocated": 105.222,
+    "released": 105.229,
+    "utilized": 87.164,
+    "overallProgress": 0.4450617063319836,
+    "currentYearProgress": 0.6980602006688964,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 45.422,
+        "release": 45.429,
+        "utilized": 45.42
+      },
+      {
+        "label": "2026?27",
+        "allocation": 59.8,
+        "release": 59.8,
+        "utilized": 41.744
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2697",
+    "projectId": "266d74e7-8e2b-4624-a2b4-03fb6cebe6a6",
+    "code": "2697",
+    "name": "Land Acquisition for Tourist Resort at Bhurban Murree.",
+    "description": "Land Acquisition and Development of Eco-Friendly Tourist Resort at Bhurban Murree.",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 01 Jul 2028",
+    "approvedCost": 400,
+    "allocated": 39.68,
+    "released": 57.031000000000006,
+    "utilized": 39.678,
+    "overallProgress": 0.09919499999999999,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 39.678,
+        "release": 57.029,
+        "utilized": 39.678
+      },
+      {
+        "label": "2026?27",
+        "allocation": 0.002,
+        "release": 0.002,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2698",
+    "projectId": "81da3f8d-9b4d-4e8d-b519-385e2004fc17",
+    "code": "2698",
+    "name": "Kashmir Point Adventure Track, Murree",
+    "description": "Establishment of Kashmir Point Adventure Track, Murree",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2028",
+    "approvedCost": 234.002,
+    "allocated": 111.458,
+    "released": 111.458,
+    "utilized": 94.17699999999999,
+    "overallProgress": 0.40246237211647756,
+    "currentYearProgress": 0.42396666666666666,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 81.458,
+        "release": 81.458,
+        "utilized": 81.458
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 12.719
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2699",
+    "projectId": "bfa75301-d059-4b04-9c2e-4e1788ddd813",
+    "code": "2699",
+    "name": "Paragliding Club at Chewra Hill Top, Kotli Sattain, District Murree",
+    "description": "Establishment of Paragliding Club at Chewra Hill Top, Kotli Sattain, District Murree",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2028",
+    "approvedCost": 423.927,
+    "allocated": 189.989,
+    "released": 190,
+    "utilized": 139.57,
+    "overallProgress": 0.32923121197753386,
+    "currentYearProgress": 0.4397888888888889,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 99.989,
+        "release": 100,
+        "utilized": 99.989
+      },
+      {
+        "label": "2026?27",
+        "allocation": 90,
+        "release": 90,
+        "utilized": 39.581
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2700",
+    "projectId": "e428b3e0-569b-40a5-8e0b-5b86856198c4",
+    "code": "2700",
+    "name": "Development of Tourist Resorts along with Tourist Activities at Kotli Sattian",
+    "description": "Master Planning for Development of Tourist Resorts along with Tourist Activities at Kotli Sattian, District Murree",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 63.5,
+    "allocated": 10,
+    "released": 10,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 10,
+        "release": 10,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2701",
+    "projectId": "9fea1054-d50e-4a9d-a864-9a22ee5e95f1",
+    "code": "2701",
+    "name": "Chair Lift System and allied Infrastructure at Kotli Sattian",
+    "description": "Establishment of Chair Lift System and allied Infrastructure at Kotli Sattian, District Murree",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 3189.495,
+    "allocated": 1091.475,
+    "released": 1091.475,
+    "utilized": 74.925,
+    "overallProgress": 0.023491179638155883,
+    "currentYearProgress": 0.003382352941176471,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 71.475,
+        "release": 71.475,
+        "utilized": 71.475
+      },
+      {
+        "label": "2026?27",
+        "allocation": 1020,
+        "release": 1020,
+        "utilized": 3.45
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2702",
+    "projectId": "bcfa9d55-b430-46ee-b88d-8c1f2efbe947",
+    "code": "2702",
+    "name": "Soft Wheel Train for Murree and Eco- Friendly Electric Carts for Various Tourist Site",
+    "description": "Procurement of Soft Wheel Train for Murree and Eco- Friendly Electric Carts for Various Tourist Site",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 500,
+    "allocated": 176.56,
+    "released": 177,
+    "utilized": 176.56,
+    "overallProgress": 0.35312,
+    "currentYearProgress": 1,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 156.56,
+        "release": 157,
+        "utilized": 156.56
+      },
+      {
+        "label": "2026?27",
+        "allocation": 20,
+        "release": 20,
+        "utilized": 20
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2703",
+    "projectId": "47bb0d3d-2344-498f-9e93-75d2c9df9f61",
+    "code": "2703",
+    "name": "Feasibility Study for Installation of Chairlift and Cable Car Lakot to Pindi Point Murree",
+    "description": "Feasibility Study for Installation of Chairlift and Cable Car Lakot to Pindi Point Murree",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 89.226,
+    "allocated": 76.862,
+    "released": 76.2862,
+    "utilized": 76.86099999999999,
+    "overallProgress": 0.8614193172393696,
+    "currentYearProgress": 0.9999,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 66.862,
+        "release": 66.2862,
+        "utilized": 66.862
+      },
+      {
+        "label": "2026?27",
+        "allocation": 10,
+        "release": 10,
+        "utilized": 9.999
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2704",
+    "projectId": "08279748-9582-4f40-8885-6433c6efcfbb",
+    "code": "2704",
+    "name": "Dak Banglows in District Jhelum",
+    "description": "Preservation and Restoration of Dak Banglows in District Jhelum",
+    "district": "Rawalpindi",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2027",
+    "approvedCost": 137.426,
+    "allocated": 68.46000000000001,
+    "released": 69,
+    "utilized": 68.457,
+    "overallProgress": 0.49813717928194085,
+    "currentYearProgress": 0.99985,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 48.46,
+        "release": 49,
+        "utilized": 48.46
+      },
+      {
+        "label": "2026?27",
+        "allocation": 20,
+        "release": 20,
+        "utilized": 19.997
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2705",
+    "projectId": "dec5a64e-5a60-4e60-b98f-d3138661c8e8",
+    "code": "2705",
+    "name": "Water Sport, Parasailing and Speed Boats at Dharabi Lake",
+    "description": "Provision of Water Sport, Parasailing and Speed Boats at Dharabi Lake, District Chakwal",
+    "district": "Chakwal",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 300,
+    "allocated": 261.24199999999996,
+    "released": 261.243,
+    "utilized": 261.24199999999996,
+    "overallProgress": 0.8708066666666665,
+    "currentYearProgress": 1,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 241.242,
+        "release": 241.243,
+        "utilized": 241.242
+      },
+      {
+        "label": "2026?27",
+        "allocation": 20,
+        "release": 20,
+        "utilized": 20
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2706",
+    "projectId": "6ffe24db-b2a0-42a6-937d-0224f65a1763",
+    "code": "2706",
+    "name": "Upgradation of Tourist Rest House Dhok Tallian, Dharabi Lake and Lakhwal Dam, District Chakwal",
+    "description": "Improvement, Revitalization, and Upgradation of Tourist Rest House Dhok Tallian, Tourist Rest House Dharabi Lake and Tourist Rest House Lakhwal Dam, District Chakwal",
+    "district": "Chakwal",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2028",
+    "approvedCost": 258.432,
+    "allocated": 93.39699999999999,
+    "released": 134,
+    "utilized": 92.396,
+    "overallProgress": 0.3575253838533928,
+    "currentYearProgress": 0.9666333333333333,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 63.397,
+        "release": 104,
+        "utilized": 63.397
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 28.999
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2707",
+    "projectId": "ceedf9ee-65e4-4b18-b81d-6068969a4f15",
+    "code": "2707",
+    "name": "Tourist Infrastructure at Neela Wahn and Swaik (Khandoa) Lake Tehsil Kallar Kahar",
+    "description": "Establishment of Tourist Infrastructure at Neela Wahn and Swaik (Khandoa) Lake Tehsil Kallar Kahar, District Chakwal.",
+    "district": "Chakwal",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2028",
+    "approvedCost": 315.265,
+    "allocated": 85.976,
+    "released": 85.976,
+    "utilized": 83.75399999999999,
+    "overallProgress": 0.2656622206714986,
+    "currentYearProgress": 0.9259333333333333,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 55.976,
+        "release": 55.976,
+        "utilized": 55.976
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 27.778
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2708",
+    "projectId": "8e88d54c-cfc1-4d60-a5b0-2e6103cb6f41",
+    "code": "2708",
+    "name": "Development of Historical Sites of District Jhelum (Ancient Tilla Jogian Temples & Historic Stepped Well Dina) Distt. Jhelum",
+    "description": "Preservation/Restoration and Development of Historical Sites of District Jhelum (Ancient Tilla Jogian Temples & Historic Stepped Well Dina) Distt. Jhelum",
+    "district": "Jhelum",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2028",
+    "approvedCost": 254.496,
+    "allocated": 110,
+    "released": 110,
+    "utilized": 106.045,
+    "overallProgress": 0.41668631334087763,
+    "currentYearProgress": 0.6045,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 100,
+        "release": 100,
+        "utilized": 100
+      },
+      {
+        "label": "2026?27",
+        "allocation": 10,
+        "release": 10,
+        "utilized": 6.045
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2709",
+    "projectId": "156fe7e8-0776-44f1-a4dd-b4c9db4d602f",
+    "code": "2709",
+    "name": "Heritage Conservation of Old Town Bhera",
+    "description": "Heritage Conservation of Old Town Bhera for the Promotion of Tourism",
+    "district": "Sargodha",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2027",
+    "approvedCost": 737.631,
+    "allocated": 94.536,
+    "released": 95,
+    "utilized": 64.532,
+    "overallProgress": 0.08748547715592213,
+    "currentYearProgress": 0.33324444444444445,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 49.536,
+        "release": 50,
+        "utilized": 49.536
+      },
+      {
+        "label": "2026?27",
+        "allocation": 45,
+        "release": 45,
+        "utilized": 14.996
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2710",
+    "projectId": "35f489e8-ce10-437b-bdf5-38afe52df25d",
+    "code": "2710",
+    "name": "Cable Car for Tourists at River Indus in Kala Bagh, Mianwali",
+    "description": "Design and Establishment of Cable Car for Tourists at River Indus in Kala Bagh, Mianwali",
+    "district": "Mianwali",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2024 - 31 Dec 2026",
+    "approvedCost": 81.571,
+    "allocated": 71.243,
+    "released": 76.244,
+    "utilized": 71.241,
+    "overallProgress": 0.8733618565421535,
+    "currentYearProgress": 0.9997999999999999,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 61.243,
+        "release": 66.244,
+        "utilized": 61.243
+      },
+      {
+        "label": "2026?27",
+        "allocation": 10,
+        "release": 10,
+        "utilized": 9.998
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2711",
+    "projectId": "961a2f6c-2dc5-4821-a6d3-d0fc8583990f",
+    "code": "2711",
+    "name": "Maharaja Ranjeet Singh Museum",
+    "description": "Development of Maharaja Ranjeet Singh Museum at Gujranwala",
+    "district": "Gujranwala",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2024 - 29 Jun 2027",
+    "approvedCost": 120,
+    "allocated": 102.44200000000001,
+    "released": 71.441,
+    "utilized": 57.429,
+    "overallProgress": 0.47857500000000003,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 34.008,
+        "release": 23.038,
+        "utilized": 23.028
+      },
+      {
+        "label": "2025?26",
+        "allocation": 57.429,
+        "release": 37.398,
+        "utilized": 34.401
+      },
+      {
+        "label": "2026?27",
+        "allocation": 11.005,
+        "release": 11.005,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2712",
+    "projectId": "9632f75f-268b-415a-a130-3e5e494c95a9",
+    "code": "2712",
+    "name": "Development of Historical Sites of Gujranwala (Ancient Lodhi Mosque, Dhonkal Baoili, Dak Choki, Jain Mandir etc)",
+    "description": "Preservation/Restoration and Development of Historical Sites of Gujranwala (Ancient Lodhi Mosque, Dhonkal Baoili, Dak Choki, Jain Mandir etc)",
+    "district": "Gujranwala",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 01 Jul 2028",
+    "approvedCost": 173.452,
+    "allocated": 54.805,
+    "released": 55,
+    "utilized": 54.799,
+    "overallProgress": 0.3159317851624657,
+    "currentYearProgress": 0.9995999999999999,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 39.805,
+        "release": 40,
+        "utilized": 39.805
+      },
+      {
+        "label": "2026?27",
+        "allocation": 15,
+        "release": 15,
+        "utilized": 14.994
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2713",
+    "projectId": "2acd0ad8-f61e-450a-a5c5-08edb32e432c",
+    "code": "2713",
+    "name": "Digitalization of ITHM and Provision of Missing Facilities Lahore",
+    "description": "Strengthening and Digitalization of ITHM and Provision of Missing Facilities Lahore",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2024 - 31 Dec 2026",
+    "approvedCost": 86.681,
+    "allocated": 89.104,
+    "released": 78.761,
+    "utilized": 66.37599999999999,
+    "overallProgress": 0.765750279761424,
+    "currentYearProgress": 0.9182666666666666,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 21.502,
+        "release": 15,
+        "utilized": 5.872
+      },
+      {
+        "label": "2025?26",
+        "allocation": 52.602,
+        "release": 48.761,
+        "utilized": 46.73
+      },
+      {
+        "label": "2026?27",
+        "allocation": 15,
+        "release": 15,
+        "utilized": 13.774
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2714",
+    "projectId": "a8d31702-ea38-41ec-b1f8-ba8fd1a98319",
+    "code": "2714",
+    "name": "Business Development Cell and IT Strengthening of TAM Department",
+    "description": "Establishment of Business Development Cell and IT Strengthening of TAM Department",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2024 - 30 Jun 2027",
+    "approvedCost": 263.87,
+    "allocated": 176.33800000000002,
+    "released": 167.803,
+    "utilized": 125.05300000000001,
+    "overallProgress": 0.4739189752529655,
+    "currentYearProgress": 0.49552727272727276,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 63.539,
+        "release": 56.036,
+        "utilized": 43.371
+      },
+      {
+        "label": "2025?26",
+        "allocation": 97.799,
+        "release": 56.767,
+        "utilized": 54.428
+      },
+      {
+        "label": "2026?27",
+        "allocation": 15,
+        "release": 55,
+        "utilized": 27.254
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2715",
+    "projectId": "df2574b2-32c4-4d35-a312-433f22869b2a",
+    "code": "2715",
+    "name": "Establishment of Theme Park in Lahore Division",
+    "description": "Feasibility Study for Establishment of Theme Park in Lahore Division",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 128.536,
+    "allocated": 70.782,
+    "released": 71.165,
+    "utilized": 70.282,
+    "overallProgress": 0.5467884483724403,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 70.282,
+        "release": 70.665,
+        "utilized": 70.282
+      },
+      {
+        "label": "2026?27",
+        "allocation": 0.5,
+        "release": 0.5,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2716",
+    "projectId": "0ae819f4-71ab-4d0e-a447-e32c8aba45bd",
+    "code": "2716",
+    "name": "Tourism Complex and Institute of Tourism and Hotel Management, Lahore.",
+    "description": "Revamping and Rehabilitation of Tourism Complex and Institute of Tourism and Hotel Management, Lahore.",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 300,
+    "allocated": 108.579,
+    "released": 99.19999999999999,
+    "utilized": 97.79499999999999,
+    "overallProgress": 0.3259833333333333,
+    "currentYearProgress": 0.9847518282246772,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 47.163,
+        "release": 47.784,
+        "utilized": 47.163
+      },
+      {
+        "label": "2026?27",
+        "allocation": 61.416,
+        "release": 51.416,
+        "utilized": 50.632
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2717",
+    "projectId": "e5031f68-367c-4cd9-a71b-948eb48e48b9",
+    "code": "2717",
+    "name": "Establishment of Program Management Unit",
+    "description": "Establishment of Program Management Unit for Punjab Tourism Rehabilitation and Revamping Project",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2028",
+    "approvedCost": 789.549,
+    "allocated": 191.168,
+    "released": 204.228,
+    "utilized": 137.513,
+    "overallProgress": 0.17416651784753068,
+    "currentYearProgress": 0.4358610567514677,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 92.968,
+        "release": 102.028,
+        "utilized": 92.968
+      },
+      {
+        "label": "2026?27",
+        "allocation": 98.2,
+        "release": 102.2,
+        "utilized": 44.545
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2718",
+    "projectId": "bbb60492-7e8e-4106-80f9-615438b0f7e5",
+    "code": "2718",
+    "name": "Office Building, Directorate General of Archaeology, Lahore",
+    "description": "Construction of Office Building, Directorate General of Archaeology, Lahore",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2027",
+    "approvedCost": 556.717,
+    "allocated": 85.214,
+    "released": 85.21600000000001,
+    "utilized": 82.324,
+    "overallProgress": 0.14787405450165883,
+    "currentYearProgress": 0.8074232025054975,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 70.207,
+        "release": 70.209,
+        "utilized": 70.207
+      },
+      {
+        "label": "2026?27",
+        "allocation": 15.007,
+        "release": 15.007,
+        "utilized": 12.117
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2719",
+    "projectId": "936eca84-0fe8-40a8-b4f2-7b7e816156b6",
+    "code": "2719",
+    "name": "Development of Tomb of Nadra Begum and Tomb of Ali Mardan, Lahore",
+    "description": "Preservation/Restoration and Development of Tomb of Nadra Begum and Tomb of Ali Mardan, Lahore",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 510.104,
+    "allocated": 173.697,
+    "released": 173.766,
+    "utilized": 166.31900000000002,
+    "overallProgress": 0.32604919781064257,
+    "currentYearProgress": 0.7540666666666667,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 143.697,
+        "release": 143.766,
+        "utilized": 143.697
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 22.622
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2720",
+    "projectId": "c87da6f9-777e-4b1b-a412-7f6d620de40c",
+    "code": "2720",
+    "name": "Sher Singh Baradari",
+    "description": "Conservation and Development of Sher Singh Baradari, District Lahore",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 271.234,
+    "allocated": 72.554,
+    "released": 43.024,
+    "utilized": 37.894999999999996,
+    "overallProgress": 0.13971331027820996,
+    "currentYearProgress": 0.6893999999999999,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 27.554,
+        "release": 28.024,
+        "utilized": 27.554
+      },
+      {
+        "label": "2026?27",
+        "allocation": 45,
+        "release": 15,
+        "utilized": 10.341
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2721",
+    "projectId": "470bd808-0b09-4e7e-ab02-e0747e85d6fd",
+    "code": "2721",
+    "name": "World Heritage Site of Harappa and Hiran Minar",
+    "description": "Preparation of Dossier of Tentative World Heritage Site of Harappa and Hiran Minar",
+    "district": "Sheikhupura",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2024 - 29 Jun 2027",
+    "approvedCost": 15.3,
+    "allocated": 5.573,
+    "released": 5.3,
+    "utilized": 2.272,
+    "overallProgress": 0.14849673202614377,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0.301,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 2.272,
+        "release": 2.3,
+        "utilized": 2.272
+      },
+      {
+        "label": "2026?27",
+        "allocation": 3,
+        "release": 3,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2722",
+    "projectId": "9761da0e-da3f-4698-af93-0564e0800ce4",
+    "code": "2722",
+    "name": "Restoration of Sheikhupura Fort",
+    "description": "Preservation and Restoration of Sheikhupura Fort, District Sheikhupura",
+    "district": "Sheikhupura",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2028",
+    "approvedCost": 785.438,
+    "allocated": 168.647,
+    "released": 169.8,
+    "utilized": 168.64,
+    "overallProgress": 0.21470822649273397,
+    "currentYearProgress": 0.9898679867986798,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 138.647,
+        "release": 139.5,
+        "utilized": 138.647
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30.3,
+        "utilized": 29.993
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2723",
+    "projectId": "f44f7160-b73f-4501-9687-074a80d01f59",
+    "code": "2723",
+    "name": "Up-gradation of Rest House & Auditorium at Harappa Museum Sahiwal",
+    "description": "Up-gradation of Rest House & Auditorium at Harappa Museum Sahiwal",
+    "district": "Sahiwal",
+    "region": "Punjab",
+    "gestationPeriod": "29 Jan 2025 - 30 Jun 2027",
+    "approvedCost": 57.834,
+    "allocated": 44.885999999999996,
+    "released": 42.022999999999996,
+    "utilized": 34.204,
+    "overallProgress": 0.5914168136390359,
+    "currentYearProgress": 0.553,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 30.886,
+        "release": 28.023,
+        "utilized": 26.462
+      },
+      {
+        "label": "2026?27",
+        "allocation": 14,
+        "release": 14,
+        "utilized": 7.742
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2724",
+    "projectId": "88af682d-5124-42dc-927d-3115da4a7c60",
+    "code": "2724",
+    "name": "Preservation of Historical Sites, District Pakpattan (Dhaki Area, Malka Hans, Waris Shah Mosque etc.)",
+    "description": "Preservation of Historical Sites, District Pakpattan (Dhaki Area, Malka Hans, Waris Shah Mosque etc.)",
+    "district": "Pakpattan",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2027",
+    "approvedCost": 624.7,
+    "allocated": 75.77799999999999,
+    "released": 79.05799999999999,
+    "utilized": 75.77199999999999,
+    "overallProgress": 0.12129342084200415,
+    "currentYearProgress": 0.9998,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 45.778,
+        "release": 49.058,
+        "utilized": 45.778
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 29.994
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2725",
+    "projectId": "42c7fa4d-7f02-4450-92fe-bd3d63b8c5ba",
+    "code": "2725",
+    "name": "Upgradation of TDCP Tourist Resort Kot Mithan",
+    "description": "Improvement, Revitalization, and Upgradation of TDCP Tourist Resort Kot Mithan, District Rajanpur",
+    "district": "Rajanpur",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2028",
+    "approvedCost": 244.789,
+    "allocated": 162.382,
+    "released": 162.494,
+    "utilized": 153.097,
+    "overallProgress": 0.6254243450481844,
+    "currentYearProgress": 0.6798275862068965,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 133.382,
+        "release": 133.494,
+        "utilized": 133.382
+      },
+      {
+        "label": "2026?27",
+        "allocation": 29,
+        "release": 29,
+        "utilized": 19.715
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2726",
+    "projectId": "841067bd-97a2-452a-ae1e-12d866e8793a",
+    "code": "2726",
+    "name": "Development of Tourist Resort at Mari Top",
+    "description": "Development of Tourist Resort at Mari Top ,District Rajanpur.",
+    "district": "Rajanpur",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2028",
+    "approvedCost": 400,
+    "allocated": 35.367000000000004,
+    "released": 35.367000000000004,
+    "utilized": 33.03,
+    "overallProgress": 0.08257500000000001,
+    "currentYearProgress": 0.7875454545454545,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 24.367,
+        "release": 24.367,
+        "utilized": 24.367
+      },
+      {
+        "label": "2026?27",
+        "allocation": 11,
+        "release": 11,
+        "utilized": 8.663
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2727",
+    "projectId": "6fae2888-c537-454f-a5bb-085916ca0eab",
+    "code": "2727",
+    "name": "Preservation of Mouj Garh Fort",
+    "description": "Conservation and Preservation of Mouj Garh Fort, District Bahawalpur",
+    "district": "Bahawalpur",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2028",
+    "approvedCost": 798.25,
+    "allocated": 190.599,
+    "released": 203.5,
+    "utilized": 184.48499999999999,
+    "overallProgress": 0.23111180707798307,
+    "currentYearProgress": 0.5687142857142857,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 160.599,
+        "release": 161.5,
+        "utilized": 160.599
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 42,
+        "utilized": 23.886
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2728",
+    "projectId": "d4a1456c-bec9-43fb-8521-1b454a2775f6",
+    "code": "2728",
+    "name": "Preservation of Din Garh Fort",
+    "description": "Conservation/Preservation of Din Garh Fort, District Bahawalpur",
+    "district": "Bahawalpur",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2028",
+    "approvedCost": 618.848,
+    "allocated": 156.917,
+    "released": 160,
+    "utilized": 135.971,
+    "overallProgress": 0.21971631159832464,
+    "currentYearProgress": 0.3018,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 126.917,
+        "release": 130,
+        "utilized": 126.917
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 9.054
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2729",
+    "projectId": "33c302f1-3a9f-4c55-819a-f02d5e652f4d",
+    "code": "2729",
+    "name": "Restoration of Marot Fort",
+    "description": "Conservation/Preservation and Restoration of Marot Fort, District Bahawalpur",
+    "district": "Bahawalpur",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 198.076,
+    "allocated": 53.909,
+    "released": 43.909,
+    "utilized": 26.503999999999998,
+    "overallProgress": 0.1338072255094004,
+    "currentYearProgress": 0.12975,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 23.909,
+        "release": 23.909,
+        "utilized": 23.909
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 20,
+        "utilized": 2.595
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2730",
+    "projectId": "5ff5dce2-0e4e-4463-bd06-bb74a3fe16d5",
+    "code": "2730",
+    "name": "Preservation of Phulara Fort",
+    "description": "Conservation and Preservation of Phulara Fort, District Bahawalnagar",
+    "district": "Bahawalnagar",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2028",
+    "approvedCost": 569.725,
+    "allocated": 167.353,
+    "released": 170,
+    "utilized": 147.953,
+    "overallProgress": 0.2596919566457501,
+    "currentYearProgress": 0.35333333333333333,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 137.353,
+        "release": 140,
+        "utilized": 137.353
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 10.6
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2731",
+    "projectId": "f497ba08-2732-421b-ae05-b6bd0b43152e",
+    "code": "2731",
+    "name": "Museum at Umar Hayat Mahal",
+    "description": "Conservation, Restoration and Development of Museum at Umar Hayat Mahal, Chiniot",
+    "district": "Chiniot",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2024 - 30 Jun 2028",
+    "approvedCost": 143.469,
+    "allocated": 55.008,
+    "released": 49.499,
+    "utilized": 48.155,
+    "overallProgress": 0.3356474220911835,
+    "currentYearProgress": 0.7414,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 5.56,
+        "release": 4.5,
+        "utilized": 4.5
+      },
+      {
+        "label": "2025?26",
+        "allocation": 44.448,
+        "release": 39.999,
+        "utilized": 39.948
+      },
+      {
+        "label": "2026?27",
+        "allocation": 5,
+        "release": 5,
+        "utilized": 3.707
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2732",
+    "projectId": "b171acf1-9824-4da3-bde7-2bc93da12291",
+    "code": "2732",
+    "name": "Upgradation of Public Facilities and Illumination of Important Historical Monuments/ Sites of Punjab",
+    "description": "Upgradation of Public Facilities and Illumination of Important Historical Monuments/ Sites of Punjab",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2019 - 29 Jun 2027",
+    "approvedCost": 282.967,
+    "allocated": 281.106,
+    "released": 199.36200000000002,
+    "utilized": 142.517,
+    "overallProgress": 0.5036523693575576,
+    "currentYearProgress": 0.3327647867950481,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 25,
+        "release": 24.844,
+        "utilized": 17.099
+      },
+      {
+        "label": "2025?26",
+        "allocation": 183.406,
+        "release": 101.818,
+        "utilized": 101.226
+      },
+      {
+        "label": "2026?27",
+        "allocation": 72.7,
+        "release": 72.7,
+        "utilized": 24.192
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2733",
+    "projectId": "bebcd7a0-35f3-4047-b055-885d80fc7c3a",
+    "code": "2733",
+    "name": "Capacity Building of Directorate General of Archaeology",
+    "description": "Capacity Building of Directorate General of Archaeology",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2022 - 28 Jun 2027",
+    "approvedCost": 413.862,
+    "allocated": 182.05200000000002,
+    "released": 150.897,
+    "utilized": 131.373,
+    "overallProgress": 0.3174318975890514,
+    "currentYearProgress": 0.8759162909006821,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 40.447,
+        "release": 40.275,
+        "utilized": 38.721
+      },
+      {
+        "label": "2025?26",
+        "allocation": 55.615,
+        "release": 24.132,
+        "utilized": 16.894
+      },
+      {
+        "label": "2026?27",
+        "allocation": 85.99,
+        "release": 86.49,
+        "utilized": 75.758
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2734",
+    "projectId": "feb44d3f-490c-49b6-8862-5172f069419f",
+    "code": "2734",
+    "name": "Eco Friendly Tourists Facilities in Punjab",
+    "description": "Designing, Promoting and Implementing different Eco Friendly Tourists Facilities in Punjab",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2024 - 30 Jun 2027",
+    "approvedCost": 250,
+    "allocated": 399.24,
+    "released": 290.714,
+    "utilized": 225.76099999999997,
+    "overallProgress": 0.9030439999999998,
+    "currentYearProgress": 0.7312666666666666,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 165.421,
+        "release": 110.299,
+        "utilized": 63.968
+      },
+      {
+        "label": "2025?26",
+        "allocation": 203.819,
+        "release": 150.415,
+        "utilized": 139.855
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 21.938
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2735",
+    "projectId": "322a6c65-b4fb-4676-811f-aba7462515b6",
+    "code": "2735",
+    "name": "Digital Mapping of Tourism Sites in Punjab",
+    "description": "Digital Mapping of Tourism Sites in Punjab",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2024 - 30 Jun 2026",
+    "approvedCost": 45.2,
+    "allocated": 64.401,
+    "released": 45.2,
+    "utilized": 38.018,
+    "overallProgress": 0.8411061946902655,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 22,
+        "release": 22,
+        "utilized": 22
+      },
+      {
+        "label": "2025?26",
+        "allocation": 38.018,
+        "release": 18.817,
+        "utilized": 16.018
+      },
+      {
+        "label": "2026?27",
+        "allocation": 4.383,
+        "release": 4.383,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2736",
+    "projectId": "bc62db53-34f9-46f3-aaa8-2133893db885",
+    "code": "2736",
+    "name": "Tourism Promotion through Events, Marketing, Branding and Participation in International Expos / Fairs",
+    "description": "Tourism Promotion through Events, Marketing, Branding and Participation in International Expos / Fairs",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 321,
+    "allocated": 290.173,
+    "released": 291.028,
+    "utilized": 276.724,
+    "overallProgress": 0.8620685358255451,
+    "currentYearProgress": 0.789859375,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 226.173,
+        "release": 227.028,
+        "utilized": 226.173
+      },
+      {
+        "label": "2026?27",
+        "allocation": 64,
+        "release": 64,
+        "utilized": 50.551
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2737",
+    "projectId": "b9b17464-36a8-4a5b-bf16-11cc93562b0c",
+    "code": "2737",
+    "name": "Land Acquisition at Various Sites of Punjab",
+    "description": "Land Acquisition at Various Sites of Punjab for Development of Tourists Facilitation Infrastructure",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 1000,
+    "allocated": 497.20300000000003,
+    "released": 497.204,
+    "utilized": 497.103,
+    "overallProgress": 0.497103,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 497.103,
+        "release": 497.104,
+        "utilized": 497.103
+      },
+      {
+        "label": "2026?27",
+        "allocation": 0.1,
+        "release": 0.1,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2738",
+    "projectId": "59e4b3d0-8c9e-4b11-873b-d2ec7c03f425",
+    "code": "2738",
+    "name": "Establishment of Program Management Unit for Planning, Designing and Implementation of Tourism Promotion and Business Development Plan including IT Interventions",
+    "description": "Establishment of Program Management Unit for Planning, Designing and Implementation of Tourism Promotion and Business Development Plan including IT Interventions",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 531.605,
+    "allocated": 354.962,
+    "released": 380.46,
+    "utilized": 303.605,
+    "overallProgress": 0.5711101287610162,
+    "currentYearProgress": 0.6784157795867252,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 195.262,
+        "release": 220.76,
+        "utilized": 195.262
+      },
+      {
+        "label": "2026?27",
+        "allocation": 159.7,
+        "release": 159.7,
+        "utilized": 108.343
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2739",
+    "projectId": "31829785-67db-4f9f-9ce6-ee4cec993c64",
+    "code": "2739",
+    "name": "Establishment of Punjab Tourism Force",
+    "description": "Establishment of Punjab Tourism Force",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 393.18,
+    "allocated": 248.9,
+    "released": 261.341,
+    "utilized": 232.643,
+    "overallProgress": 0.591695915356834,
+    "currentYearProgress": 0.4581,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 218.9,
+        "release": 231.341,
+        "utilized": 218.9
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 13.743
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2740",
+    "projectId": "534b5077-da8a-4c3e-a05f-c1d4dc45c4a5",
+    "code": "2740",
+    "name": "Establishment of Salt Range Tourist Trail",
+    "description": "Establishment of Salt Range Tourist Trail",
+    "district": "Multiple District",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 300,
+    "allocated": 50.685,
+    "released": 50.949,
+    "utilized": 48.399,
+    "overallProgress": 0.16133,
+    "currentYearProgress": 0.8562173721617712,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 34.786,
+        "release": 35.05,
+        "utilized": 34.786
+      },
+      {
+        "label": "2026?27",
+        "allocation": 15.899,
+        "release": 15.899,
+        "utilized": 13.613
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2741",
+    "projectId": "74fe43f0-c86c-44c7-a8f8-c401a8cda79b",
+    "code": "2741",
+    "name": "Upgradation of TDCP Patriata Chairlift and Cable Car Resort and Tourist Information Center, Murree.",
+    "description": "Improvement, Revitalization, and Upgradation of TDCP Patriata Chairlift and Cable Car Resort and Tourist Information Center, Murree.",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 499.545,
+    "allocated": 182.161,
+    "released": 182.161,
+    "utilized": 117.275,
+    "overallProgress": 0.23476363490776608,
+    "currentYearProgress": 0.4592833333333333,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 62.161,
+        "release": 62.161,
+        "utilized": 62.161
+      },
+      {
+        "label": "2026?27",
+        "allocation": 120,
+        "release": 120,
+        "utilized": 55.114
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2742",
+    "projectId": "7c828f9f-8fc3-4e04-b5fc-e6b04faad434",
+    "code": "2742",
+    "name": "Upgradation of World Heritage Site Taxila",
+    "description": "Preservation/Restoration , Improvement, Management and Upgradation of World Heritage Site Taxila, District Rawalpindi",
+    "district": "Rawalpindi",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2028",
+    "approvedCost": 3972.617,
+    "allocated": 460.874,
+    "released": 428.194,
+    "utilized": 378.209,
+    "overallProgress": 0.09520399273325367,
+    "currentYearProgress": 0.6607381058248111,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 296.479,
+        "release": 304.499,
+        "utilized": 296.479
+      },
+      {
+        "label": "2026?27",
+        "allocation": 164.395,
+        "release": 123.695,
+        "utilized": 81.73
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2743",
+    "projectId": "489e2c36-41f8-4365-ba03-1bb91796fa66",
+    "code": "2743",
+    "name": "TDCP Tourist Resort Dharabi Dam",
+    "description": "Improvement, Revitalization, and Upgradation of TDCP Tourist Resort Dharabi Dam, District Chakwal",
+    "district": "Chakwal",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 448.102,
+    "allocated": 329.711,
+    "released": 344.909,
+    "utilized": 226.687,
+    "overallProgress": 0.505882589231916,
+    "currentYearProgress": 0.557688840040872,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 96.789,
+        "release": 111.987,
+        "utilized": 96.789
+      },
+      {
+        "label": "2026?27",
+        "allocation": 232.922,
+        "release": 232.922,
+        "utilized": 129.898
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2744",
+    "projectId": "35daeaa0-c07a-478d-a36f-e2fe45e5f7ce",
+    "code": "2744",
+    "name": "Upgradation of Rohtas Fort",
+    "description": "Preservation/Restoration , Improvement, Management and Upgradation of Rohtas Fort, District Jhelum",
+    "district": "Jhelum",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2028",
+    "approvedCost": 2460.938,
+    "allocated": 296.524,
+    "released": 284.499,
+    "utilized": 210.516,
+    "overallProgress": 0.08554299214364604,
+    "currentYearProgress": 0.2607826086956522,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 186.524,
+        "release": 192.499,
+        "utilized": 186.524
+      },
+      {
+        "label": "2026?27",
+        "allocation": 110,
+        "release": 92,
+        "utilized": 23.992
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2745",
+    "projectId": "4947941b-1c11-43d1-86a8-6d7348ee7cfd",
+    "code": "2745",
+    "name": "TDCP Tourist Resort Khabbeki Lake",
+    "description": "Improvement, Revitalization, and Upgradation of TDCP Tourist Resort Khabbeki Lake, District Khushab.",
+    "district": "Khushab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2028",
+    "approvedCost": 559.616,
+    "allocated": 112.073,
+    "released": 111.574,
+    "utilized": 93.92599999999999,
+    "overallProgress": 0.16784009034766695,
+    "currentYearProgress": 0.21568888888888887,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 89.073,
+        "release": 89.074,
+        "utilized": 89.073
+      },
+      {
+        "label": "2026?27",
+        "allocation": 23,
+        "release": 22.5,
+        "utilized": 4.853
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2746",
+    "projectId": "04f48b5b-cd6b-4ac9-ad36-ceea4efbbc25",
+    "code": "2746",
+    "name": "TDCP Indus Picnic Resort, Daud Khel District Mianwali",
+    "description": "Improvement, Revitalization, and Upgradation of TDCP Indus Picnic Resort, Daud Khel District Mianwali.",
+    "district": "Mianwali",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2028",
+    "approvedCost": 601.681,
+    "allocated": 109.38900000000001,
+    "released": 109.733,
+    "utilized": 89.69300000000001,
+    "overallProgress": 0.14907068695870404,
+    "currentYearProgress": 0.4031818181818182,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 76.388,
+        "release": 76.733,
+        "utilized": 76.388
+      },
+      {
+        "label": "2026?27",
+        "allocation": 33.001,
+        "release": 33,
+        "utilized": 13.305
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2747",
+    "projectId": "02330710-f43a-4375-8337-4396722c703c",
+    "code": "2747",
+    "name": "TDCP Tourist Resort Jallo",
+    "description": "Improvement, Revitalization, and Upgradation of TDCP Tourist Resort Jallo, District Lahore",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2028",
+    "approvedCost": 599,
+    "allocated": 242.84699999999998,
+    "released": 242.849,
+    "utilized": 207.279,
+    "overallProgress": 0.3460417362270451,
+    "currentYearProgress": 0.690725056087932,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 127.847,
+        "release": 127.851,
+        "utilized": 127.847
+      },
+      {
+        "label": "2026?27",
+        "allocation": 115,
+        "release": 114.998,
+        "utilized": 79.432
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2748",
+    "projectId": "6b425936-ce50-43e3-a028-13e7e11cb7ac",
+    "code": "2748",
+    "name": "Master Plan for Lahore Museum",
+    "description": "Master Plan for Conservation, Rehabilitation, Improvement and Upgradation of Lahore Museum",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2030",
+    "approvedCost": 6589.13,
+    "allocated": 667.7570000000001,
+    "released": 667.753,
+    "utilized": 550.754,
+    "overallProgress": 0.08358523811185999,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 550.754,
+        "release": 550.755,
+        "utilized": 550.754
+      },
+      {
+        "label": "2026?27",
+        "allocation": 117.003,
+        "release": 116.998,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2749",
+    "projectId": "8f19e099-e38a-42e7-838f-6ca936c1b3a4",
+    "code": "2749",
+    "name": "Upgradation St. Andrew's Presbyterian Church",
+    "description": "Preservation/Restoration , Improvement, Management and Upgradation St. Andrew's Presbyterian Church, Lahore",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 95.28,
+    "allocated": 43.229,
+    "released": 44.730000000000004,
+    "utilized": 30.451999999999998,
+    "overallProgress": 0.3196053736356003,
+    "currentYearProgress": 0.32752631578947367,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 24.229,
+        "release": 25.73,
+        "utilized": 24.229
+      },
+      {
+        "label": "2026?27",
+        "allocation": 19,
+        "release": 19,
+        "utilized": 6.223
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2750",
+    "projectId": "fa110342-ef41-470a-a8f0-aa6351310646",
+    "code": "2750",
+    "name": "Improvement of Summit Minar, Lahore",
+    "description": "Conservation, Rehabilitation and Improvement of Summit Minar, Lahore",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2028",
+    "approvedCost": 524.95,
+    "allocated": 63.506,
+    "released": 58.256,
+    "utilized": 44.617,
+    "overallProgress": 0.08499285646252022,
+    "currentYearProgress": 0.09085455272630316,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 43.254,
+        "release": 43.254,
+        "utilized": 43.254
+      },
+      {
+        "label": "2026?27",
+        "allocation": 20.252,
+        "release": 15.002,
+        "utilized": 1.363
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2751",
+    "projectId": "95552780-6dc3-4743-bd0a-4a67822d1f5a",
+    "code": "2751",
+    "name": "Javaid Manzil (Iqbal Museum), Lahore",
+    "description": "Rehabilitation of Javaid Manzil (Iqbal Museum), Lahore",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 200,
+    "allocated": 109.441,
+    "released": 109.447,
+    "utilized": 91.839,
+    "overallProgress": 0.459195,
+    "currentYearProgress": 0.41326666666666667,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 79.441,
+        "release": 79.447,
+        "utilized": 79.441
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 12.398
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2752",
+    "projectId": "/272f8d88-6e99-40bd-bd49-d32920f303d5",
+    "code": "2752",
+    "name": "Upgradation of Hiran Minar",
+    "description": "Preservation/Restoration , Improvement, Management and Upgradation of Hiran Minar, District Sheikhupura",
+    "district": "Sheikhupura",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2028",
+    "approvedCost": 1841.771,
+    "allocated": 263.048,
+    "released": 195.599,
+    "utilized": 177.99400000000003,
+    "overallProgress": 0.0966428508213019,
+    "currentYearProgress": 0.5482175226586102,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 159.848,
+        "release": 162.499,
+        "utilized": 159.848
+      },
+      {
+        "label": "2026?27",
+        "allocation": 103.2,
+        "release": 33.1,
+        "utilized": 18.146
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2753",
+    "projectId": "0e213372-3229-4972-a26c-25fdfe27c83a",
+    "code": "2753",
+    "name": "TDCP Tourist Resort Changa Manga",
+    "description": "Improvement, Revitalization, and Upgradation of TDCP Tourist Resort Changa Manga, District Kasur.",
+    "district": "Kasur",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 284.133,
+    "allocated": 218.089,
+    "released": 218.10500000000002,
+    "utilized": 182.059,
+    "overallProgress": 0.6407527460731418,
+    "currentYearProgress": 0.5243313178253638,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 142.343,
+        "release": 142.359,
+        "utilized": 142.343
+      },
+      {
+        "label": "2026?27",
+        "allocation": 75.746,
+        "release": 75.746,
+        "utilized": 39.716
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2754",
+    "projectId": "22bba5b0-ab48-4ef7-8223-9b88a13a17dc",
+    "code": "2754",
+    "name": "Upgradation of Harrapa",
+    "description": "Preservation/Restoration , Improvement, Management and Upgradation of Harrapa, District Sahiwal",
+    "district": "Sahiwal",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2028",
+    "approvedCost": 1429.843,
+    "allocated": 218.588,
+    "released": 219.19799999999998,
+    "utilized": 212.904,
+    "overallProgress": 0.14890026387512473,
+    "currentYearProgress": 0.9549679999999999,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 93.58,
+        "release": 94.198,
+        "utilized": 93.533
+      },
+      {
+        "label": "2026?27",
+        "allocation": 125.008,
+        "release": 125,
+        "utilized": 119.371
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2755",
+    "projectId": "fef03f75-f416-40bc-b1be-aa4e6181c84b",
+    "code": "2755",
+    "name": "TDCP Tourist Resort Derawar Fort",
+    "description": "Improvement, Revitalization, and Upgradation of TDCP Tourist Resort Derawar Fort Cholistan, District Bahawalpur",
+    "district": "Bahawalpur",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2028",
+    "approvedCost": 126.44,
+    "allocated": 83.193,
+    "released": 94.651,
+    "utilized": 75.03,
+    "overallProgress": 0.5934039860803544,
+    "currentYearProgress": 0.59185,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 63.193,
+        "release": 74.651,
+        "utilized": 63.193
+      },
+      {
+        "label": "2026?27",
+        "allocation": 20,
+        "release": 20,
+        "utilized": 11.837
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2756",
+    "projectId": "955696d1-769a-438a-82d0-6eb5c92db137",
+    "code": "2756",
+    "name": "Upgradation of Derawar Fort",
+    "description": "Preservation/Restoration , Improvement, Management and Upgradation of Derawar Fort, District Bahawalpur",
+    "district": "Bahawalpur",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 29 Jun 2028",
+    "approvedCost": 2490.79,
+    "allocated": 202.52800000000002,
+    "released": 114.079,
+    "utilized": 101.67,
+    "overallProgress": 0.040818374893106205,
+    "currentYearProgress": 0.6231050531914893,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 82.927,
+        "release": 83.999,
+        "utilized": 82.927
+      },
+      {
+        "label": "2026?27",
+        "allocation": 119.601,
+        "release": 30.08,
+        "utilized": 18.743
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2757",
+    "projectId": "b533eb05-6dc4-4866-97e9-b5ddebd614e4",
+    "code": "2757",
+    "name": "Glamping Pod Village at Chewra Hill",
+    "description": "Establishment of Eco-Friendly Glamping Pod Village at Chewra Hill Kotli Sattian",
+    "district": "Rawalpindi",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2024 - 31 Dec 2026",
+    "approvedCost": 233.847,
+    "allocated": 297.60400000000004,
+    "released": 202.695,
+    "utilized": 199.29,
+    "overallProgress": 0.8522238899793454,
+    "currentYearProgress": 0.43266375545851526,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 95.066,
+        "release": 75.066,
+        "utilized": 75.066
+      },
+      {
+        "label": "2025?26",
+        "allocation": 196.813,
+        "release": 121.904,
+        "utilized": 121.747
+      },
+      {
+        "label": "2026?27",
+        "allocation": 5.725,
+        "release": 5.725,
+        "utilized": 2.477
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2758",
+    "projectId": "bf21dcb2-95db-4cc2-9b65-bec5ff5f3d94",
+    "code": "2758",
+    "name": "Establishment of Eco Park & Paragliding Club at Karore, Kotli Sattian",
+    "description": "Establishment of Eco Park & Paragliding Club at Karore, Kotli Sattian, Murree",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2027",
+    "approvedCost": 725,
+    "allocated": 0.1,
+    "released": 0,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 0.1,
+        "release": 0,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2759",
+    "projectId": "8ecac75d-717e-437f-9fb6-49cbd34606c5",
+    "code": "2759",
+    "name": "Sky Glass Bridge at Panjpeer Rocks",
+    "description": "Construction of Sky Glass Bridge at Panjpeer Rocks Thesil Kotli Sattain District Murree",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2028",
+    "approvedCost": 2500,
+    "allocated": 0.1,
+    "released": 0,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 0.1,
+        "release": 0,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2760",
+    "projectId": "06a60b0b-5f2b-4790-8a0a-15caa00dbf4e",
+    "code": "2760",
+    "name": "Monument of 2nd Angelo Sikh War",
+    "description": "Rehabilitation of Monument of 2nd Angelo Sikh War District Mandi Baha Ud-Din",
+    "district": "Mandi Bahauddin",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 29 Jun 2028",
+    "approvedCost": 230,
+    "allocated": 30,
+    "released": 29,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 29,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2761",
+    "projectId": "8d634499-3780-48ba-b6b4-e69d7edcf830",
+    "code": "2761",
+    "name": "Renovation of Lintott Café",
+    "description": "Rehabilitation and Renovation of Lintott Café, Mall Road Murree",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2028",
+    "approvedCost": 200,
+    "allocated": 0.2,
+    "released": 0,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 0.2,
+        "release": 0,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2762",
+    "projectId": "f64b01bb-2e7e-4e01-a4b5-151d768a3b41",
+    "code": "2762",
+    "name": "Heritage Conservation and Urban Revitalization of the Walled City of Rawalpindi",
+    "description": "Heritage Conservation and Urban Revitalization of the Walled City of Rawalpindi",
+    "district": "Rawalpindi",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 29 Jun 2029",
+    "approvedCost": 5886,
+    "allocated": 80,
+    "released": 79,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 80,
+        "release": 79,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2763",
+    "projectId": "cbed6335-9c95-442c-959a-6f1c22e44493",
+    "code": "2763",
+    "name": "Historical Monuments of District Attock (Behram Ki Baradari and Attock Tomb)",
+    "description": "Conservation, Restoration of Historical Monuments of District Attock (Behram Ki Baradari and Attock Tomb).",
+    "district": "Attock",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2028",
+    "approvedCost": 117.532,
+    "allocated": 20,
+    "released": 5,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 20,
+        "release": 5,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2764",
+    "projectId": "8419a7ae-4d62-4ec5-ab4b-60375f9fdaec",
+    "code": "2764",
+    "name": "TDCP Tourist Resort Kallar Kahar",
+    "description": "Improvement, Revitalisation, and Up gradation of TDCP Tourist Resort Kallar Kahar, District Chakwal",
+    "district": "Chakwal",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2028",
+    "approvedCost": 799.557,
+    "allocated": 20.1,
+    "released": 20.1,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 20.1,
+        "release": 20.1,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2765",
+    "projectId": "656dd5ee-81d2-4f69-b84e-889ee567b65f",
+    "code": "2765",
+    "name": "Construction of Lahore Museum (New Block)",
+    "description": "Construction of Lahore Museum (New Block)",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "19 Nov 2025 - 30 Sep 2028",
+    "approvedCost": 5605.65,
+    "allocated": 120,
+    "released": 0,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 120,
+        "release": 0,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2766",
+    "projectId": "f8acbb56-e0ac-49b5-8c74-79ae9f2aa5e3",
+    "code": "2766",
+    "name": "Heritage/Archaeological Sites, Monuments and Museums Optimization Program",
+    "description": "Heritage/Archaeological Sites, Monuments and Museums Optimization Program",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 29 Jun 2028",
+    "approvedCost": 743.25,
+    "allocated": 30,
+    "released": 30,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2767",
+    "projectId": "3f30a980-8d4b-4944-8c03-b250ce5b2ed8",
+    "code": "2767",
+    "name": "Construction of Tourism Complex Punjab",
+    "description": "Construction of Tourism Complex Punjab",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 31 Dec 2027",
+    "approvedCost": 799.1,
+    "allocated": 30,
+    "released": 0,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 0,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2768",
+    "projectId": "c1255adb-0e05-418e-b4e8-9ee256eb4d69",
+    "code": "2768",
+    "name": "Strategic Management Unit at Tourism",
+    "description": "Establishment of Strategic Management Unit at Tourism, Archaeology, & Museums Department",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2028",
+    "approvedCost": 127.83,
+    "allocated": 30,
+    "released": 0,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 0,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2769",
+    "projectId": "1cf818d3-3cb6-4e64-bda6-c210a6154f42",
+    "code": "2769",
+    "name": "Establishment of Virsa Village Lahore – Living Rural Heritage and Cultural Tourism Park",
+    "description": "Establishment of Virsa Village Lahore – Living Rural Heritage and Cultural Tourism Park",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2028",
+    "approvedCost": 1000,
+    "allocated": 15,
+    "released": 15,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 15,
+        "release": 15,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2770",
+    "projectId": "45c8c3e0-7952-4b08-8237-c6a138d51a41",
+    "code": "2770",
+    "name": "Improvement of Infrastructure of Tourism in Punjab",
+    "description": "Development and Improvement of Infrastructure of Tourism in Punjab",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2025 - 30 Jun 2027",
+    "approvedCost": 2000,
+    "allocated": 370.932,
+    "released": 0,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 370.932,
+        "release": 0,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2771",
+    "projectId": "f968c655-915d-4b50-8d22-af77d2c54c68",
+    "code": "2771",
+    "name": "Provision of Missing Tourism Facilities and Development of New Attractions at Tourist Destinations, Resorts, Archaeological, Heritage and Religious Sites in Punjab",
+    "description": "Provision of Missing Tourism Facilities and Development of New Attractions at Tourist Destinations, Resorts, Archaeological, Heritage and Religious Sites in Punjab",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2027",
+    "approvedCost": 500,
+    "allocated": 30,
+    "released": 30,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2772",
+    "projectId": "202181cb-c2e7-4200-b76e-92f07496bea2",
+    "code": "2772",
+    "name": "Tourism & Heritage Development Force",
+    "description": "Establishment of Tourism & Heritage Development Force For Revival of Built Heritage",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2029",
+    "approvedCost": 783.045,
+    "allocated": 30,
+    "released": 0,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 0,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2773",
+    "projectId": "8a2eb4a2-0e94-4e07-b6dd-9bae2b65f339",
+    "code": "2773",
+    "name": "Empowering Youth as Professional Tourist Guides",
+    "description": "Empowering Youth as Professional Tourist Guides for Heritage, Historical and Tourism Sites",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2027",
+    "approvedCost": 372,
+    "allocated": 30,
+    "released": 29.99,
+    "utilized": 4.91,
+    "overallProgress": 0.013198924731182796,
+    "currentYearProgress": 0.16372124041347116,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 29.99,
+        "utilized": 4.91
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2774",
+    "projectId": "09bc2098-f870-433d-9f6f-b7bfb85e7979",
+    "code": "2774",
+    "name": "Sightseeing Bus Service in Punjab",
+    "description": "Establishment of New Terminals & Revamping of Existing Terminals Sightseeing Bus Service in Punjab",
+    "district": "Multiple District",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2027",
+    "approvedCost": 221.931,
+    "allocated": 30,
+    "released": 30,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 30,
+        "release": 30,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2775",
+    "projectId": "f1c38f8b-a778-4985-beea-73383e585268",
+    "code": "2775",
+    "name": "North / Potohar Leisure Belt",
+    "description": "North / Potohar Leisure Belt",
+    "district": "Murree",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2029",
+    "approvedCost": 42000,
+    "allocated": 250,
+    "released": 250,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 250,
+        "release": 250,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2776",
+    "projectId": "62d32d11-cc51-4361-8a97-2ffd5b821847",
+    "code": "2776",
+    "name": "Lahore Heritage",
+    "description": "Lahore Heritage",
+    "district": "Lahore",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2029",
+    "approvedCost": 31000,
+    "allocated": 180,
+    "released": 180,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 180,
+        "release": 180,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2777",
+    "projectId": "00aab588-8a53-4028-b08d-83ce65e784d7",
+    "code": "2777",
+    "name": "Religious Trail Punjab",
+    "description": "Religious Trail Punjab",
+    "district": "Nankana Sahib",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2029",
+    "approvedCost": 20000,
+    "allocated": 185,
+    "released": 185,
+    "utilized": 0,
+    "overallProgress": 0,
+    "currentYearProgress": 0,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 185,
+        "release": 185,
+        "utilized": 0
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  },
+  {
+    "id": "scheme-2778",
+    "projectId": "6fd1e6f4-6523-4707-980e-e88b9b568d68",
+    "code": "2778",
+    "name": "Magnificent Tourism Internship Programme – (Phase II)",
+    "description": "Work for Punjab Chief Minister's Magnificent Tourism Internship Programme – (Phase II)",
+    "district": "Punjab",
+    "region": "Punjab",
+    "gestationPeriod": "01 Jul 2026 - 30 Jun 2027",
+    "approvedCost": 790,
+    "allocated": 430,
+    "released": 430,
+    "utilized": 93.937,
+    "overallProgress": 0.11890759493670885,
+    "currentYearProgress": 0.21845813953488372,
+    "fiscalYears": [
+      {
+        "label": "2024?25",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2025?26",
+        "allocation": 0,
+        "release": 0,
+        "utilized": 0
+      },
+      {
+        "label": "2026?27",
+        "allocation": 430,
+        "release": 430,
+        "utilized": 93.937
+      }
+    ],
+    "sourceUpdated": "3 Nov 2026"
+  }
+]
