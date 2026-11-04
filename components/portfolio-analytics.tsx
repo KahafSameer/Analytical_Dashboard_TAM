@@ -24,6 +24,7 @@ import {
 } from "@/lib/analytics";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState } from "@/components/ui";
+import { Reveal, useChartEntrance } from "@/components/motion";
 
 const palette = ["#0f4c3a", "#508065", "#8cac91", "#d4a017", "#789081", "#c5a341", "#b8c8bc", "#57725f"];
 type FundingMeasure = "approved" | "allocated" | "released" | "utilized";
@@ -55,6 +56,7 @@ function CompactTooltip({
 
 function DistrictFundingChart({ sites }: { sites: Site[] }) {
   const [measure, setMeasure] = useState<FundingMeasure>("utilized");
+  const { ref, isInView, animate } = useChartEntrance();
   const rows = useMemo(() =>
     summarizeDistricts(sites).sort((a, b) => b[measure] - a[measure]).slice(0, 8),
   [measure, sites]);
@@ -73,8 +75,8 @@ function DistrictFundingChart({ sites }: { sites: Site[] }) {
       className="analysis-chart-card"
     >
       {rows.length ? (
-        <div className="analysis-bar-chart" role="img" aria-label={`${fundingMeasures.find((item) => item.id === measure)?.label} by district`}>
-          <ResponsiveContainer width="100%" height="100%">
+        <div ref={ref} className="analysis-bar-chart" role="img" aria-label={`${fundingMeasures.find((item) => item.id === measure)?.label} by district`}>
+          {isInView && <ResponsiveContainer width="100%" height="100%">
             <BarChart data={rows} layout="vertical" margin={{ top: 5, right: 12, bottom: 1, left: 3 }} barCategoryGap="27%">
               <CartesianGrid horizontal={false} stroke="#edf0ed" strokeDasharray="3 5" />
               <XAxis
@@ -86,9 +88,9 @@ function DistrictFundingChart({ sites }: { sites: Site[] }) {
               />
               <YAxis type="category" dataKey="district" width={104} axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#65736a" }} />
               <Tooltip content={<CompactTooltip />} cursor={{ fill: "#f4f7f4" }} />
-              <Bar dataKey={measure} name={fundingMeasures.find((item) => item.id === measure)?.label} fill="#0f4c3a" radius={[0, 4, 4, 0]} maxBarSize={20} />
+              <Bar dataKey={measure} name={fundingMeasures.find((item) => item.id === measure)?.label} fill="#0f4c3a" radius={[0, 4, 4, 0]} maxBarSize={20} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
             </BarChart>
-          </ResponsiveContainer>
+          </ResponsiveContainer>}
         </div>
       ) : <EmptyState title="No district funding data" description="There are no funding records to compare." />}
       <p className="chart-footnote">All values in PKR millions · Largest amounts shown</p>
@@ -97,6 +99,7 @@ function DistrictFundingChart({ sites }: { sites: Site[] }) {
 }
 
 function CategoryMixChart({ sites }: { sites: Site[] }) {
+  const { ref, isInView, animate } = useChartEntrance();
   const categories = useMemo(() => summarizeCategories(sites), [sites]);
   const summary = useMemo(() => getPortfolioSummary(sites), [sites]);
   return (
@@ -104,15 +107,15 @@ function CategoryMixChart({ sites }: { sites: Site[] }) {
       {categories.length && summary.totalApproved > 0 ? (
         <>
           <div className="category-donut-wrap">
-            <div className="category-donut" role="img" aria-label="Donut chart showing approved project cost by project type">
-              <ResponsiveContainer width="100%" height="100%">
+            <div ref={ref} className="category-donut" role="img" aria-label="Donut chart showing approved project cost by project type">
+              {isInView && <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={categories} dataKey="approved" nameKey="category" innerRadius="68%" outerRadius="91%" paddingAngle={2} stroke="none">
+                  <Pie data={categories} dataKey="approved" nameKey="category" innerRadius="68%" outerRadius="91%" paddingAngle={2} stroke="none" isAnimationActive={animate} animationDuration={800} animationEasing="ease-out">
                     {categories.map((entry, index) => <Cell key={entry.category} fill={palette[index % palette.length]} />)}
                   </Pie>
                   <Tooltip content={<CompactTooltip />} />
                 </PieChart>
-              </ResponsiveContainer>
+              </ResponsiveContainer>}
             </div>
             <div className="donut-center"><strong>{formatMillions(summary.totalApproved, 0)}</strong><span>approved total</span></div>
           </div>
@@ -132,13 +135,14 @@ function CategoryMixChart({ sites }: { sites: Site[] }) {
 }
 
 function ProgressDistributionChart({ sites }: { sites: Site[] }) {
+  const { ref, isInView, animate } = useChartEntrance();
   const distribution = useMemo(() => summarizeProgressBands(sites), [sites]);
   return (
     <ChartCard title="Financial progress distribution" description="How many projects fall into each expenditure band." className="analysis-chart-card progress-distribution-card">
       {sites.length ? (
         <>
-          <div className="distribution-chart" role="img" aria-label="Number of projects by financial progress range">
-            <ResponsiveContainer width="100%" height="100%">
+          <div ref={ref} className="distribution-chart" role="img" aria-label="Number of projects by financial progress range">
+            {isInView && <ResponsiveContainer width="100%" height="100%">
               <BarChart data={distribution} margin={{ top: 12, right: 7, bottom: 1, left: -21 }} barCategoryGap="38%">
                 <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
                 <XAxis dataKey="band" axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#718078" }} dy={7} />
@@ -148,11 +152,11 @@ function ProgressDistributionChart({ sites }: { sites: Site[] }) {
                   formatter={(value) => [`${Number(value)} projects`, "Project count"]}
                   labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
                 />
-                <Bar dataKey="count" name="Projects" fill="#508065" radius={[4, 4, 0, 0]} maxBarSize={34}>
+                <Bar dataKey="count" name="Projects" fill="#508065" radius={[4, 4, 0, 0]} maxBarSize={34} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out">
                   {distribution.map((entry, index) => <Cell key={entry.band} fill={index === 0 ? "#d4a017" : "#508065"} />)}
                 </Bar>
               </BarChart>
-            </ResponsiveContainer>
+            </ResponsiveContainer>}
           </div>
           <div className="distribution-legend"><i /><span>Projects with no expenditure recorded</span></div>
         </>
@@ -201,13 +205,15 @@ function PortfolioSignals({ sites }: { sites: Site[] }) {
   ];
   return (
     <div className="portfolio-signals">
-      {signals.map((signal) => (
-        <article className="signal-card" key={signal.label}>
-          <span className={`signal-icon signal-icon-${signal.tone}`}>{signal.icon}</span>
-          <span className="signal-label">{signal.label}</span>
-          <strong className="signal-value">{signal.value}</strong>
-          <span className="signal-detail">{signal.detail}</span>
-        </article>
+      {signals.map((signal, index) => (
+        <Reveal className="signal-reveal" delay={index * 0.045} key={signal.label}>
+          <article className="signal-card">
+            <span className={`signal-icon signal-icon-${signal.tone}`}>{signal.icon}</span>
+            <span className="signal-label">{signal.label}</span>
+            <strong className="signal-value">{signal.value}</strong>
+            <span className="signal-detail">{signal.detail}</span>
+          </article>
+        </Reveal>
       ))}
     </div>
   );

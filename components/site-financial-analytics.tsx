@@ -19,10 +19,12 @@ import { formatMillions, formatPercent } from "@/lib/analytics";
 import { getAllocationComposition, getCumulativeFunding, getFiscalYearRates } from "@/lib/site-analytics";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState } from "@/components/ui";
+import { useChartEntrance } from "@/components/motion";
 
 function FundingCompositionChart({ site }: { site: Site }) {
   const segments = useMemo(() => getAllocationComposition(site), [site]);
   const displayTotal = Math.max(site.allocated, site.utilized);
+  const { ref, isInView, animate } = useChartEntrance();
 
   return (
     <ChartCard
@@ -33,10 +35,10 @@ function FundingCompositionChart({ site }: { site: Site }) {
       {displayTotal > 0 ? (
         <>
           <div className="detail-donut-wrap">
-            <div className="detail-donut" role="img" aria-label="Donut chart showing allocated funds utilized and remaining">
-              <ResponsiveContainer width="100%" height="100%">
+            <div ref={ref} className="detail-donut" role="img" aria-label="Donut chart showing allocated funds utilized and remaining">
+              {isInView && <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={segments} dataKey="value" nameKey="name" innerRadius="69%" outerRadius="92%" paddingAngle={2} stroke="none">
+                  <Pie data={segments} dataKey="value" nameKey="name" innerRadius="69%" outerRadius="92%" paddingAngle={2} stroke="none" isAnimationActive={animate} animationDuration={800} animationEasing="ease-out">
                     {segments.map((segment) => <Cell key={segment.name} fill={segment.color} />)}
                   </Pie>
                   <Tooltip
@@ -44,7 +46,7 @@ function FundingCompositionChart({ site }: { site: Site }) {
                     formatter={(value) => [formatMillions(Number(value)), ""]}
                   />
                 </PieChart>
-              </ResponsiveContainer>
+              </ResponsiveContainer>}
             </div>
             <div className="detail-donut-center">
               <strong>{formatPercent(site.allocated ? site.utilized / site.allocated : 0)}</strong>
@@ -75,6 +77,7 @@ function FundingCompositionChart({ site }: { site: Site }) {
 function CumulativeFundingChart({ site }: { site: Site }) {
   const data = useMemo(() => getCumulativeFunding(site), [site]);
   const hasData = data.some((year) => year.allocation || year.released || year.utilized);
+  const { ref, isInView, animate } = useChartEntrance();
 
   return (
     <ChartCard
@@ -84,8 +87,8 @@ function CumulativeFundingChart({ site }: { site: Site }) {
     >
       {hasData ? (
         <>
-          <div className="cumulative-chart" role="img" aria-label="Cumulative allocation, release and expenditure by fiscal year">
-            <ResponsiveContainer width="100%" height="100%">
+          <div ref={ref} className="cumulative-chart" role="img" aria-label="Cumulative allocation, release and expenditure by fiscal year">
+            {isInView && <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data} margin={{ top: 9, right: 6, bottom: 1, left: -18 }}>
                 <defs>
                   <linearGradient id="cumulativeAllocation" x1="0" y1="0" x2="0" y2="1">
@@ -105,11 +108,11 @@ function CumulativeFundingChart({ site }: { site: Site }) {
                   formatter={(value) => [formatMillions(Number(value)), ""]}
                   labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
                 />
-                <Area type="monotone" dataKey="allocation" name="Allocation" stroke="#d4a017" fill="url(#cumulativeAllocation)" strokeWidth={1.8} />
-                <Area type="monotone" dataKey="released" name="Released" stroke="#8bab98" fill="transparent" strokeWidth={1.8} />
-                <Area type="monotone" dataKey="utilized" name="Utilized" stroke="#0f4c3a" fill="url(#cumulativeUtilized)" strokeWidth={2.2} />
+                <Area type="monotone" dataKey="allocation" name="Allocation" stroke="#d4a017" fill="url(#cumulativeAllocation)" strokeWidth={1.8} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
+                <Area type="monotone" dataKey="released" name="Released" stroke="#8bab98" fill="transparent" strokeWidth={1.8} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
+                <Area type="monotone" dataKey="utilized" name="Utilized" stroke="#0f4c3a" fill="url(#cumulativeUtilized)" strokeWidth={2.2} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
               </AreaChart>
-            </ResponsiveContainer>
+            </ResponsiveContainer>}
           </div>
           <div className="detail-analytics-legend">
             <span><i className="legend-gold" />Allocated</span>
@@ -127,6 +130,7 @@ function CumulativeFundingChart({ site }: { site: Site }) {
 function AnnualExecutionChart({ site }: { site: Site }) {
   const data = useMemo(() => getFiscalYearRates(site), [site]);
   const maxRate = Math.max(100, ...data.map((year) => Math.max(year.releaseRate, year.utilizationRate)));
+  const { ref, isInView, animate } = useChartEntrance();
 
   return (
     <ChartCard
@@ -136,8 +140,8 @@ function AnnualExecutionChart({ site }: { site: Site }) {
     >
       {data.length ? (
         <>
-          <div className="execution-chart" role="img" aria-label="Annual release and expenditure rates relative to allocation">
-            <ResponsiveContainer width="100%" height="100%">
+          <div ref={ref} className="execution-chart" role="img" aria-label="Annual release and expenditure rates relative to allocation">
+            {isInView && <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data} layout="vertical" margin={{ top: 6, right: 24, bottom: 1, left: 3 }} barCategoryGap="30%">
                 <CartesianGrid horizontal={false} stroke="#edf0ed" strokeDasharray="3 5" />
                 <XAxis
@@ -155,10 +159,10 @@ function AnnualExecutionChart({ site }: { site: Site }) {
                   formatter={(value, name) => [`${formatPercent(Number(value) / 100)} of annual allocation`, name]}
                   labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
                 />
-                <Bar dataKey="releaseRate" name="Released / allocated" fill="#8bab98" radius={[0, 3, 3, 0]} maxBarSize={12} />
-                <Bar dataKey="utilizationRate" name="Utilized / allocated" fill="#0f4c3a" radius={[0, 3, 3, 0]} maxBarSize={12} />
+                <Bar dataKey="releaseRate" name="Released / allocated" fill="#8bab98" radius={[0, 3, 3, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
+                <Bar dataKey="utilizationRate" name="Utilized / allocated" fill="#0f4c3a" radius={[0, 3, 3, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
               </BarChart>
-            </ResponsiveContainer>
+            </ResponsiveContainer>}
           </div>
           <div className="detail-analytics-legend">
             <span><i className="legend-release" />Released / allocated</span>

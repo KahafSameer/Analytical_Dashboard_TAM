@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useState } from "react";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -29,6 +29,7 @@ import { SiteFinancialAnalytics } from "@/components/site-financial-analytics";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState, KpiCard, ProgressBar, StatusBadge } from "@/components/ui";
 import { PageTopline } from "@/components/dashboard-shell";
+import { Reveal, useChartEntrance } from "@/components/motion";
 
 function exportCsv(site: Site) {
   const rows = [
@@ -59,9 +60,10 @@ function exportCsv(site: Site) {
 function ProjectDetail({ site }: { site: Site }) {
   const [exported, setExported] = useState(false);
   const summary = useMemo(() => getPortfolioSummary([site]), [site]);
+  const { ref: chartRef, isInView: chartInView, animate: animateChart } = useChartEntrance();
   return (
     <div className="page-stack">
-      <PageTopline section="Project detail" date={site.sourceUpdated ?? "Local workbook"} />
+      <PageTopline section="Project detail" date="Master workbook" />
       <Link href="/" className="back-link"><ArrowLeft size={15} /> All tourism projects</Link>
 
       <section className="detail-hero">
@@ -110,8 +112,8 @@ function ProjectDetail({ site }: { site: Site }) {
           <ChartCard title="Funds by fiscal year" description="Compare planned funding with releases and spend.">
             {site.fiscalYears.some((year) => year.allocation || year.release || year.utilized) ? (
               <>
-                <div className="detail-chart" role="img" aria-label="Bar chart comparing annual allocation, release and utilization">
-                  <ResponsiveContainer width="100%" height="100%">
+                <div ref={chartRef} className="detail-chart" role="img" aria-label="Bar chart comparing annual allocation, release and utilization">
+                  {chartInView && <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={site.fiscalYears} margin={{ top: 10, right: 6, bottom: 1, left: -20 }} barGap={3} barCategoryGap="26%">
                       <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
                       <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#718078" }} dy={8} />
@@ -122,11 +124,11 @@ function ProjectDetail({ site }: { site: Site }) {
                         formatter={(value) => [formatMillions(Number(value)), ""]}
                         labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
                       />
-                      <Bar dataKey="allocation" name="Allocated" fill="#d4a017" radius={[3, 3, 0, 0]} maxBarSize={24} />
-                      <Bar dataKey="release" name="Released" fill="#8bab98" radius={[3, 3, 0, 0]} maxBarSize={24} />
-                      <Bar dataKey="utilized" name="Utilized" fill="#0f4c3a" radius={[3, 3, 0, 0]} maxBarSize={24} />
+                      <Bar dataKey="allocation" name="Allocated" fill="#d4a017" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={750} animationEasing="ease-out" />
+                      <Bar dataKey="release" name="Released" fill="#8bab98" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={750} animationEasing="ease-out" />
+                      <Bar dataKey="utilized" name="Utilized" fill="#0f4c3a" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={750} animationEasing="ease-out" />
                     </BarChart>
-                  </ResponsiveContainer>
+                  </ResponsiveContainer>}
                 </div>
                 <div className="detail-legend">
                   <span><i className="legend-gold" />Allocated</span>
@@ -139,6 +141,7 @@ function ProjectDetail({ site }: { site: Site }) {
             )}
           </ChartCard>
 
+          <Reveal className="detail-table-reveal">
           <section className="chart-card detail-table-card">
             <div className="table-headline">
               <div className="chart-card-heading"><div><h3>Fiscal-year breakdown</h3><p>Reported funding flows, PKR millions.</p></div></div>
@@ -156,6 +159,7 @@ function ProjectDetail({ site }: { site: Site }) {
             </div>
             <p className="table-footnote">Small differences may occur due to source rounding.</p>
           </section>
+          </Reveal>
         </div>
       </section>
 
@@ -181,45 +185,15 @@ function ProjectDetail({ site }: { site: Site }) {
 }
 
 export function SiteDetail({ site, siteId }: { site: Site | null; siteId: string }) {
-  const savedProjects = useSyncExternalStore(
-    (onChange) => {
-      window.addEventListener("storage", onChange);
-      window.addEventListener("tourism-insights:imported-sites", onChange);
-      return () => {
-        window.removeEventListener("storage", onChange);
-        window.removeEventListener("tourism-insights:imported-sites", onChange);
-      };
-    },
-    () => window.localStorage.getItem("tourism-insights:imported-sites") ?? "[]",
-    () => "__loading__",
-  );
-  const checked = savedProjects !== "__loading__";
-  const localSite = useMemo(() => {
-    if (!checked) return null;
-    try {
-      return (JSON.parse(savedProjects) as Site[]).find((item) => item.id === siteId) ?? null;
-    } catch {
-      return null;
-    }
-  }, [checked, savedProjects, siteId]);
-  const resolved = site ?? localSite;
-  if (!resolved && !checked && !site) {
-    return (
-      <div className="page-stack">
-        <PageTopline section="Project detail" />
-        <div className="detail-loading" aria-label="Loading imported project"><span /><span /><span /></div>
-      </div>
-    );
-  }
-  if (!resolved) {
+  if (!site) {
     return (
       <div className="detail-error">
         <span className="empty-icon"><FileSpreadsheet size={22} /></span>
-        <h1>Project data isn’t available</h1>
-        <p>This project may have been removed from this browser. Return to the portfolio or import its Excel workbook again.</p>
+        <h1>Project not found in the master workbook</h1>
+        <p>Project {siteId} isn’t present in the current master dataset. Return to the portfolio to choose an available project.</p>
         <Link href="/" className="button button-primary"><ArrowLeft size={15} /> Back to projects</Link>
       </div>
     );
   }
-  return <ProjectDetail site={resolved} />;
+  return <ProjectDetail site={site} />;
 }

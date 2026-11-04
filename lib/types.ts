@@ -23,8 +23,6 @@ export type Site = {
   overallProgress: number;
   currentYearProgress?: number;
   fiscalYears: FiscalYear[];
-  sourceUpdated?: string;
-  imported?: boolean;
 };
 
 export type AnalyticsSummary = {

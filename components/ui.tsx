@@ -1,6 +1,17 @@
+"use client";
+
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowDownRight, ArrowUpRight, Check, Clock3, CircleDashed } from "lucide-react";
+import {
+  animate,
+  motion,
+  useInView,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from "motion/react";
+import { useEffect, useRef } from "react";
 
 export function StatusBadge({
   status,
@@ -15,8 +26,12 @@ export function StatusBadge({
 
 export function ProgressBar({ value, compact = false }: { value: number; compact?: boolean }) {
   const percentage = Math.max(0, Math.min(100, value * 100));
+  const reduceMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "30px 0px" });
   return (
     <div
+      ref={ref}
       className={`progress-track${compact ? " progress-track-compact" : ""}`}
       role="progressbar"
       aria-label="Financial progress"
@@ -24,7 +39,12 @@ export function ProgressBar({ value, compact = false }: { value: number; compact
       aria-valuemin={0}
       aria-valuemax={100}
     >
-      <span className="progress-fill" style={{ width: `${percentage}%` }} />
+      <motion.span
+        className="progress-fill"
+        initial={{ width: 0 }}
+        animate={{ width: isInView || reduceMotion ? `${percentage}%` : 0 }}
+        transition={{ duration: reduceMotion ? 0.15 : 0.8, ease: [0.22, 1, 0.36, 1] }}
+      />
     </div>
   );
 }
@@ -86,13 +106,45 @@ export function KpiCard({
   trend?: "up" | "down";
   accent?: boolean;
 }) {
+  const valueRef = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(valueRef, { once: true, margin: "30px 0px" });
+  const reduceMotion = useReducedMotion();
+  const metric = parseMetric(value);
+  const count = useMotionValue(metric.number ?? 0);
+  const displayedMetric = useTransform(count, (current) =>
+    `${metric.prefix}${formatMetric(current, metric.decimals)}${metric.suffix}`,
+  );
+  useEffect(() => {
+    if (metric.number === null) return;
+    if (reduceMotion) {
+      count.set(metric.number);
+      return;
+    }
+    if (!isInView) return;
+    count.set(0);
+    const controls = animate(count, metric.number, {
+      duration: 0.75,
+      ease: [0.22, 1, 0.36, 1],
+    });
+    return () => controls.stop();
+  }, [count, isInView, metric.number, reduceMotion]);
   return (
-    <article className={`kpi-card${accent ? " kpi-card-accent" : ""}`}>
+    <motion.article
+      className={`kpi-card${accent ? " kpi-card-accent" : ""}`}
+      initial={{ opacity: 0, y: reduceMotion ? 0 : 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ duration: reduceMotion ? 0.15 : 0.38, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="kpi-top">
         <span className="kpi-label">{label}</span>
         <span className="kpi-icon">{icon}</span>
       </div>
-      <div className="kpi-value">{value}</div>
+      <div className="kpi-value">
+        {metric.number === null
+          ? <span ref={valueRef}>{value}</span>
+          : <motion.span ref={valueRef}>{displayedMetric}</motion.span>}
+      </div>
       <div className="kpi-foot">
         {trend && (
           <span className="trend-icon" aria-label={trend === "up" ? "Increase" : "Decrease"}>
@@ -101,8 +153,27 @@ export function KpiCard({
         )}
         <span>{supporting}</span>
       </div>
-    </article>
+    </motion.article>
   );
+}
+
+function parseMetric(value: string) {
+  const match = value.match(/(\d[\d,]*(?:\.\d+)?)/);
+  if (!match) return { number: null, prefix: "", suffix: "", decimals: 0 };
+  const number = Number(match[1].replaceAll(",", ""));
+  return {
+    number: Number.isFinite(number) ? number : null,
+    prefix: value.slice(0, match.index),
+    suffix: value.slice((match.index ?? 0) + match[1].length),
+    decimals: match[1].split(".")[1]?.length ?? 0,
+  };
+}
+
+function formatMetric(value: number, decimals: number) {
+  return value.toLocaleString("en-PK", {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
 }
 
 export function ChartCard({
@@ -118,8 +189,15 @@ export function ChartCard({
   action?: ReactNode;
   className?: string;
 }) {
+  const reduceMotion = useReducedMotion();
   return (
-    <section className={`chart-card ${className}`}>
+    <motion.section
+      className={`chart-card ${className}`}
+      initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.12 }}
+      transition={{ duration: reduceMotion ? 0.15 : 0.44, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="chart-card-heading">
         <div>
           <h3>{title}</h3>
@@ -128,7 +206,7 @@ export function ChartCard({
         {action}
       </div>
       {children}
-    </section>
+    </motion.section>
   );
 }
 

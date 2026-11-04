@@ -4,16 +4,18 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YA
 import { formatMillions } from "@/lib/analytics";
 import type { FiscalYear } from "@/lib/types";
 import { ChartCard } from "@/components/ui";
+import { useChartEntrance } from "@/components/motion";
 
 export function PortfolioFundingChart({ data }: { data: FiscalYear[] }) {
+  const { ref, isInView, animate } = useChartEntrance();
   return (
     <ChartCard title="Funds utilized by fiscal year" description="Portfolio-wide expenditure · PKR millions">
       <div className="chart-legend">
         <span><i className="legend-dot legend-green" /> Utilized</span>
         <span><i className="legend-dot legend-gold" /> Allocated</span>
       </div>
-      <div className="overview-chart">
-        <ResponsiveContainer width="100%" height="100%">
+      <div ref={ref} className="overview-chart">
+        {isInView && <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 8, right: 8, left: -14, bottom: 0 }}>
             <defs>
               <linearGradient id="allocatedGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#d4a017" stopOpacity={0.12} /><stop offset="100%" stopColor="#d4a017" stopOpacity={0} /></linearGradient>
@@ -27,10 +29,10 @@ export function PortfolioFundingChart({ data }: { data: FiscalYear[] }) {
               formatter={(value) => [formatMillions(Number(value)), ""]}
               labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
             />
-            <Area type="monotone" dataKey="allocation" name="Allocated" stroke="#d4a017" fill="url(#allocatedGradient)" strokeWidth={1.8} />
-            <Area type="monotone" dataKey="utilized" name="Utilized" stroke="#0f4c3a" fill="url(#utilizedGradient)" strokeWidth={2.5} />
+            <Area type="monotone" dataKey="allocation" name="Allocated" stroke="#d4a017" fill="url(#allocatedGradient)" strokeWidth={1.8} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
+            <Area type="monotone" dataKey="utilized" name="Utilized" stroke="#0f4c3a" fill="url(#utilizedGradient)" strokeWidth={2.5} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
           </AreaChart>
-        </ResponsiveContainer>
+        </ResponsiveContainer>}
       </div>
     </ChartCard>
   );

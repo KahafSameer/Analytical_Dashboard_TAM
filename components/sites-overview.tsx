@@ -17,6 +17,7 @@ import { PortfolioFundingChart } from "@/components/portfolio-chart";
 import { PortfolioAnalytics } from "@/components/portfolio-analytics";
 import { PortfolioExportButton } from "@/components/portfolio-export-button";
 import { SiteGrid } from "@/components/site-grid";
+import { Reveal } from "@/components/motion";
 
 export function SitesOverview({ sites }: { sites: Site[] }) {
   const summary = getPortfolioSummary(sites);
@@ -26,13 +27,13 @@ export function SitesOverview({ sites }: { sites: Site[] }) {
       <PageTopline section="Tourism sites" />
       <section className="page-intro">
         <div>
-          <div className="intro-kicker"><span className="intro-kicker-line" /> PUNJAB · TOURISM & HERITAGE</div>
+          <div className="intro-kicker"><span className="intro-kicker-line" /> TOURISM & HERITAGE PORTFOLIO</div>
           <h1>Tourism sites<span className="title-period">.</span></h1>
-          <p>One clear view of project delivery and financial progress across Punjab.</p>
+          <p>One clear view of project funding and financial progress across the portfolio.</p>
         </div>
         <div className="intro-context">
           <span className="context-icon"><MapPin size={17} /></span>
-          <div><strong>Punjab, Pakistan</strong><span>Reporting snapshot · 03 Nov 2026</span></div>
+          <div><strong>Master workbook</strong><span>Current source of project data</span></div>
         </div>
       </section>
 
@@ -64,6 +65,7 @@ export function SitesOverview({ sites }: { sites: Site[] }) {
         />
         <div className="portfolio-chart-layout">
           <PortfolioFundingChart data={yearly} />
+          <Reveal className="funding-note-reveal">
           <aside className="funding-note">
             <span className="funding-note-icon"><CircleAlert size={18} /></span>
             <p className="eyebrow">HOW TO READ THIS</p>
@@ -73,6 +75,7 @@ export function SitesOverview({ sites }: { sites: Site[] }) {
             <div className="funding-stat"><span>Released to date</span><strong>{formatMillions(summary.totalReleased)}</strong></div>
             <a href="#report-export" className="text-link">About this dataset <ArrowUpRight size={14} /></a>
           </aside>
+          </Reveal>
         </div>
       </section>
 
@@ -80,10 +83,10 @@ export function SitesOverview({ sites }: { sites: Site[] }) {
 
       <section id="report-export" className="report-strip">
         <div className="report-icon"><Banknote size={19} /></div>
-        <div><strong>Built from the Scheme Details workbook</strong><span>{sites.length} source projects · PKR millions · Snapshot dated 3 November 2026</span></div>
+        <div><strong>Built from the master workbook</strong><span>{sites.length} source projects · PKR millions · Fiscal-year data from the workbook</span></div>
         <PortfolioExportButton sites={sites} />
       </section>
-      <footer className="page-footer"><span>FIELDNOTES <b>·</b> TOURISM INTELLIGENCE</span><span>Punjab portfolio · Financial reporting snapshot</span></footer>
+      <footer className="page-footer"><span>FIELDNOTES <b>·</b> TOURISM INTELLIGENCE</span><span>Master workbook · Financial reporting snapshot</span></footer>
     </div>
   );
 }
