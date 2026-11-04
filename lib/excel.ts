@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
 import type { FiscalYear, Site } from "@/lib/types";
 
-type SheetRecord = Record<string, unknown>;
+export type SheetRecord = Record<string, unknown>;
 
 export type WorkbookResult = {
   sites: Site[];
@@ -137,7 +137,7 @@ function toSite(
     name,
     description,
     district,
-    region: String(findField(row, "Province", "Region") ?? "Punjab").trim() || "Punjab",
+    region: String(findField(row, "Province", "Region") ?? "Not specified").trim() || "Not specified",
     category: typeof sourceCategory === "string" && sourceCategory.trim() ? sourceCategory.trim() : "Tourism project",
     image,
     gestationPeriod: String(findField(row, "Gestation Period") ?? "").trim(),
@@ -174,19 +174,11 @@ function combineDuplicateRows(existing: Site, incoming: Site): Site {
   };
 }
 
-export function parseWorkbook(buffer: ArrayBuffer | Uint8Array): WorkbookResult {
-  let workbook: XLSX.WorkBook;
-  try {
-    workbook = XLSX.read(buffer, { type: "array", cellDates: true });
-  } catch {
-    throw new WorkbookDataError("empty-workbook");
-  }
-  const sheetName = workbook.SheetNames[0];
-  const sheet = sheetName ? workbook.Sheets[sheetName] : undefined;
-  if (!sheet) throw new WorkbookDataError("empty-workbook");
-
-  const records = XLSX.utils.sheet_to_json<SheetRecord>(sheet, { defval: null });
-  const headers = records[0] ? Object.keys(records[0]) : [];
+export function normalizeSheetRows(
+  headers: string[],
+  records: SheetRecord[],
+  sheetName: string,
+): WorkbookResult {
   if (!headers.some((header) => ["name", "project name", "site name", "scheme name"].includes(normalizeHeader(header)))) {
     throw new WorkbookDataError("missing-project-column");
   }
@@ -211,4 +203,20 @@ export function parseWorkbook(buffer: ArrayBuffer | Uint8Array): WorkbookResult 
 
   if (!grouped.size) throw new WorkbookDataError("missing-projects");
   return { sites: [...grouped.values()], sheetName, skippedRows };
+}
+
+export function parseWorkbook(buffer: ArrayBuffer | Uint8Array): WorkbookResult {
+  let workbook: XLSX.WorkBook;
+  try {
+    workbook = XLSX.read(buffer, { type: "array", cellDates: true });
+  } catch {
+    throw new WorkbookDataError("empty-workbook");
+  }
+  const sheetName = workbook.SheetNames[0];
+  const sheet = sheetName ? workbook.Sheets[sheetName] : undefined;
+  if (!sheet) throw new WorkbookDataError("empty-workbook");
+
+  const records = XLSX.utils.sheet_to_json<SheetRecord>(sheet, { defval: null });
+  const headers = records[0] ? Object.keys(records[0]) : [];
+  return normalizeSheetRows(headers, records, sheetName);
 }

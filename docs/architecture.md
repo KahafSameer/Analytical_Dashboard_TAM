@@ -2,59 +2,48 @@
 
 ## Summary
 
-The Next.js App Router application uses one Excel workbook as the only project-data source. `lib/site-repository.ts` reads the root-level master workbook and passes its bytes to the reusable parser in `lib/excel.ts`. That parser validates the sheet, discovers rows/columns, groups project records and normalizes them into `Site[]`. Both portfolio and detail pages use this same dataset. No parallel normalized JSON or per-site Excel files are maintained.
+The dashboard uses a single Google Spreadsheet as its runtime source of truth. A server-only repository obtains the first worksheet through Google Sheets API v4, maps its rows using the same normalization functions retained in `lib/excel.ts`, and returns normalized records. Existing analytics and UI remain data-source independent.
 
 ```text
-Scheme Details for DAT 11-03-2026.xlsx
-                │
-                ▼
-lib/site-repository.ts ── reads once; caches successful result per process
-                │
-                ▼
-lib/excel.ts ── SheetJS → header discovery → row grouping → normalized Site[]
-                │
-                ├── app/page.tsx
-                │      └── SitesOverview → search/filter/sort cards + portfolio analytics
-                └── app/sites/[siteId]/page.tsx
-                       └── select project by dynamic ID → project-specific analytics
-
-Normalized Site[]
-       ├── lib/analytics.ts       portfolio aggregates
-       └── lib/site-analytics.ts  project fiscal-year chart series
+Google Spreadsheet
+       │ Sheets API v4, read-only service account
+       ▼
+lib/google-sheets.ts ── credential validation, API calls, server cache
+       │
+       ├── app/page.tsx
+       ├── app/sites/[siteId]/page.tsx
+       └── app/api/dashboard-data/route.ts ── periodic browser refresh
+                    │
+                    ▼
+lib/excel.ts: normalizeSheetRows(headers, rows, tabName)
+                    │
+                    ▼
+lib/types.ts: DashboardData / Site[] / FiscalYear[]
+       ├── lib/analytics.ts
+       ├── lib/site-analytics.ts
+       └── DashboardDataProvider → existing cards, detail pages and charts
 ```
 
-## Repository map
+## Server repository and normalization
 
-- `Scheme Details for DAT 11-03-2026.xlsx`: single master data source.
-- `lib/excel.ts`: shared parser, header matching, dynamic fiscal-year discovery, identity selection, duplicate grouping and normalization.
-- `lib/site-repository.ts`: server-only filesystem access and process-level cache boundary.
-- `lib/types.ts`: normalized project and fiscal-year contracts.
-- `lib/analytics.ts`, `lib/site-analytics.ts`: calculations independent of workbook column names.
-- `app/`: Server Component routes/layout and stylesheet.
-- `components/`: reusable UI; client components are used where interaction or Recharts requires them.
-- `docs/`: project documentation.
+- `lib/google-sheets.ts` is marked server-only. It reads `GOOGLE_SHEET_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, and `GOOGLE_PRIVATE_KEY`, authenticates with `spreadsheets.readonly`, discovers the first tab, fetches its values and calls the shared normalizer.
+- `lib/excel.ts` retains the prior workbook parser and exports `normalizeSheetRows`, the shared header and row mapping path. The current routes do not open the local Excel file.
+- `lib/types.ts` contains the normalized model and response type. Analytics and components do not depend on Google API row formats.
+- The repository coalesces concurrent requests and caches successful parsed data in memory for 20 seconds per warm process.
+- `app/api/dashboard-data/route.ts` exposes only normalized data and safe errors; it is uncached at the HTTP layer.
 
-## Source-to-view flow
+The first spreadsheet tab is treated as the dataset. Row 1 must contain the headers previously accepted from the workbook. Stable IDs are generated from GS No, another recognized project identifier, or name plus district. Fiscal-year groups are discovered from annual allocation/release/utilization header labels.
 
-The master workbook is read from the project root using `process.cwd()`. The first worksheet is parsed with SheetJS. Project identity uses GS No when available, otherwise Project ID/Site ID/Project Code, and finally a name-plus-district fallback. Rows with the same stable identity are grouped and their financial totals/fiscal-year values are combined.
+## Rendering and refresh
 
-Fiscal-year series are discovered from matching allocation/release/utilization header names; the parser does not hard-code the 2024–2027 range. Display fields such as category and image are taken from the workbook when available. If absent, the normalized record uses a generic category and presentation image rather than a site-specific value.
+The App Router overview and detail routes fetch through the server repository and pass normalized initial data into client components for server rendering. `DashboardDataProvider` keeps one client copy for the active dashboard, updates the sidebar count, and polls the API every 30 seconds while the tab is visible. The same dataset drives portfolio filters, analytics and project detail lookup; successful refreshes update React state without reloading the document.
 
-The parser returns a normalized `Site[]` and skipped-row count. Shared analytics consume only normalized records. The portfolio creates one card per normalized project; the detail route dynamically selects the matching ID and calculates charts from that project's normalized fiscal-year data.
+If refresh fails, the provider retains the last valid data and exposes a stale-data warning. Empty or malformed API responses are not accepted as replacement data. The server cache is only per-instance; no filesystem, persistent store, or background worker is required.
 
-## Rendering and lifecycle
+## Security boundaries
 
-- `app/layout.tsx` and route files are Server Components. The root shell receives the project count from the same parsed workbook.
-- The root layout and overview display a friendly data-source error if the master file cannot be read; the overview reports skipped non-empty rows.
-- `app/sites/[siteId]/page.tsx` looks up the requested ID in the workbook-derived dataset; unknown IDs receive an unavailable-project state.
-- `components/site-grid.tsx` owns interactive search/filter/sort state, not data loading or parsing.
-- `components/site-detail.tsx` is client-rendered for CSV download; its project record is selected by the server route.
-- The repository caches the first successful read/parse in memory for the process. Replacing the workbook requires a server restart/redeploy to refresh the cache.
-
-## Future data-source boundary
-
-UI components depend on normalized records and analytics functions, not SheetJS row structures. A future Google Sheets or API integration should replace/adapt the repository in `lib/site-repository.ts` and map its response to the same normalized model. Keep credentials and network access on the server side.
+Google credentials and API calls are restricted to `lib/google-sheets.ts` on the server. Client modules call only the application endpoint, which returns `DashboardData` and safe error text. Never add credentials to client code or `NEXT_PUBLIC_*`.
 
 ## Explicitly absent
 
-There is no database, application API, authentication, user editing, Google Sheets client, per-site workbook architecture, checked-in duplicate `data/sites.json`, or browser local-storage project repository.
+No database, write access, Google Sheets editing, authentication system, per-site spreadsheet, permanent cache, scheduled background process, or user upload flow is included.

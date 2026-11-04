@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "motion/react";
+import { DashboardDataProvider, useDashboardData } from "@/components/dashboard-data-provider";
 import {
   Activity,
   BarChart3,
@@ -25,10 +26,20 @@ const navigation = [
 ];
 
 export function DashboardShell({ children, siteCount }: { children: React.ReactNode; siteCount: number }) {
+  return (
+    <DashboardDataProvider>
+      <DashboardShellContent siteCount={siteCount}>{children}</DashboardShellContent>
+    </DashboardDataProvider>
+  );
+}
+
+function DashboardShellContent({ children, siteCount }: { children: React.ReactNode; siteCount: number }) {
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const reduceMotion = useReducedMotion();
+  const { data } = useDashboardData();
+  const currentSiteCount = data?.sites.length ?? siteCount;
 
   return (
     <MotionConfig reducedMotion="user">
@@ -55,7 +66,7 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
               >
                 {active && <motion.span className="nav-active-indicator" layoutId="sidebar-active-indicator" transition={{ duration: reduceMotion ? 0.12 : 0.3, ease: [0.22, 1, 0.36, 1] }} />}
                 <Icon size={18} strokeWidth={1.8} /><span>{label}</span>
-                {label === "Sites & projects" && <span className="nav-count">{siteCount}</span>}
+                {label === "Sites & projects" && <span className="nav-count">{currentSiteCount}</span>}
               </Link>
             );
           })}
@@ -64,7 +75,7 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
         <div className="sidebar-bottom">
           <div className="sidebar-region">
             <span className="region-indicator" />
-            <div><strong>Tourism portfolio</strong><small>{siteCount} projects in source</small></div>
+            <div><strong>Tourism portfolio</strong><small>{currentSiteCount} projects in source</small></div>
             <ChevronDown size={14} />
           </div>
           <button className="profile-button" onClick={() => setSettingsOpen((open) => !open)} aria-expanded={settingsOpen}>
@@ -82,7 +93,7 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
               transition={{ duration: reduceMotion ? 0.12 : 0.22, ease: [0.22, 1, 0.36, 1] }}
             >
               <strong>Prototype workspace</strong>
-              <span>Source: master Excel workbook</span>
+              <span>Source: Google Sheets</span>
               <span>Currency: Pakistani rupees (millions)</span>
             </motion.div>
           )}
@@ -110,11 +121,35 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
   );
 }
 
-export function PageTopline({ section, date = "Master workbook" }: { section: string; date?: string }) {
+export function PageTopline({ section, date = "Google Sheets" }: { section: string; date?: string }) {
+  const { data, isRefreshing, error } = useDashboardData();
+  const freshness = useFreshnessLabel(data?.fetchedAt);
   return (
     <div className="page-topline">
       <div className="breadcrumb"><span>Workspace</span><span className="breadcrumb-separator">/</span><strong>{section}</strong></div>
-      <div className="topline-meta"><Activity size={14} /><span>Data snapshot · {date}</span></div>
+      <div className={`topline-meta${error ? " topline-meta-stale" : ""}`} title={error ?? undefined}>
+        <Activity size={14} />
+        <span>{error ? "Refresh failed · showing last data" : isRefreshing ? "Updating…" : freshness ? `Updated ${freshness}` : `Data source · ${date}`}</span>
+      </div>
     </div>
   );
+}
+
+function useFreshnessLabel(fetchedAt?: string) {
+  const [now, setNow] = useState(0);
+  useEffect(() => {
+    const update = () => setNow(Date.now());
+    const initialUpdate = window.setTimeout(update, 0);
+    const timer = window.setInterval(update, 15_000);
+    return () => {
+      window.clearTimeout(initialUpdate);
+      window.clearInterval(timer);
+    };
+  }, []);
+  if (!fetchedAt) return null;
+  const elapsedSeconds = Math.max(0, Math.floor((now - new Date(fetchedAt).getTime()) / 1000));
+  if (elapsedSeconds < 10) return "just now";
+  if (elapsedSeconds < 60) return `${elapsedSeconds} seconds ago`;
+  const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+  return `${elapsedMinutes} minute${elapsedMinutes === 1 ? "" : "s"} ago`;
 }

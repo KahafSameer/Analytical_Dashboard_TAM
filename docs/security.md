@@ -1,20 +1,25 @@
 # Security
 
-## Current data and credential boundaries
+## Credentials and service account
 
-- No authentication, account system, database, Google credentials, server API or application secrets are currently configured.
-- The master workbook is read from the project root on the server. It is included with the project deployment; treat all financial records as public only if their owner has approved that distribution.
-- The workbook is not accepted from users and is not stored in browser local storage.
-- Google Sheets integration is not implemented. Do not add a private spreadsheet credential to a browser bundle or a `NEXT_PUBLIC_*` variable.
+- `GOOGLE_PRIVATE_KEY`, service-account email, and spreadsheet ID are server environment variables. `.env.example` contains blank placeholders only.
+- The Sheets client is isolated in `lib/google-sheets.ts`, which imports `server-only`. It uses the read-only `spreadsheets.readonly` scope.
+- The service account should have Viewer access to only the one master spreadsheet. Do not use a credential JSON file or commit secrets.
+- Never prefix credentials with `NEXT_PUBLIC_`, log them, return them from `/api/dashboard-data`, or paste them into issues or documentation.
+- Configure local secrets in ignored `.env.local`; configure Vercel secrets through Project Settings → Environment Variables. Rotate any credential that has been exposed.
 
-## Workbook processing
+## API and data
 
-The parser reads the configured master workbook and inspects its first worksheet. There is no upload route. The workbook remains an input that must be reviewed and validated before deployment; parser-level structural validation is not a comprehensive malformed-file or resource-exhaustion defense. Do not execute macros or treat workbook strings as trusted HTML.
+`GET /api/dashboard-data` is a read-only endpoint. It returns normalized public dashboard data and safe error messages, not Google API responses or authentication material. It sets `Cache-Control: no-store`; the server repository applies only a short in-memory cache. The endpoint does not accept a spreadsheet ID or arbitrary range from the caller.
 
-If user uploads are added later, define authorized access, size limits, content checks, parsing resource limits, malware handling, retention and audit logging.
+Only publish a spreadsheet whose contents are approved for every dashboard visitor. The route has no user authentication or authorization because the prototype is publicly readable; do not assume obscurity of the dashboard URL protects financial records.
 
-## Dependencies and operations
+## Input handling
 
-SheetJS is pinned to the patched 0.20.3 tarball from `cdn.sheetjs.com`; the dependency's source/tarball origin is a supply-chain consideration and should be pinned/reviewed via lockfile and CI. The production-only `npm audit --omit=dev` check passed during implementation; repeat it with dependency updates. Do not infer that a prototype audit constitutes a security review or eliminates all runtime risk.
+Google Sheets values are external data. `lib/excel.ts` normalizes supported header names and values, drops invalid project rows, and UI renders strings as text. It does not evaluate formulas or treat cell contents as HTML. Missing required headers and empty sheets fail gracefully.
 
-Protect production with HTTPS and suitable security headers. Review remote image/font privacy implications and the privacy policy before public launch. No security headers, CSP, telemetry policy or formal vulnerability disclosure process are currently documented in application code.
+## Deployment and dependencies
+
+Use HTTPS and Vercel environment-variable protections, and restrict Preview secrets to trusted contributors where appropriate. Review dependency updates and Google Cloud access periodically. `googleapis` is used server-side only; avoid bundling it into client components.
+
+There is no write access, user file upload, database, CSP/security-header policy, account system, or formal security monitoring in the prototype.

@@ -2,7 +2,15 @@
 
 This is a user-oriented summary of the work represented in the current repository. It is not a release/tag history; inspect Git history for commit-level provenance.
 
-## Unreleased — master workbook source architecture
+## Unreleased — Google Sheets source and live refresh
+
+- Replaced runtime local Excel file access with a server-only Google Sheets API adapter using a read-only service account.
+- Reused the existing row normalizer so the `Site`/`FiscalYear` model and analytics remain independent of source format.
+- Added `/api/dashboard-data`, a 20-second per-instance cache and a single client refresh every 30 seconds while the tab is visible.
+- Added a subtle freshness/stale-data indicator and previous-data retention when a background refresh fails.
+- Added blank-only `.env.example`, service-account JSON ignore rules and setup/Vercel documentation.
+
+## Earlier — master workbook normalization architecture
 
 - Replaced the duplicate JSON/browser-import data architecture with a single root-level master workbook.
 - Added server-side workbook repository with process-level cache and reusable parser/normalizer.
@@ -29,8 +37,8 @@ This is a user-oriented summary of the work represented in the current repositor
 
 ## Data and scope notes
 
-- Google Sheets synchronization, authentication, database persistence, physical progress, activities, milestones, visitor analytics and dated monthly progress are not implemented.
-- Current source workbook: `Scheme Details for DAT 11-03-2026.xlsx`. The parser reads its first worksheet at runtime.
+- Google Sheets is read-only. Authentication applies to the server's service account, not dashboard users.
+- Database persistence, physical progress, activities, milestones, visitor analytics and dated monthly progress are not implemented.
 
 ## Maintaining this file
 

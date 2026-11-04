@@ -2,7 +2,8 @@
 
 ## Application shell
 
-- `components/dashboard-shell.tsx`: responsive fixed sidebar, navigation links, mobile header/drawer, profile popover and `PageTopline`. Receives the project count from the master workbook through the root layout.
+- `components/dashboard-shell.tsx`: responsive fixed sidebar, navigation links, mobile header/drawer, profile popover and freshness-aware `PageTopline`. Gets live project counts from the dashboard data provider.
+- `components/dashboard-data-provider.tsx`: one client-held normalized dataset, 30-second background polling, request deduplication, freshness/error state and stale-data retention.
 - `components/ui.tsx`: shared `StatusBadge`, `ProgressBar`, `SectionHeading`, `EmptyState`, `KpiCard`, `ChartCard` and a milestone-data note. `MilestonePlaceholder` is a data-absence notice, not an implemented milestone timeline.
 - `components/motion.tsx`: reusable viewport reveal and chart entrance hooks used to keep animation logic small and localized.
 
@@ -13,7 +14,7 @@
 - `components/site-card.tsx`: image-led project card and navigation.
 - `components/portfolio-chart.tsx`: responsive portfolio allocation/utilization chart.
 - `components/portfolio-analytics.tsx`: district funding, category mix, progress distribution and derived financial signals.
-- `components/portfolio-export-button.tsx`: downloads current master-workbook portfolio rows as CSV.
+- `components/portfolio-export-button.tsx`: downloads the currently loaded Google Sheets portfolio rows as CSV.
 
 ## Project detail
 
@@ -24,11 +25,12 @@
 
 - `app/layout.tsx`: metadata, CSS and root shell.
 - `app/page.tsx`: overview route.
-- `app/sites/[siteId]/page.tsx`: dynamically selects a normalized project by its workbook-derived ID and displays a friendly unavailable state when missing.
+- `app/sites/[siteId]/page.tsx`: dynamically selects a normalized project by its sheet-derived ID and displays a friendly unavailable state when missing.
 - `app/loading.tsx`: shared route skeleton.
 - `lib/types.ts`: domain contracts.
-- `lib/site-repository.ts`: server-side master workbook access and process cache.
-- `lib/excel.ts`: shared Excel parsing, validation, grouping and normalization.
+- `lib/excel.ts`: retained Excel parser plus shared header/row validation, grouping and normalization; runtime routes use its normalizer only.
+- `lib/google-sheets.ts`: server-only service-account client, first-tab fetching, short process cache and normalization adapter.
+- `app/api/dashboard-data/route.ts`: safe normalized-data API response for background refresh.
 - `lib/analytics.ts`: portfolio calculations.
 - `lib/site-analytics.ts`: project fiscal-year series calculations.
 

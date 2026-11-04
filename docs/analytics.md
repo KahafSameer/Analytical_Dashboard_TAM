@@ -2,7 +2,7 @@
 
 ## Source and units
 
-Metrics use the normalized projects from the single master workbook (currently 89 projects). Financial amounts are PKR millions. There is no activity-level dataset or transaction/date series. Fiscal-year labels are discovered from the workbook's annual funding headers; the current workbook has FY 2024–25, FY 2025–26 and FY 2026–27.
+Metrics use the normalized projects from the single master Google Sheet (currently expected to mirror 89 source projects). Financial amounts are PKR millions. There is no activity-level dataset or transaction/date series. Fiscal-year labels are discovered from the sheet's annual funding headers.
 
 ## Portfolio KPIs (`lib/analytics.ts`)
 
@@ -30,13 +30,13 @@ When denominators are zero, portfolio ratio helpers return zero. Percentages are
 - **Allocation utilization donut:** shows `min(utilized, allocated)` as expenditure within allocation, `max(allocated − utilized, 0)` as remaining allocation, and `max(utilized − allocated, 0)` as expenditure above allocation. Zero-valued slices are omitted. The chart center shows `utilized / allocated` as a percentage; the shared percentage formatter does not cap this figure, so it can exceed 100%.
 - **Cumulative funding:** for each fiscal year in order, take a running sum of annual allocation, release and utilization. This is a cumulative fiscal-year view, not monthly progress or an activity timeline.
 - **Annual execution rates:** for years with a positive allocation, calculate `release / allocation × 100` and `utilized / allocation × 100`. Rates may exceed 100%.
-- **Project financial progress:** use the workbook's `Project Overall Financial Progress %` fraction. The shared parser falls back to `utilized / approvedCost` only when that source field is absent.
+- **Project financial progress:** use the sheet's `Project Overall Financial Progress %` fraction. The shared normalizer falls back to `utilized / approvedCost` only when that source field is absent.
 
 ## Interpretation and caveats
 
 - The source calls these financial progress figures; they do not prove physical completion.
 - Aggregated financial progress and arithmetic mean project progress answer different questions.
-- Workbook totals and sums of annual fields may differ because of rounding or source reporting.
+- Sheet totals and sums of annual fields may differ because of rounding or source reporting.
 - Utilization may exceed allocation or releases; this is surfaced rather than clamped in source totals.
 - District/category aggregations are descriptive, not performance rankings or quality assessments.
 - A three-year annual series should never be presented as a smooth monthly trend.

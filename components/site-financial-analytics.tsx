@@ -171,7 +171,7 @@ function AnnualExecutionChart({ site }: { site: Site }) {
           <p className="detail-chart-footnote">Rates may exceed 100% where reported releases or spending exceed allocation.</p>
         </>
       ) : (
-        <EmptyState title="No annual allocation to compare" description="Annual execution rates appear when the workbook reports fiscal-year allocations." />
+        <EmptyState title="No annual allocation to compare" description="Annual execution rates appear when the sheet reports fiscal-year allocations." />
       )}
     </ChartCard>
   );

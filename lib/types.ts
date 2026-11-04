@@ -37,3 +37,10 @@ export type AnalyticsSummary = {
   awaitingSpend: number;
   meanProgress: number;
 };
+
+export type DashboardData = {
+  sites: Site[];
+  sheetName: string;
+  skippedRows: number;
+  fetchedAt: string;
+};

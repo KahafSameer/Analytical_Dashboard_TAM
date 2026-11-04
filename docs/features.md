@@ -3,7 +3,7 @@
 ## Portfolio overview (`/`)
 
 - Summary metrics for project count, cost-weighted financial progress, expenditure, and projects with recorded spend.
-- Portfolio cards with a workbook-supplied image where available (otherwise a shared fallback), source category/type where available, district, title, source code, financial progress bar and detail link.
+- Portfolio cards with a sheet-supplied image where available (otherwise a shared fallback), source category/type where available, district, title, source code, financial progress bar and detail link.
 - Live search, clear-search behavior, filter panel, sorting and a no-results state.
 - Filters: region, category, spend status and financial-progress range.
 - Sorting: most financial progress, name and financial activity status. The workbook has no row-level update timestamp.
@@ -22,19 +22,19 @@
 - CSV summary export.
 - An explicit explanation that activity milestones and physical progress are absent from this source.
 
-## Master workbook
+## Master Google Sheet
 
-The root-level `Scheme Details for DAT 11-03-2026.xlsx` workbook is the sole source of all portfolio records. The server parses its first worksheet through `lib/site-repository.ts` and `lib/excel.ts`. Projects and detail analytics are generated from the normalized records. Replacing the workbook requires restarting/redeploying the server to refresh its process cache. No browser upload or local-storage project repository is present.
+One Google Spreadsheet is the sole source of all portfolio records. The server reads its first worksheet through `lib/google-sheets.ts` and normalizes it with `lib/excel.ts`. Projects and detail analytics are generated from the normalized records. The browser refreshes shared dashboard state every 30 seconds while visible; no browser upload or local-storage project repository is present.
 
 ## Export
 
 - Project export downloads the project's source financial fields and fiscal-year breakdown as CSV.
-- Portfolio export downloads the records loaded from the master workbook as CSV.
+- Portfolio export downloads the records loaded from Google Sheets as CSV.
 - Neither export is an Excel `.xlsx` file, PDF report, signed report or official statement.
 
 ## Navigation and loading
 
-The sidebar and mobile drawer share the workspace navigation. `app/loading.tsx` provides skeleton UI. Unknown project IDs and unavailable/invalid workbooks display friendly states.
+The sidebar and mobile drawer share the workspace navigation. `app/loading.tsx` provides skeleton UI. Unknown project IDs and unavailable/invalid sheet data display friendly states.
 
 ## Empty states
 

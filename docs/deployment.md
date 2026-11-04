@@ -2,43 +2,45 @@
 
 ## Prerequisites
 
-- Node.js compatible with the installed Next.js 16 version.
-- npm.
-- Network access to install dependencies. SheetJS is currently installed from a SheetJS CDN tarball, not a conventional npm registry version.
-- Network access at runtime for remote Unsplash images and Google Fonts unless those assets are replaced or self-hosted.
+- Node.js compatible with the project's Next.js 16 version and npm.
+- One Google Cloud project with the **Google Sheets API enabled**.
+- A Google Cloud service account granted Viewer access to the master spreadsheet.
+- Vercel configured with the required server-side environment variables.
 
 ## Local development
+
+1. Copy `.env.example` to `.env.local`.
+2. Set `GOOGLE_SHEET_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, and `GOOGLE_PRIVATE_KEY` in `.env.local`; never commit that file.
+3. Share the master spreadsheet with the service account email as Viewer.
+4. Run:
 
 ```powershell
 npm install
 npm run dev
 ```
 
-Open the local URL printed by Next.js. The default development server uses port 3000 when available.
+The API reads the first tab and expects the same first-row column headers as the previous master workbook.
 
-## Validation and production
+## Vercel
+
+1. Select the repository and keep the **Next.js** framework preset/default build and output settings.
+2. In Project Settings → Environment Variables, create all three variables for Production and any trusted Preview/Development environments that need Google access.
+3. Enter the private key exactly as a secret. If entered with escaped newlines (`\n`), the server converts them to newline characters.
+4. Confirm the spreadsheet is shared with the configured service-account email.
+5. Redeploy after setting or rotating credentials. Do not set a custom output directory such as `public` or `.next`.
+
+The application does not use a local workbook, service-account file, filesystem persistence, or a permanent Node process. Sheets API calls execute in serverless route/page invocations; the 20-second memory cache is opportunistic per warm instance.
+
+## Validation
 
 ```powershell
 npm run lint
 npm run typecheck
 npm run build
-npm run start
 ```
 
-The application reads the master workbook from the project root at runtime. Include `Scheme Details for DAT 11-03-2026.xlsx` in the deployment artifact and ensure the runtime can read it. Routes are dynamic so workbook data is not baked into a build-time static portfolio page. The production start command requires an available port; choose a different port through the standard Next.js `PORT` environment variable when 3000 is already occupied.
+The build does not require Google credentials because routes are dynamic; runtime credentials must exist for pages/API data retrieval to succeed. After deployment, verify `/`, a `/sites/[siteId]` link, and `GET /api/dashboard-data`.
 
-## Deployment configuration
+## Operational notes
 
-No runtime secrets or environment variables are required by the current application. There are no Google Sheets credentials to configure. Keep the framework preset compatible with Next.js App Router. Include the workbook and allow Next.js image optimization to fetch configured Unsplash images, or use local images instead.
-
-For a public deployment, first confirm that the supplied workbook and all financial records are approved for publication. Add the required privacy, access, logging, security headers and operational policies before presenting this prototype as an official system.
-
-## Data update procedure
-
-1. Review and approve the replacement master workbook.
-2. Replace the root workbook while retaining any required backup outside the deployed application artifact.
-3. Validate sheet/header structure, normalized project IDs, duplicate grouping and calculated totals.
-4. Run lint, typecheck, data checks and production build.
-5. Deploy/restart the app so the process cache reloads the workbook; verify overview and representative detail routes.
-
-The repository does not generate a JSON snapshot. Replacing the workbook does not invalidate a running process's in-memory cache; restart/redeploy to load the updated source. Do not add a normalized project JSON copy as a second source of truth.
+The browser refreshes once per 30 seconds while visible. Monitor Google API quota and Vercel function errors. Updates to the sheet appear on the next successful refresh; no redeploy is needed for data changes. Changes to Vercel environment variables require a new deployment.

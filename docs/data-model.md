@@ -1,64 +1,63 @@
 # Data model
 
-## Normalized model
+## Normalized contract
 
-`lib/types.ts` defines the UI-facing `Site` and `FiscalYear` contracts. The UI and analytics must consume these types, not raw workbook headers.
+The dashboard consumes `DashboardData`, `Site[]`, and `FiscalYear[]` from `lib/types.ts`. This contract is shared across the server Sheets adapter, client refresh provider, calculations and UI.
+
+### `DashboardData`
+
+| Field | Type | Meaning |
+|---|---|---|
+| `sites` | `Site[]` | Normalized, dynamically identified projects from the master sheet. |
+| `sheetName` | `string` | Title of the first spreadsheet tab read from Google Sheets. |
+| `skippedRows` | `number` | Non-empty rows that lack a supported project name. |
+| `fetchedAt` | `string` | ISO timestamp when the server successfully normalized the data. |
 
 ### `Site`
 
 | Field | Type | Meaning |
 |---|---|---|
-| `id` | `string` | Stable route ID, derived from GS No, another project identifier, or name/district fallback. |
+| `id` | `string` | Stable route ID from GS No, another project ID, or name/district fallback. |
 | `projectId` | `string?` | Source Project ID where present. |
 | `code` | `string?` | Source GS No where present. |
-| `name` | `string` | Workbook Name/Project Name/Site Name/Scheme Name. Required for a usable project row. |
-| `description` | `string` | Workbook description, falling back to project name. |
-| `district` | `string` | District/Location or “Not specified”. |
-| `region` | `string` | Province/Region where supplied; current provincial workbook defaults to Punjab. |
-| `category` | `string` | Category/Project Type/Site Type from workbook, else neutral “Tourism project”. |
-| `image` | `string` | HTTPS image from Image/Image URL/Photo URL, else a generic presentation fallback. |
-| `gestationPeriod` | `string?` | Workbook gestation/delivery-period text. |
-| `approvedCost` | `number` | Total approval cost in PKR millions. |
-| `allocated` | `number` | Total allocation in PKR millions. |
-| `released` | `number` | Total release in PKR millions. |
-| `utilized` | `number` | Total utilization in PKR millions. |
-| `overallProgress` | `number` | Fraction from 0 to 1; derives from reported overall financial progress or falls back to utilized/approved cost. |
-| `currentYearProgress` | `number?` | Current-year financial-progress fraction, when available. |
-| `fiscalYears` | `FiscalYear[]` | Dynamically discovered annual funding records. |
+| `name` | `string` | Project name; required for a usable record. |
+| `description` | `string` | Source description, with project name fallback. |
+| `district` | `string` | Source District/Location or “Not specified”. |
+| `region` | `string` | Source Province/Region or “Not specified”. |
+| `category` | `string` | Source category/type or neutral “Tourism project”. |
+| `image` | `string` | HTTPS image source or the existing generic presentation fallback. |
+| `gestationPeriod` | `string?` | Source gestation/delivery-period text. |
+| `approvedCost`, `allocated`, `released`, `utilized` | `number` | Funding totals in PKR millions. |
+| `overallProgress` | `number` | Fraction from 0 to 1 from reported progress, otherwise utilization / approved cost. |
+| `currentYearProgress` | `number?` | Current-year financial progress when reported. |
+| `fiscalYears` | `FiscalYear[]` | Annual funding series discovered from sheet headers. |
 
-### `FiscalYear`
+`FiscalYear` contains `label`, `allocation`, `release`, and `utilized` values in PKR millions.
 
-Each fiscal-year item has `label`, `allocation`, `release` and `utilized`. Amounts are numeric PKR millions; the year label is inferred from annual headers, rather than a hard-coded fixed list.
+## Google Sheet columns
 
-## Master workbook
+The sheet mirrors the former master workbook's structure; it is one spreadsheet with all projects, not one spreadsheet per project. The parser accepts headers including:
 
-The current master file is `Scheme Details for DAT 11-03-2026.xlsx`. It contains one worksheet (`Sheet1`) with 89 populated project records and source fields including:
+- Project identity: `Project ID`, `GS No`, and related ID aliases.
+- Metadata: `Name`, `Project Name`, `Description`, `District`, `Location`, `Province`, `Region`, `Category`, `Project Type`, `Image`, and `Gestation Period`.
+- Funding totals: `Total Approval Cost`, `Total Funds Allocation In Millions`, `Total FD Release In Millions`, and `Total Funds Utilization All Fys In Millions`, with supported concise aliases.
+- Progress: `Project Overall Financial Progress %` and `Project CFY Financial Progress %`.
+- Annual allocation, release and utilization columns with fiscal-year labels in the header.
 
-- Identity and metadata: `Project ID`, `GS No`, `Name`, `Description`, `District`, `Gestation Period`.
-- Totals: `Total Approval Cost`, `Total Funds Allocation In Millions`, `Total FD Release In Millions`, `Total Funds Utilization All Fys In Millions`.
-- Progress: `Project Overall Financial Progress %`, `Project CFY Financial Progress %`.
-- Annual groups for allocation, release and utilization. The parser discovers years in column headers and does not assume the workbook always uses the same fixed fiscal years.
+Headers are whitespace-normalized and matched case-insensitively. The first row is the header row; subsequent rows are records. Google values are read as unformatted values so numbers and percentages remain parseable.
 
-The workbook's headers have spacing, newline and trailing-space variations. `lib/excel.ts` normalizes whitespace and matches headers case-insensitively.
+## Identity and duplicate rows
 
-## Identity and grouping
+Identity priority is GS No, then Project ID/Site ID/Project Code, then normalized project name plus district. Duplicate project rows are grouped using the existing parser behavior: funding totals and fiscal-year values are summed and overall progress is recalculated from combined utilization / approved cost. Confirm source semantics if the sheet contains repeated snapshots rather than split project rows.
 
-Identity priority:
+## Validation and missing values
 
-1. GS No.
-2. Project ID, Site ID or Project Code.
-3. Normalized project name plus district.
+- Missing credentials, unavailable spreadsheet, access denial, empty first tab, unsupported project-name header, missing financial headers and no valid project rows produce typed errors and user-safe messages.
+- Non-empty rows without a valid name are skipped and counted.
+- Missing numeric values are normalized as zero; reported progress is preferred and falls back to utilization/approved cost.
+- Optional category/image fields use the existing neutral presentation defaults; no financial facts or unsupported metrics are fabricated.
+- A failed refresh or invalid/empty payload does not replace valid client-held data.
 
-Rows sharing an identity are combined: cost/allocation/release/utilization and matching annual funding are summed; overall progress is recalculated from combined utilization / approved cost. The first row supplies descriptive metadata. Verify this aggregation rule if future sheets contain repeated snapshot rows rather than split project rows.
+## Excel migration boundary
 
-## Validation and fallback behavior
-
-- A missing workbook, unreadable workbook, absent project-name header, missing financial columns, or workbook with no valid project rows produces a typed `WorkbookDataError`; the UI displays a friendly source-unavailable state.
-- Non-empty rows without a valid project name are skipped and counted.
-- Missing numeric cell values normalize to zero. Missing overall progress falls back to utilization divided by approved cost when possible.
-- Missing category/image columns get neutral presentation defaults; these defaults are not treated as financial facts.
-- Absent annual funding columns yield an empty fiscal-year array, allowing chart empty states.
-
-## Single-source rule
-
-Do not add a per-site workbook directory, manually maintained project JSON, or browser-upload/local-storage dataset. Add source-column aliases and normalization logic in `lib/excel.ts`, and keep the `Site` model stable when changing the source provider.
+`lib/excel.ts` retains `parseWorkbook()` for a potential offline/import adapter, but `normalizeSheetRows()` is shared with the Google Sheets source. Application routes use only `lib/google-sheets.ts`; the checked-in `.xlsx` file is no longer required at runtime.

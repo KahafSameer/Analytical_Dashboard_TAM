@@ -13,6 +13,9 @@
 # Local environment files
 .env
 .env.*
+!.env.example
+*service-account*.json
+google-credentials*.json
 
 # Debug logs
 npm-debug.log*

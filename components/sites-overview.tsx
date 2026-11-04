@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import {
   ArrowUpRight,
   Banknote,
@@ -10,7 +11,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { getPortfolioSummary, combineFiscalYears, formatMillions, formatPercent } from "@/lib/analytics";
-import type { Site } from "@/lib/types";
+import type { DashboardData } from "@/lib/types";
 import { KpiCard, SectionHeading } from "@/components/ui";
 import { PageTopline } from "@/components/dashboard-shell";
 import { PortfolioFundingChart } from "@/components/portfolio-chart";
@@ -18,13 +19,38 @@ import { PortfolioAnalytics } from "@/components/portfolio-analytics";
 import { PortfolioExportButton } from "@/components/portfolio-export-button";
 import { SiteGrid } from "@/components/site-grid";
 import { Reveal } from "@/components/motion";
+import { useDashboardData } from "@/components/dashboard-data-provider";
+import { DataSourceError, NoProjectsState } from "@/components/data-source-state";
 
-export function SitesOverview({ sites }: { sites: Site[] }) {
+export function SitesOverview({
+  initialData,
+  initialError,
+}: {
+  initialData: DashboardData | null;
+  initialError?: string | null;
+}) {
+  const { data, setData, setError } = useDashboardData();
+  useEffect(() => {
+    if (initialData) setData(initialData);
+    else if (initialError) setError(initialError);
+  }, [initialData, initialError, setData, setError]);
+  const currentData = initialData && (!data || Date.parse(initialData.fetchedAt) >= Date.parse(data.fetchedAt))
+    ? initialData
+    : data;
+  if (!currentData) return <DataSourceError message={initialError ?? undefined} />;
+  if (!currentData.sites.length) return <NoProjectsState />;
+
+  const sites = currentData.sites;
   const summary = getPortfolioSummary(sites);
   const yearly = combineFiscalYears(sites);
   return (
     <div className="page-stack">
-      <PageTopline section="Tourism sites" />
+      {currentData.skippedRows > 0 && (
+        <p className="inline-alert" role="status">
+          {currentData.skippedRows} non-empty row{currentData.skippedRows === 1 ? " was" : "s were"} skipped because no valid project name was found.
+        </p>
+      )}
+      <PageTopline section="Tourism sites" date="Google Sheets" />
       <section className="page-intro">
         <div>
           <div className="intro-kicker"><span className="intro-kicker-line" /> TOURISM & HERITAGE PORTFOLIO</div>
@@ -33,7 +59,7 @@ export function SitesOverview({ sites }: { sites: Site[] }) {
         </div>
         <div className="intro-context">
           <span className="context-icon"><MapPin size={17} /></span>
-          <div><strong>Master workbook</strong><span>Current source of project data</span></div>
+          <div><strong>Google Sheets</strong><span>Current source of project data</span></div>
         </div>
       </section>
 
@@ -83,10 +109,10 @@ export function SitesOverview({ sites }: { sites: Site[] }) {
 
       <section id="report-export" className="report-strip">
         <div className="report-icon"><Banknote size={19} /></div>
-        <div><strong>Built from the master workbook</strong><span>{sites.length} source projects · PKR millions · Fiscal-year data from the workbook</span></div>
+        <div><strong>Built from the master Google Sheet</strong><span>{sites.length} source projects · PKR millions · Fiscal-year data from the sheet</span></div>
         <PortfolioExportButton sites={sites} />
       </section>
-      <footer className="page-footer"><span>FIELDNOTES <b>·</b> TOURISM INTELLIGENCE</span><span>Master workbook · Financial reporting snapshot</span></footer>
+      <footer className="page-footer"><span>FIELDNOTES <b>·</b> TOURISM INTELLIGENCE</span><span>Google Sheets · Financial reporting snapshot</span></footer>
     </div>
   );
 }

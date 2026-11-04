@@ -1,17 +1,15 @@
 import { SiteDetail } from "@/components/site-detail";
-import { DataSourceError } from "@/components/data-source-state";
-import { getSites } from "@/lib/site-repository";
-import type { Site } from "@/lib/types";
+import { getDashboardData, getDashboardDataErrorMessage } from "@/lib/google-sheets";
+import type { DashboardData } from "@/lib/types";
 
 export default async function SiteDetailPage({ params }: { params: Promise<{ siteId: string }> }) {
   const { siteId } = await params;
-  let sites: Site[];
+  let initialData: DashboardData | null = null;
+  let initialError: string | null = null;
   try {
-    sites = getSites();
-  } catch {
-    return <DataSourceError />;
+    initialData = await getDashboardData();
+  } catch (error) {
+    initialError = getDashboardDataErrorMessage(error);
   }
-  const site = sites.find((item) => item.id === siteId);
-  if (!site) return <SiteDetail site={null} siteId={siteId} />;
-  return <SiteDetail site={site} siteId={siteId} />;
+  return <SiteDetail initialData={initialData} initialError={initialError} siteId={siteId} />;
 }

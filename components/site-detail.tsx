@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -26,10 +26,12 @@ import {
 } from "recharts";
 import { getPortfolioSummary, formatMillions, formatPercent } from "@/lib/analytics";
 import { SiteFinancialAnalytics } from "@/components/site-financial-analytics";
-import type { Site } from "@/lib/types";
+import type { DashboardData, Site } from "@/lib/types";
 import { ChartCard, EmptyState, KpiCard, ProgressBar, StatusBadge } from "@/components/ui";
 import { PageTopline } from "@/components/dashboard-shell";
 import { Reveal, useChartEntrance } from "@/components/motion";
+import { useDashboardData } from "@/components/dashboard-data-provider";
+import { DataSourceError } from "@/components/data-source-state";
 
 function exportCsv(site: Site) {
   const rows = [
@@ -63,7 +65,7 @@ function ProjectDetail({ site }: { site: Site }) {
   const { ref: chartRef, isInView: chartInView, animate: animateChart } = useChartEntrance();
   return (
     <div className="page-stack">
-      <PageTopline section="Project detail" date="Master workbook" />
+      <PageTopline section="Project detail" date="Google Sheets" />
       <Link href="/" className="back-link"><ArrowLeft size={15} /> All tourism projects</Link>
 
       <section className="detail-hero">
@@ -95,7 +97,7 @@ function ProjectDetail({ site }: { site: Site }) {
       </section>
 
       <section aria-label="Project financial summary">
-        <div className="summary-section-label"><span>FINANCIAL SNAPSHOT</span><span className="summary-privacy"><Check size={13} /> From source workbook</span></div>
+        <div className="summary-section-label"><span>FINANCIAL SNAPSHOT</span><span className="summary-privacy"><Check size={13} /> From Google Sheets</span></div>
         <div className="kpi-grid detail-kpis">
           <KpiCard label="Financial progress" value={formatPercent(site.overallProgress)} supporting="Utilized / approved cost" icon={<ArrowUpRight size={17} />} accent />
           <KpiCard label="Approved cost" value={formatMillions(site.approvedCost)} supporting="Total project approval" icon={<Landmark size={17} />} />
@@ -137,7 +139,7 @@ function ProjectDetail({ site }: { site: Site }) {
                 </div>
               </>
             ) : (
-              <EmptyState title="No year-wise funding available" description="This workbook doesn’t contain annual allocation or expenditure for this project." />
+              <EmptyState title="No year-wise funding available" description="This Google Sheet doesn’t contain annual allocation or expenditure for this project." />
             )}
           </ChartCard>
 
@@ -184,13 +186,31 @@ function ProjectDetail({ site }: { site: Site }) {
   );
 }
 
-export function SiteDetail({ site, siteId }: { site: Site | null; siteId: string }) {
+export function SiteDetail({
+  initialData,
+  initialError,
+  siteId,
+}: {
+  initialData: DashboardData | null;
+  initialError?: string | null;
+  siteId: string;
+}) {
+  const { data, setData, setError } = useDashboardData();
+  useEffect(() => {
+    if (initialData) setData(initialData);
+    else if (initialError) setError(initialError);
+  }, [initialData, initialError, setData, setError]);
+  const currentData = initialData && (!data || Date.parse(initialData.fetchedAt) >= Date.parse(data.fetchedAt))
+    ? initialData
+    : data;
+  if (!currentData) return <DataSourceError message={initialError ?? undefined} />;
+  const site = currentData.sites.find((item) => item.id === siteId) ?? null;
   if (!site) {
     return (
       <div className="detail-error">
         <span className="empty-icon"><FileSpreadsheet size={22} /></span>
-        <h1>Project not found in the master workbook</h1>
-        <p>Project {siteId} isn’t present in the current master dataset. Return to the portfolio to choose an available project.</p>
+        <h1>Project not found in Google Sheets</h1>
+        <p>Project {siteId} isn’t present in the current dataset. Return to the portfolio to choose an available project.</p>
         <Link href="/" className="button button-primary"><ArrowLeft size={15} /> Back to projects</Link>
       </div>
     );

@@ -67,6 +67,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .breadcrumb-separator { color: #bdc5be; }
 .breadcrumb strong { color: #34443b; font-weight: 600; }
 .topline-meta { display: flex; align-items: center; gap: 7px; color: #89948b; font-size: 10px; }
+.topline-meta-stale { color: #8b6a12; }
 .topline-meta svg { color: var(--green-2); }
 .page-intro { display: flex; align-items: flex-end; justify-content: space-between; margin-top: 3px; }
 .intro-kicker, .eyebrow { color: #728078; font-size: 9px; letter-spacing: 1.1px; font-weight: 700; }

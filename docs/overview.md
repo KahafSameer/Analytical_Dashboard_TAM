@@ -2,14 +2,7 @@
 
 ## Purpose
 
-Fieldnotes is a client-facing analytics prototype for reviewing tourism and heritage investment projects in Punjab, Pakistan. It turns a provided project-finance workbook into a searchable project catalogue and a set of portfolio- and project-level funding views.
-
-## Goals
-
-- Make a large list of public tourism projects understandable at a glance.
-- Make individual projects and their reported budgets, releases and expenditure easy to inspect.
-- Present amounts and percentages consistently, with source-data limitations visible.
-- Provide a foundation for a later operational platform or API-backed product.
+Fieldnotes is a client-facing analytics prototype for reviewing tourism and heritage investment projects in Punjab, Pakistan. It turns a master Google Spreadsheet into a searchable project catalogue and portfolio/project financial views.
 
 ## Intended users
 
@@ -22,23 +15,23 @@ The application is a prototype, not an official financial system, approval workf
 
 ## Current scope
 
-- One root-level master workbook, `Scheme Details for DAT 11-03-2026.xlsx`, containing 89 project rows in its first worksheet.
-- Dynamic project identification by GS No, then Project ID, then a name/district fallback; duplicate rows with the same stable identity are grouped.
-- One reusable parser and normalized in-memory `Site[]` layer used by both overview and detail routes.
-- Portfolio search, filters, sorting, summary metrics and funding visualizations.
-- Project detail views are selected dynamically by filtering normalized records from the master workbook.
-- CSV download for project or master-workbook portfolio summaries.
-- Responsive layouts and keyboard-accessible controls.
+- One Google Spreadsheet is the single source of truth for all projects.
+- Server-side Google Sheets API access uses a read-only service account.
+- A shared normalizer maps spreadsheet rows into the existing typed `Site[]` model.
+- Portfolio cards, filters, project detail pages and financial analytics derive from the same normalized dataset.
+- Client state refreshes every 30 seconds while the browser tab is visible; a refresh does not reload the page.
+- Successful server responses are cached briefly per warm serverless instance; temporary refresh failures retain the previous client dataset.
+- CSV download is available for project and portfolio data.
+- Responsive layouts, animations and accessibility affordances remain as implemented.
 
-The bundled source contains financial fields. It does **not** contain task/activity detail, physical completion, visitor statistics, a reliably dated expenditure history, or verified project milestones. Accordingly, the dashboard does not invent these measures.
+The sheet contains financial fields but no task/activity detail, physical completion, visitor statistics, reliably dated expenditure history, or verified project milestones. The dashboard does not invent these measures.
 
 ## Product vocabulary
 
-- **Project/site:** One tourism scheme or initiative listed in the workbook.
-- **Financial progress:** The reported utilization divided by total approved cost (the workbook's overall financial progress field).
-- **Fiscal year:** One of the workbook's annual funding periods.
-- **Reporting area:** The district value reported for a project. Some source rows use values such as “Punjab” or “Multiple District”; the field is not necessarily a municipality.
+- **Project/site:** One tourism scheme or initiative listed in the master spreadsheet.
+- **Financial progress:** Reported overall financial-progress value, with utilization/approved-cost fallback only if absent.
+- **Fiscal year:** One of the annual funding periods discovered from column headers.
+- **Reporting area:** Source district/location; not necessarily a municipality.
+- **Data freshness:** Timestamp of the latest successful normalized fetch, with a stale-data warning after a failed background refresh.
 
-## Not currently included
-
-Google Sheets synchronization, database persistence, authentication, user roles, a separate domain API, PDF export, project editing, live government-system connections, activity tracking, and deployment-specific monitoring are not implemented.
+Google Sheets editing, database persistence, authentication, user roles, PDF export, project editing, physical-progress tracking and live government-system connections are not implemented.
