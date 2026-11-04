@@ -35,7 +35,7 @@ The stylesheet requests DM Sans for interface text and Manrope for prominent hea
 - Project and portfolio exports download CSV files.
 - KPI figures count up and progress bars fill when they enter the viewport; chart series animate once when first visible.
 - Main route transitions, chart cards, filters and profile popover use brief opacity/transform transitions. The mobile navigation remains a slide-in drawer with a fading scrim.
-- Motion uses short easing curves and `MotionConfig`/CSS reduced-motion handling; no parallax or continuous chart animation is used.
+- Motion uses slightly longer easing curves (roughly 300–800ms, depending on the interaction) and `MotionConfig`/CSS reduced-motion handling; no parallax or continuous chart animation is used.
 
 ## Accessibility
 

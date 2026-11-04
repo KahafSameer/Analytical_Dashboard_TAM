@@ -124,9 +124,9 @@ function ProjectDetail({ site }: { site: Site }) {
                         formatter={(value) => [formatMillions(Number(value)), ""]}
                         labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
                       />
-                      <Bar dataKey="allocation" name="Allocated" fill="#d4a017" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={650} animationEasing="ease-out" />
-                      <Bar dataKey="release" name="Released" fill="#8bab98" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={650} animationEasing="ease-out" />
-                      <Bar dataKey="utilized" name="Utilized" fill="#0f4c3a" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={650} animationEasing="ease-out" />
+                      <Bar dataKey="allocation" name="Allocated" fill="#d4a017" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={750} animationEasing="ease-out" />
+                      <Bar dataKey="release" name="Released" fill="#8bab98" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={750} animationEasing="ease-out" />
+                      <Bar dataKey="utilized" name="Utilized" fill="#0f4c3a" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={750} animationEasing="ease-out" />
                     </BarChart>
                   </ResponsiveContainer>}
                 </div>

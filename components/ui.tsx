@@ -123,7 +123,7 @@ export function KpiCard({
     if (!isInView) return;
     count.set(0);
     const controls = animate(count, metric.number, {
-      duration: 0.65,
+      duration: 0.75,
       ease: [0.22, 1, 0.36, 1],
     });
     return () => controls.stop();
@@ -134,7 +134,7 @@ export function KpiCard({
       initial={{ opacity: 0, y: reduceMotion ? 0 : 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: reduceMotion ? 0.15 : 0.32, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: reduceMotion ? 0.15 : 0.38, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="kpi-top">
         <span className="kpi-label">{label}</span>
@@ -196,7 +196,7 @@ export function ChartCard({
       initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.12 }}
-      transition={{ duration: reduceMotion ? 0.15 : 0.38, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: reduceMotion ? 0.15 : 0.44, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="chart-card-heading">
         <div>

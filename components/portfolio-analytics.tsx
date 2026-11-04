@@ -88,7 +88,7 @@ function DistrictFundingChart({ sites }: { sites: Site[] }) {
               />
               <YAxis type="category" dataKey="district" width={104} axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#65736a" }} />
               <Tooltip content={<CompactTooltip />} cursor={{ fill: "#f4f7f4" }} />
-              <Bar dataKey={measure} name={fundingMeasures.find((item) => item.id === measure)?.label} fill="#0f4c3a" radius={[0, 4, 4, 0]} maxBarSize={20} isAnimationActive={animate} animationDuration={650} animationEasing="ease-out" />
+              <Bar dataKey={measure} name={fundingMeasures.find((item) => item.id === measure)?.label} fill="#0f4c3a" radius={[0, 4, 4, 0]} maxBarSize={20} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
             </BarChart>
           </ResponsiveContainer>}
         </div>
@@ -110,7 +110,7 @@ function CategoryMixChart({ sites }: { sites: Site[] }) {
             <div ref={ref} className="category-donut" role="img" aria-label="Donut chart showing approved project cost by project type">
               {isInView && <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={categories} dataKey="approved" nameKey="category" innerRadius="68%" outerRadius="91%" paddingAngle={2} stroke="none" isAnimationActive={animate} animationDuration={700} animationEasing="ease-out">
+                  <Pie data={categories} dataKey="approved" nameKey="category" innerRadius="68%" outerRadius="91%" paddingAngle={2} stroke="none" isAnimationActive={animate} animationDuration={800} animationEasing="ease-out">
                     {categories.map((entry, index) => <Cell key={entry.category} fill={palette[index % palette.length]} />)}
                   </Pie>
                   <Tooltip content={<CompactTooltip />} />
@@ -152,7 +152,7 @@ function ProgressDistributionChart({ sites }: { sites: Site[] }) {
                   formatter={(value) => [`${Number(value)} projects`, "Project count"]}
                   labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
                 />
-                <Bar dataKey="count" name="Projects" fill="#508065" radius={[4, 4, 0, 0]} maxBarSize={34} isAnimationActive={animate} animationDuration={650} animationEasing="ease-out">
+                <Bar dataKey="count" name="Projects" fill="#508065" radius={[4, 4, 0, 0]} maxBarSize={34} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out">
                   {distribution.map((entry, index) => <Cell key={entry.band} fill={index === 0 ? "#d4a017" : "#508065"} />)}
                 </Bar>
               </BarChart>

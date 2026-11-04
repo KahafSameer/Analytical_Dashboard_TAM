@@ -38,7 +38,7 @@ function FundingCompositionChart({ site }: { site: Site }) {
             <div ref={ref} className="detail-donut" role="img" aria-label="Donut chart showing allocated funds utilized and remaining">
               {isInView && <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={segments} dataKey="value" nameKey="name" innerRadius="69%" outerRadius="92%" paddingAngle={2} stroke="none" isAnimationActive={animate} animationDuration={700} animationEasing="ease-out">
+                  <Pie data={segments} dataKey="value" nameKey="name" innerRadius="69%" outerRadius="92%" paddingAngle={2} stroke="none" isAnimationActive={animate} animationDuration={800} animationEasing="ease-out">
                     {segments.map((segment) => <Cell key={segment.name} fill={segment.color} />)}
                   </Pie>
                   <Tooltip
@@ -108,9 +108,9 @@ function CumulativeFundingChart({ site }: { site: Site }) {
                   formatter={(value) => [formatMillions(Number(value)), ""]}
                   labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
                 />
-                <Area type="monotone" dataKey="allocation" name="Allocation" stroke="#d4a017" fill="url(#cumulativeAllocation)" strokeWidth={1.8} isAnimationActive={animate} animationDuration={700} animationEasing="ease-out" />
-                <Area type="monotone" dataKey="released" name="Released" stroke="#8bab98" fill="transparent" strokeWidth={1.8} isAnimationActive={animate} animationDuration={700} animationEasing="ease-out" />
-                <Area type="monotone" dataKey="utilized" name="Utilized" stroke="#0f4c3a" fill="url(#cumulativeUtilized)" strokeWidth={2.2} isAnimationActive={animate} animationDuration={700} animationEasing="ease-out" />
+                <Area type="monotone" dataKey="allocation" name="Allocation" stroke="#d4a017" fill="url(#cumulativeAllocation)" strokeWidth={1.8} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
+                <Area type="monotone" dataKey="released" name="Released" stroke="#8bab98" fill="transparent" strokeWidth={1.8} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
+                <Area type="monotone" dataKey="utilized" name="Utilized" stroke="#0f4c3a" fill="url(#cumulativeUtilized)" strokeWidth={2.2} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
               </AreaChart>
             </ResponsiveContainer>}
           </div>
@@ -159,8 +159,8 @@ function AnnualExecutionChart({ site }: { site: Site }) {
                   formatter={(value, name) => [`${formatPercent(Number(value) / 100)} of annual allocation`, name]}
                   labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
                 />
-                <Bar dataKey="releaseRate" name="Released / allocated" fill="#8bab98" radius={[0, 3, 3, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={650} animationEasing="ease-out" />
-                <Bar dataKey="utilizationRate" name="Utilized / allocated" fill="#0f4c3a" radius={[0, 3, 3, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={650} animationEasing="ease-out" />
+                <Bar dataKey="releaseRate" name="Released / allocated" fill="#8bab98" radius={[0, 3, 3, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
+                <Bar dataKey="utilizationRate" name="Utilized / allocated" fill="#0f4c3a" radius={[0, 3, 3, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
               </BarChart>
             </ResponsiveContainer>}
           </div>

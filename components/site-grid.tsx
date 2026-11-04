@@ -99,7 +99,7 @@ export function SiteGrid({ initialSites }: { initialSites: Site[] }) {
           initial={{ opacity: 0, y: reduceMotion ? 0 : -5 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: reduceMotion ? 0 : -5 }}
-          transition={{ duration: reduceMotion ? 0.12 : 0.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: reduceMotion ? 0.12 : 0.24, ease: [0.22, 1, 0.36, 1] }}
         >
           <label className="filter-field">Region<select value={region} onChange={(event) => setRegion(event.target.value)}><option>All regions</option>{regions.map((item) => <option key={item}>{item}</option>)}</select></label>
           <label className="filter-field">Project type<select value={category} onChange={(event) => setCategory(event.target.value)}><option>All categories</option>{categories.map((item) => <option key={item}>{item}</option>)}</select></label>
@@ -124,10 +124,10 @@ export function SiteGrid({ initialSites }: { initialSites: Site[] }) {
                 exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.98 }}
                 viewport={{ once: true, amount: 0.08 }}
                 transition={{
-                  opacity: { duration: reduceMotion ? 0.12 : 0.24, delay: reduceMotion ? 0 : (index % 3) * 0.045 },
-                  y: { duration: reduceMotion ? 0.12 : 0.32, ease: [0.22, 1, 0.36, 1] },
+                  opacity: { duration: reduceMotion ? 0.12 : 0.28, delay: reduceMotion ? 0 : (index % 3) * 0.045 },
+                  y: { duration: reduceMotion ? 0.12 : 0.38, ease: [0.22, 1, 0.36, 1] },
                   scale: { duration: 0.16 },
-                  layout: { duration: reduceMotion ? 0.12 : 0.28, ease: [0.22, 1, 0.36, 1] },
+                  layout: { duration: reduceMotion ? 0.12 : 0.34, ease: [0.22, 1, 0.36, 1] },
                 }}
               >
                 <SiteCard site={site} priority={index === 0} />

@@ -53,7 +53,7 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
                 aria-current={active ? "page" : undefined}
                 onClick={() => setDrawerOpen(false)}
               >
-                {active && <motion.span className="nav-active-indicator" layoutId="sidebar-active-indicator" transition={{ duration: reduceMotion ? 0.12 : 0.24, ease: [0.22, 1, 0.36, 1] }} />}
+                {active && <motion.span className="nav-active-indicator" layoutId="sidebar-active-indicator" transition={{ duration: reduceMotion ? 0.12 : 0.3, ease: [0.22, 1, 0.36, 1] }} />}
                 <Icon size={18} strokeWidth={1.8} /><span>{label}</span>
                 {label === "Sites & projects" && <span className="nav-count">{siteCount}</span>}
               </Link>
@@ -79,7 +79,7 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
               initial={{ opacity: 0, y: reduceMotion ? 0 : 5, scale: reduceMotion ? 1 : 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: reduceMotion ? 0 : 4, scale: reduceMotion ? 1 : 0.98 }}
-              transition={{ duration: reduceMotion ? 0.12 : 0.18, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: reduceMotion ? 0.12 : 0.22, ease: [0.22, 1, 0.36, 1] }}
             >
               <strong>Prototype workspace</strong>
               <span>Source: master Excel workbook</span>
@@ -102,7 +102,7 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
           key={pathname}
           initial={{ opacity: 0, y: reduceMotion ? 0 : 6 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: reduceMotion ? 0.12 : 0.28, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: reduceMotion ? 0.12 : 0.34, ease: [0.22, 1, 0.36, 1] }}
         >{children}</motion.main>
       </div>
     </div>

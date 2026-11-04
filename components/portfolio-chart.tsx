@@ -29,8 +29,8 @@ export function PortfolioFundingChart({ data }: { data: FiscalYear[] }) {
               formatter={(value) => [formatMillions(Number(value)), ""]}
               labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
             />
-            <Area type="monotone" dataKey="allocation" name="Allocated" stroke="#d4a017" fill="url(#allocatedGradient)" strokeWidth={1.8} isAnimationActive={animate} animationDuration={700} animationEasing="ease-out" />
-            <Area type="monotone" dataKey="utilized" name="Utilized" stroke="#0f4c3a" fill="url(#utilizedGradient)" strokeWidth={2.5} isAnimationActive={animate} animationDuration={700} animationEasing="ease-out" />
+            <Area type="monotone" dataKey="allocation" name="Allocated" stroke="#d4a017" fill="url(#allocatedGradient)" strokeWidth={1.8} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
+            <Area type="monotone" dataKey="utilized" name="Utilized" stroke="#0f4c3a" fill="url(#utilizedGradient)" strokeWidth={2.5} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
           </AreaChart>
         </ResponsiveContainer>}
       </div>
