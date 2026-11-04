@@ -28,13 +28,14 @@ The stylesheet requests DM Sans for interface text and Manrope for prominent hea
 
 ## Interaction
 
-- Project cards lead to `/sites/[siteId]`; hover lift and image zoom are deliberately subtle.
+- Project cards lead to `/sites/[siteId]`; viewport reveals, layout-aware filtering, subtle desktop hover lift/image zoom and mobile press feedback use Motion for React.
 - Search is live, accepts a Ctrl/Cmd+K shortcut, and filters name, district, category, code and description.
 - Filters expand inline on the page rather than using a bottom sheet.
 - Chart hover tooltips reveal source-derived amounts and rates.
 - Project and portfolio exports download CSV files.
-- Entrance and hover animation respects `prefers-reduced-motion`.
-- The mobile navigation is a slide-in drawer.
+- KPI figures count up and progress bars fill when they enter the viewport; chart series animate once when first visible.
+- Main route transitions, chart cards, filters and profile popover use brief opacity/transform transitions. The mobile navigation remains a slide-in drawer with a fading scrim.
+- Motion uses short easing curves and `MotionConfig`/CSS reduced-motion handling; no parallax or continuous chart animation is used.
 
 ## Accessibility
 

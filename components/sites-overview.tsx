@@ -17,6 +17,7 @@ import { PortfolioFundingChart } from "@/components/portfolio-chart";
 import { PortfolioAnalytics } from "@/components/portfolio-analytics";
 import { PortfolioExportButton } from "@/components/portfolio-export-button";
 import { SiteGrid } from "@/components/site-grid";
+import { Reveal } from "@/components/motion";
 
 export function SitesOverview({ sites }: { sites: Site[] }) {
   const summary = getPortfolioSummary(sites);
@@ -64,6 +65,7 @@ export function SitesOverview({ sites }: { sites: Site[] }) {
         />
         <div className="portfolio-chart-layout">
           <PortfolioFundingChart data={yearly} />
+          <Reveal className="funding-note-reveal">
           <aside className="funding-note">
             <span className="funding-note-icon"><CircleAlert size={18} /></span>
             <p className="eyebrow">HOW TO READ THIS</p>
@@ -73,6 +75,7 @@ export function SitesOverview({ sites }: { sites: Site[] }) {
             <div className="funding-stat"><span>Released to date</span><strong>{formatMillions(summary.totalReleased)}</strong></div>
             <a href="#report-export" className="text-link">About this dataset <ArrowUpRight size={14} /></a>
           </aside>
+          </Reveal>
         </div>
       </section>
 

@@ -29,6 +29,7 @@ import { SiteFinancialAnalytics } from "@/components/site-financial-analytics";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState, KpiCard, ProgressBar, StatusBadge } from "@/components/ui";
 import { PageTopline } from "@/components/dashboard-shell";
+import { Reveal, useChartEntrance } from "@/components/motion";
 
 function exportCsv(site: Site) {
   const rows = [
@@ -59,6 +60,7 @@ function exportCsv(site: Site) {
 function ProjectDetail({ site }: { site: Site }) {
   const [exported, setExported] = useState(false);
   const summary = useMemo(() => getPortfolioSummary([site]), [site]);
+  const { ref: chartRef, isInView: chartInView, animate: animateChart } = useChartEntrance();
   return (
     <div className="page-stack">
       <PageTopline section="Project detail" date="Master workbook" />
@@ -110,8 +112,8 @@ function ProjectDetail({ site }: { site: Site }) {
           <ChartCard title="Funds by fiscal year" description="Compare planned funding with releases and spend.">
             {site.fiscalYears.some((year) => year.allocation || year.release || year.utilized) ? (
               <>
-                <div className="detail-chart" role="img" aria-label="Bar chart comparing annual allocation, release and utilization">
-                  <ResponsiveContainer width="100%" height="100%">
+                <div ref={chartRef} className="detail-chart" role="img" aria-label="Bar chart comparing annual allocation, release and utilization">
+                  {chartInView && <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={site.fiscalYears} margin={{ top: 10, right: 6, bottom: 1, left: -20 }} barGap={3} barCategoryGap="26%">
                       <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
                       <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#718078" }} dy={8} />
@@ -122,11 +124,11 @@ function ProjectDetail({ site }: { site: Site }) {
                         formatter={(value) => [formatMillions(Number(value)), ""]}
                         labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
                       />
-                      <Bar dataKey="allocation" name="Allocated" fill="#d4a017" radius={[3, 3, 0, 0]} maxBarSize={24} />
-                      <Bar dataKey="release" name="Released" fill="#8bab98" radius={[3, 3, 0, 0]} maxBarSize={24} />
-                      <Bar dataKey="utilized" name="Utilized" fill="#0f4c3a" radius={[3, 3, 0, 0]} maxBarSize={24} />
+                      <Bar dataKey="allocation" name="Allocated" fill="#d4a017" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={650} animationEasing="ease-out" />
+                      <Bar dataKey="release" name="Released" fill="#8bab98" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={650} animationEasing="ease-out" />
+                      <Bar dataKey="utilized" name="Utilized" fill="#0f4c3a" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={650} animationEasing="ease-out" />
                     </BarChart>
-                  </ResponsiveContainer>
+                  </ResponsiveContainer>}
                 </div>
                 <div className="detail-legend">
                   <span><i className="legend-gold" />Allocated</span>
@@ -139,6 +141,7 @@ function ProjectDetail({ site }: { site: Site }) {
             )}
           </ChartCard>
 
+          <Reveal className="detail-table-reveal">
           <section className="chart-card detail-table-card">
             <div className="table-headline">
               <div className="chart-card-heading"><div><h3>Fiscal-year breakdown</h3><p>Reported funding flows, PKR millions.</p></div></div>
@@ -156,6 +159,7 @@ function ProjectDetail({ site }: { site: Site }) {
             </div>
             <p className="table-footnote">Small differences may occur due to source rounding.</p>
           </section>
+          </Reveal>
         </div>
       </section>
 

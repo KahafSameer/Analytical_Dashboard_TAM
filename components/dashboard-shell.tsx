@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "motion/react";
 import {
   Activity,
   BarChart3,
@@ -27,11 +28,13 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="app-shell">
-      <div className={`mobile-scrim${drawerOpen ? " is-open" : ""}`} onClick={() => setDrawerOpen(false)} />
-      <aside className={`sidebar${drawerOpen ? " sidebar-open" : ""}`}>
+      <button type="button" className={`mobile-scrim${drawerOpen ? " is-open" : ""}`} aria-label="Close navigation" tabIndex={drawerOpen ? 0 : -1} onClick={() => setDrawerOpen(false)} />
+      <aside id="primary-navigation" className={`sidebar${drawerOpen ? " sidebar-open" : ""}`}>
         <Link href="/" className="brand-lockup" aria-label="Fieldnotes home" onClick={() => setDrawerOpen(false)}>
           <span className="brand-mark"><Command size={18} strokeWidth={2.2} /></span>
           <span className="brand-copy"><strong>Fieldnotes</strong><small>TOURISM INTELLIGENCE</small></span>
@@ -47,8 +50,10 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
                 href={href}
                 key={label}
                 className={`nav-link${active ? " nav-link-active" : ""}`}
+                aria-current={active ? "page" : undefined}
                 onClick={() => setDrawerOpen(false)}
               >
+                {active && <motion.span className="nav-active-indicator" layoutId="sidebar-active-indicator" transition={{ duration: reduceMotion ? 0.12 : 0.24, ease: [0.22, 1, 0.36, 1] }} />}
                 <Icon size={18} strokeWidth={1.8} /><span>{label}</span>
                 {label === "Sites & projects" && <span className="nav-count">{siteCount}</span>}
               </Link>
@@ -67,26 +72,41 @@ export function DashboardShell({ children, siteCount }: { children: React.ReactN
             <span className="profile-copy"><strong>Tourism Dept.</strong><small>Portfolio viewer</small></span>
             <Settings2 size={16} className="profile-settings" />
           </button>
+          <AnimatePresence>
           {settingsOpen && (
-            <div className="profile-popover">
+            <motion.div
+              className="profile-popover"
+              initial={{ opacity: 0, y: reduceMotion ? 0 : 5, scale: reduceMotion ? 1 : 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: reduceMotion ? 0 : 4, scale: reduceMotion ? 1 : 0.98 }}
+              transition={{ duration: reduceMotion ? 0.12 : 0.18, ease: [0.22, 1, 0.36, 1] }}
+            >
               <strong>Prototype workspace</strong>
               <span>Source: master Excel workbook</span>
               <span>Currency: Pakistani rupees (millions)</span>
-            </div>
+            </motion.div>
           )}
+          </AnimatePresence>
           <div className="sidebar-version">FIELDNOTES <span>PREVIEW 1.0</span></div>
         </div>
       </aside>
 
       <div className="main-column">
         <header className="mobile-header">
-          <button className="icon-button mobile-menu-button" onClick={() => setDrawerOpen(true)} aria-label="Open navigation"><Menu size={20} /></button>
+          <button className="icon-button mobile-menu-button" onClick={() => setDrawerOpen(true)} aria-label="Open navigation" aria-expanded={drawerOpen} aria-controls="primary-navigation"><Menu size={20} /></button>
           <Link href="/" className="mobile-brand"><span className="brand-mark"><Command size={15} /></span>Fieldnotes</Link>
           <span className="mobile-header-meta">Punjab</span>
         </header>
-        <main className="main-content" key={pathname}>{children}</main>
+        <motion.main
+          className="main-content"
+          key={pathname}
+          initial={{ opacity: 0, y: reduceMotion ? 0 : 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduceMotion ? 0.12 : 0.28, ease: [0.22, 1, 0.36, 1] }}
+        >{children}</motion.main>
       </div>
     </div>
+    </MotionConfig>
   );
 }
 

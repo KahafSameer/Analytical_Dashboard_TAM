@@ -24,6 +24,8 @@ Sidebar is retained until the mobile breakpoint. The project grid narrows to two
 - Sidebar is replaced with an accessible-by-button off-canvas drawer and scrim.
 - Header remains compact and sticky.
 - Project cards use a single column on narrow devices; intermediate mobile can retain two.
+- Cards reveal as they enter the viewport and respond to tap/press; hover-only motion is restricted to devices with fine pointers.
+- Progress fills and chart series animate once when visible; mobile uses no parallax.
 - KPI and insight cards use two columns.
 - Detail analytics stack vertically and chart containers have smaller heights.
 - Fiscal-year tables are inside horizontal overflow containers, not allowed to expand the page.
@@ -31,4 +33,4 @@ Sidebar is retained until the mobile breakpoint. The project grid narrows to two
 
 ## QA targets
 
-Check 320, 375, 390, 414, 768, 1024 and 1440+ px. Verify no viewport-level horizontal overflow, drawer dismissal, focus visibility, card control targets, chart tooltips and axis labels, and CSV/import toolbar layout.
+Check 320, 375, 390, 414, 768, 1024 and 1440+ px. Verify no viewport-level horizontal overflow, drawer dismissal, focus visibility, card control targets, chart tooltips and axis labels, and CSV toolbar layout. Also check `prefers-reduced-motion` to ensure movement is suppressed while state changes remain clear.

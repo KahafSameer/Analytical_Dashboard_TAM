@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowDownWideNarrow, ChevronDown, Search, SlidersHorizontal, X } from "lucide-react";
 import type { Site } from "@/lib/types";
 import { EmptyState } from "@/components/ui";
@@ -19,6 +20,7 @@ export function SiteGrid({ initialSites }: { initialSites: Site[] }) {
   const [sort, setSort] = useState<SortKey>("progress");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     function focusSearch(event: KeyboardEvent) {
@@ -90,18 +92,49 @@ export function SiteGrid({ initialSites }: { initialSites: Site[] }) {
           </label>
         </div>
       </div>
-      {filtersOpen && (
-        <div className="filter-panel">
+      <AnimatePresence initial={false}>
+        {filtersOpen && (
+        <motion.div
+          className="filter-panel"
+          initial={{ opacity: 0, y: reduceMotion ? 0 : -5 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: reduceMotion ? 0 : -5 }}
+          transition={{ duration: reduceMotion ? 0.12 : 0.2, ease: [0.22, 1, 0.36, 1] }}
+        >
           <label className="filter-field">Region<select value={region} onChange={(event) => setRegion(event.target.value)}><option>All regions</option>{regions.map((item) => <option key={item}>{item}</option>)}</select></label>
           <label className="filter-field">Project type<select value={category} onChange={(event) => setCategory(event.target.value)}><option>All categories</option>{categories.map((item) => <option key={item}>{item}</option>)}</select></label>
           <label className="filter-field">Financial activity<select value={status} onChange={(event) => setStatus(event.target.value)}><option>All progress</option><option>Spend recorded</option><option>No spend yet</option></select></label>
           <label className="filter-field">Financial progress<select value={progressRange} onChange={(event) => setProgressRange(event.target.value)}><option>Any progress</option><option>0–25%</option><option>25–50%</option><option>50–75%</option><option>75–100%</option></select></label>
           {filterCount > 0 && <button className="filter-reset" onClick={() => { setRegion("All regions"); setCategory("All categories"); setStatus("All progress"); setProgressRange("Any progress"); }}>Clear filters</button>}
-        </div>
-      )}
+        </motion.div>
+        )}
+      </AnimatePresence>
       <div className="results-meta"><span><strong>{items.length}</strong> projects</span><span>Amounts shown in PKR millions</span></div>
       {items.length > 0 ? (
-        <div className="site-grid">{items.map((site, index) => <SiteCard site={site} key={site.id} priority={index === 0} />)}</div>
+        <motion.div className="site-grid" layout>
+          <AnimatePresence mode="popLayout">
+            {items.map((site, index) => (
+              <motion.div
+                key={site.id}
+                layout
+                initial={{ opacity: 0, y: reduceMotion ? 0 : 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={reduceMotion ? undefined : { y: -3 }}
+                whileTap={reduceMotion ? undefined : { scale: 0.99 }}
+                exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.98 }}
+                viewport={{ once: true, amount: 0.08 }}
+                transition={{
+                  opacity: { duration: reduceMotion ? 0.12 : 0.24, delay: reduceMotion ? 0 : (index % 3) * 0.045 },
+                  y: { duration: reduceMotion ? 0.12 : 0.32, ease: [0.22, 1, 0.36, 1] },
+                  scale: { duration: 0.16 },
+                  layout: { duration: reduceMotion ? 0.12 : 0.28, ease: [0.22, 1, 0.36, 1] },
+                }}
+              >
+                <SiteCard site={site} priority={index === 0} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       ) : (
         <EmptyState title="No projects match your search" description="Try another project name, district or category, or clear your filters." action={<button className="button button-outline" onClick={() => { setSearch(""); setRegion("All regions"); setCategory("All categories"); setStatus("All progress"); setProgressRange("Any progress"); }}>Clear search & filters</button>} />
       )}

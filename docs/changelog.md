@@ -11,6 +11,13 @@ This is a user-oriented summary of the work represented in the current repositor
 - Removed the misleading “Recently updated” sort because the source has no row update timestamp.
 - Updated documentation to describe the actual single-workbook implementation.
 
+## Unreleased — motion design system
+
+- Added Motion for React for viewport-based reveals, staggered/layout-aware project filtering, subtle route/navigation transitions and profile/filter feedback.
+- Animated KPI count-ups and progress fills; financial charts now mount and animate once when entering view.
+- Added mobile press feedback, hover-only card effects for fine pointers, and reduced-motion behavior.
+- Updated responsive and design-system documentation.
+
 ## Earlier prototype work — analytics and UX
 
 - Added project-wide and project-detail financial analytics, including district funding, category mix, progress distribution, allocation utilization, cumulative annual funding and execution rates.

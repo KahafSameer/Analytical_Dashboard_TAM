@@ -4,6 +4,7 @@
 
 - `components/dashboard-shell.tsx`: responsive fixed sidebar, navigation links, mobile header/drawer, profile popover and `PageTopline`. Receives the project count from the master workbook through the root layout.
 - `components/ui.tsx`: shared `StatusBadge`, `ProgressBar`, `SectionHeading`, `EmptyState`, `KpiCard`, `ChartCard` and a milestone-data note. `MilestonePlaceholder` is a data-absence notice, not an implemented milestone timeline.
+- `components/motion.tsx`: reusable viewport reveal and chart entrance hooks used to keep animation logic small and localized.
 
 ## Portfolio
 
