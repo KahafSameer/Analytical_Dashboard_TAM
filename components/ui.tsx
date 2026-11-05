@@ -136,7 +136,8 @@ export function KpiCard({
   return (
     <motion.article
       className={`kpi-card${accent ? " kpi-card-accent" : ""}`}
-      initial={{ opacity: 0, y: reduceMotion ? 0 : 10 }}
+      // Constant initial values keep SSR and hydration identical; MotionConfig reducedMotion="user" skips the transform.
+      initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: reduceMotion ? 0.15 : 0.38, ease: [0.22, 1, 0.36, 1] }}
@@ -198,7 +199,7 @@ export function ChartCard({
   return (
     <motion.section
       className={`chart-card ${className}`}
-      initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
+      initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.12 }}
       transition={{ duration: reduceMotion ? 0.15 : 0.44, ease: [0.22, 1, 0.36, 1] }}

@@ -2,6 +2,16 @@
 
 This is a user-oriented summary of the work represented in the current repository. It is not a release/tag history; inspect Git history for commit-level provenance.
 
+## Unreleased — analytical dashboard overhaul
+
+- Overview reorganized as filters → KPIs → funding flow → analytics → project register → export, so analysis is no longer below 89 project cards.
+- One global filter bar (search, district, spend status, financial progress) now drives every KPI, chart, signal, the register and the CSV export, with a visible "Showing X of Y" status and a one-click reset.
+- Added a sortable, paginated project register table (approved, released, utilized, unspent release, progress) as the default view; cards remain available and drop the duplicated fallback photo.
+- Added a "Released, not yet spent" watchlist and an "Approved, not yet allocated" signal; the empty project-type chart is hidden when the source has no type labels.
+- Raised the type scale (minimum text size 10px, body/secondary text 11–13px) and stopped chart axes from skipping category labels.
+- Fixed invalid HTML (a button nested in the brand link), removed a non-functional sidebar chevron, hid "Not specified" placeholders in locations, and fixed a hydration mismatch for reduced-motion users.
+- CSV export adds an unspent-release column and names filtered exports separately.
+
 ## Unreleased — Google Sheets source and live refresh
 
 - Replaced runtime local Excel file access with a server-only Google Sheets API adapter using a read-only service account.

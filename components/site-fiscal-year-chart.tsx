@@ -26,8 +26,8 @@ export function SiteFiscalYearChart({ site }: { site: Site }) {
             {isInView && <ResponsiveContainer width="100%" height="100%">
               <BarChart data={site.fiscalYears} margin={{ top: 10, right: 6, bottom: 1, left: -20 }} barGap={3} barCategoryGap="26%">
                 <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
-                <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#59665d" }} dy={8} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#59665d" }} tickFormatter={(value: number) => value.toLocaleString("en-US")} />
+                <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#59665d" }} dy={8} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#59665d" }} tickFormatter={(value: number) => value.toLocaleString("en-US")} />
                 <Tooltip
                   cursor={{ fill: "#f5f8f5" }}
                   contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 11 }}

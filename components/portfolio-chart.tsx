@@ -9,7 +9,7 @@ import { useChartEntrance } from "@/components/motion";
 export function PortfolioFundingChart({ data }: { data: FiscalYear[] }) {
   const { ref, isInView, animate } = useChartEntrance();
   return (
-    <ChartCard title="Funds utilized by fiscal year" description="Portfolio-wide expenditure · PKR millions">
+    <ChartCard title="Funds utilized by fiscal year" description="Expenditure against allocation for the projects shown · PKR millions">
       <div className="chart-legend">
         <span><i className="legend-dot legend-green" /> Utilized</span>
         <span><i className="legend-dot legend-gold" /> Allocated</span>
@@ -23,7 +23,7 @@ export function PortfolioFundingChart({ data }: { data: FiscalYear[] }) {
             </defs>
             <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
             <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#59665d" }} dy={8} />
-            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#59665d" }} tickFormatter={(value: number) => `${value}`} />
+            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#59665d" }} tickFormatter={(value: number) => `${value}`} />
             <Tooltip
               contentStyle={{ borderRadius: 10, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 12 }}
               formatter={(value) => [formatMillions(Number(value)), ""]}

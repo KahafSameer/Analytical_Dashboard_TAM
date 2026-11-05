@@ -42,7 +42,7 @@ function FundingCompositionChart({ site }: { site: Site }) {
                     {segments.map((segment) => <Cell key={segment.name} fill={segment.color} />)}
                   </Pie>
                   <Tooltip
-                    contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 10 }}
+                    contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 11 }}
                     formatter={(value) => [formatMillions(Number(value)), ""]}
                   />
                 </PieChart>
@@ -101,10 +101,10 @@ function CumulativeFundingChart({ site }: { site: Site }) {
                   </linearGradient>
                 </defs>
                 <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
-                <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#59665d" }} dy={7} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 8, fill: "#59665d" }} tickFormatter={(value: number) => value >= 1000 ? `${(value / 1000).toFixed(1)}k` : `${value}`} />
+                <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#59665d" }} dy={7} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#59665d" }} tickFormatter={(value: number) => value >= 1000 ? `${(value / 1000).toFixed(1)}k` : `${value}`} />
                 <Tooltip
-                  contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 10 }}
+                  contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 11 }}
                   formatter={(value) => [formatMillions(Number(value)), ""]}
                   labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
                 />
@@ -149,13 +149,13 @@ function AnnualExecutionChart({ site }: { site: Site }) {
                   domain={[0, Math.ceil(maxRate / 25) * 25]}
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 8, fill: "#59665d" }}
+                  tick={{ fontSize: 10, fill: "#59665d" }}
                   tickFormatter={(value: number) => `${value}%`}
                 />
-                <YAxis type="category" dataKey="label" width={58} axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#65736a" }} />
+                <YAxis type="category" dataKey="label" width={58} axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#65736a" }} />
                 <Tooltip
                   cursor={{ fill: "#f5f8f5" }}
-                  contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 10 }}
+                  contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 11 }}
                   formatter={(value, name) => [`${formatPercent(Number(value) / 100)} of annual allocation`, name]}
                   labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
                 />

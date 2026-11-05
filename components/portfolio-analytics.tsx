@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowDownRight, ArrowUpRight, CircleAlert, Layers3, MapPinned, Wallet } from "lucide-react";
 import {
@@ -22,6 +23,7 @@ import {
   summarizeDistricts,
   summarizeProgressBands,
 } from "@/lib/analytics";
+import { getUnspentRelease } from "@/lib/portfolio-filters";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState } from "@/components/ui";
 import { Reveal, useChartEntrance } from "@/components/motion";
@@ -63,7 +65,7 @@ function DistrictFundingChart({ sites }: { sites: Site[] }) {
   const measureLabel = fundingMeasures.find((item) => item.id === measure)?.label ?? "Funding";
   return (
     <ChartCard
-      title="Funding by reporting area"
+      title="Funding by district"
       description="Top eight districts for the selected funding measure."
       action={
         <label className="chart-select-wrap">
@@ -84,10 +86,10 @@ function DistrictFundingChart({ sites }: { sites: Site[] }) {
                 type="number"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 9, fill: "#59665d" }}
+                tick={{ fontSize: 11, fill: "#59665d" }}
                 tickFormatter={(value: number) => value >= 1000 ? `${(value / 1000).toFixed(1)}k` : `${value}`}
               />
-              <YAxis type="category" dataKey="district" width={104} axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#65736a" }} />
+              <YAxis type="category" dataKey="district" width={112} interval={0} axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#65736a" }} />
               <Tooltip content={<CompactTooltip />} cursor={{ fill: "#f4f7f4" }} />
               <Bar dataKey={measure} name={measureLabel} fill="#0f4c3a" radius={[0, 4, 4, 0]} maxBarSize={20} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
             </BarChart>
@@ -158,8 +160,8 @@ function ProgressDistributionChart({ sites }: { sites: Site[] }) {
             {isInView && <ResponsiveContainer width="100%" height="100%">
               <BarChart data={distribution} margin={{ top: 12, right: 7, bottom: 1, left: -21 }} barCategoryGap="38%">
                 <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
-                <XAxis dataKey="band" axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#59665d" }} dy={7} />
-                <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#59665d" }} />
+                <XAxis dataKey="band" interval={0} axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#59665d" }} dy={7} />
+                <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#59665d" }} />
                 <Tooltip
                   contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 11 }}
                   formatter={(value) => [`${Number(value)} projects`, "Project count"]}
@@ -211,10 +213,9 @@ function ChartDataTable({
 function PortfolioSignals({ sites }: { sites: Site[] }) {
   const summary = useMemo(() => getPortfolioSummary(sites), [sites]);
   const districts = useMemo(() => summarizeDistricts(sites), [sites]);
-  const categories = useMemo(() => summarizeCategories(sites), [sites]);
   const topDistrict = [...districts].sort((a, b) => b.utilized - a.utilized)[0];
   const unspentAllocation = Math.max(0, summary.totalAllocated - summary.totalUtilized);
-  const classifiedProjects = categories.reduce((total, category) => total + category.projects, 0);
+  const unallocatedApproval = Math.max(0, summary.totalApproved - summary.totalAllocated);
   const signals = [
     {
       icon: <Wallet size={16} />,
@@ -232,9 +233,9 @@ function PortfolioSignals({ sites }: { sites: Site[] }) {
     },
     {
       icon: <Layers3 size={16} />,
-      label: "Projects with reported types",
-      value: `${classifiedProjects}`,
-      detail: `of ${summary.siteCount} projects`,
+      label: "Approved, not yet allocated",
+      value: formatMillions(unallocatedApproval, 0),
+      detail: `${formatPercent(summary.totalApproved ? unallocatedApproval / summary.totalApproved : 0)} of approved cost`,
       tone: "neutral",
     },
     {
@@ -261,7 +262,43 @@ function PortfolioSignals({ sites }: { sites: Site[] }) {
   );
 }
 
+function UnspentReleaseWatchlist({ sites, wide }: { sites: Site[]; wide: boolean }) {
+  const rows = useMemo(() =>
+    sites
+      .map((site) => ({ site, unspent: getUnspentRelease(site) }))
+      .filter((row) => row.unspent > 0)
+      .sort((a, b) => b.unspent - a.unspent)
+      .slice(0, 6),
+  [sites]);
+  const largest = rows[0]?.unspent ?? 0;
+  const total = useMemo(() => sites.reduce((sum, site) => sum + getUnspentRelease(site), 0), [sites]);
+  return (
+    <ChartCard
+      title="Released, not yet spent"
+      description={`Projects holding the most released funds without recorded expenditure · ${formatMillions(total, 0)} in total.`}
+      className={`analysis-chart-card watchlist-card${wide ? " watchlist-card-wide" : ""}`}
+    >
+      {rows.length ? (
+        <ol className="watchlist">
+          {rows.map(({ site, unspent }) => (
+            <li key={site.id}>
+              <div className="watchlist-head">
+                <Link href={`/sites/${site.id}`} className="watchlist-name">{site.name}</Link>
+                <strong>{formatMillions(unspent)}</strong>
+              </div>
+              <div className="watchlist-bar" aria-hidden="true"><i style={{ width: `${largest ? (unspent / largest) * 100 : 0}%` }} /></div>
+              <span className="watchlist-meta">{site.district} · {formatPercent(site.released ? unspent / site.released : 0, 0)} of {formatMillions(site.released)} released is unspent</span>
+            </li>
+          ))}
+        </ol>
+      ) : <EmptyState title="No unspent releases" description="Every released rupee in this selection has recorded expenditure." />}
+      <p className="chart-footnote">Unspent release = released − utilized, per project · PKR millions</p>
+    </ChartCard>
+  );
+}
+
 export function PortfolioAnalytics({ sites }: { sites: Site[] }) {
+  const hasCategories = useMemo(() => summarizeCategories(sites).length > 0, [sites]);
   return (
     <section className="analytics-section" aria-labelledby="analytics-title">
       <div className="section-heading">
@@ -275,9 +312,20 @@ export function PortfolioAnalytics({ sites }: { sites: Site[] }) {
       <PortfolioSignals sites={sites} />
       <div className="analytics-chart-grid">
         <DistrictFundingChart sites={sites} />
-        <CategoryMixChart sites={sites} />
-        <ProgressDistributionChart sites={sites} />
+        {hasCategories ? (
+          <>
+            <CategoryMixChart sites={sites} />
+            <UnspentReleaseWatchlist sites={sites} wide={false} />
+            <ProgressDistributionChart sites={sites} />
+          </>
+        ) : (
+          <>
+            <ProgressDistributionChart sites={sites} />
+            <UnspentReleaseWatchlist sites={sites} wide />
+          </>
+        )}
       </div>
+      {!hasCategories && <p className="chart-footnote">The source sheet has no project-type labels, so a type comparison is not shown.</p>}
     </section>
   );
 }

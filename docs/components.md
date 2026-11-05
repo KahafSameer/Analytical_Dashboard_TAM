@@ -11,7 +11,9 @@
 ## Portfolio
 
 - `components/sites-overview.tsx`: overview composition and portfolio KPIs; obtains the summary and fiscal-year rollup from the analytics helpers.
-- `components/site-grid.tsx`: interactive client-side search, filters, sorting and empty state. Receives normalized sites from the server.
+- `components/portfolio-filter-bar.tsx`: global search (Ctrl K), district, spend-status and financial-progress filters. The filter state lives in `sites-overview.tsx` and drives every KPI, chart, the register and the CSV export on the overview page. `?q=` pre-fills the search.
+- `components/project-register.tsx`: sortable, paginated project table (default) with an optional card view. Card imagery is hidden when every project shares the same fallback photo.
+- `lib/portfolio-filters.ts`: pure filter/sort helpers (`filterSites`, `sortSites`, `getUnspentRelease`, `formatLocation`), covered by `tests/portfolio-filters.test.mjs`.
 - `components/site-card.tsx`: image-led project card and navigation.
 - `components/portfolio-chart.tsx`: responsive portfolio allocation/utilization chart.
 - `components/portfolio-analytics.tsx`: district funding, category mix, progress distribution and derived financial signals.

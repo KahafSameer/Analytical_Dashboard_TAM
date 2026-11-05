@@ -161,7 +161,7 @@ export function AssistantWidget() {
             className="assistant-launcher"
             aria-label="Open AI Assistant"
             onClick={() => setOpen(true)}
-            initial={{ opacity: 0, y: reduceMotion ? 0 : 8 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.96 }}
             transition={{ duration: reduceMotion ? 0.12 : 0.24 }}

@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { getPortfolioSummary, formatMillions, formatPercent } from "@/lib/analytics";
 import { serializeCsv } from "@/lib/csv";
+import { formatLocation, isSpecified } from "@/lib/portfolio-filters";
 import { LazySiteFinancialAnalytics, LazySiteFiscalYearChart } from "@/components/lazy-site-charts";
 import type { DashboardData, Site } from "@/lib/types";
 import { KpiCard, ProgressBar, StatusBadge } from "@/components/ui";
@@ -73,11 +74,11 @@ function ProjectDetail({ site, invalidAmountCount }: { site: Site; invalidAmount
           />
         </div>
         <div className="detail-hero-copy">
-          <span className="detail-category"><Landmark size={14} /> {site.category}</span>
+          {isSpecified(site.category) && <span className="detail-category"><Landmark size={14} /> {site.category}</span>}
           <h1>{site.name}</h1>
-          <p className="detail-hero-description">{site.description}</p>
+          {site.description.trim().toLowerCase() !== site.name.trim().toLowerCase() && <p className="detail-hero-description">{site.description}</p>}
           <div className="detail-meta">
-            <span><MapPin size={13} />{site.district}, {site.region}</span>
+            <span><MapPin size={13} />{formatLocation(site)}</span>
             {site.code && <span><FileSpreadsheet size={13} /> Project {site.code}</span>}
             {site.gestationPeriod && <span><CalendarDays size={13} />{site.gestationPeriod}</span>}
             <StatusBadge status={site.utilized > 0 ? "Spend recorded" : "No spend yet"} tone={site.utilized > 0 ? "green" : "gold"} />
