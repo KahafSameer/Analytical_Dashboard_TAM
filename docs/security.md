@@ -30,6 +30,8 @@ If a key has appeared in a source file, commit, log, or shared environment, revo
 
 Google Sheets values are external data. `lib/excel.ts` normalizes supported header names and values, drops invalid project rows, and UI renders strings as text. It does not evaluate formulas or treat cell contents as HTML. Missing required headers and empty sheets fail gracefully.
 
+Both CSV exports pass through `lib/csv.ts`, which quotes cells and prefixes text beginning with spreadsheet formula characters (including when preceded by whitespace); numeric cells remain numeric values.
+
 ## Deployment and dependencies
 
 Use HTTPS and Vercel environment-variable protections, and restrict Preview secrets to trusted contributors where appropriate. Review dependency updates and Google Cloud access periodically. `googleapis` is used server-side only; avoid bundling it into client components.

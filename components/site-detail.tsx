@@ -15,21 +15,13 @@ import {
   MapPin,
   Wallet,
 } from "lucide-react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import { getPortfolioSummary, formatMillions, formatPercent } from "@/lib/analytics";
-import { SiteFinancialAnalytics } from "@/components/site-financial-analytics";
+import { serializeCsv } from "@/lib/csv";
+import { LazySiteFinancialAnalytics, LazySiteFiscalYearChart } from "@/components/lazy-site-charts";
 import type { DashboardData, Site } from "@/lib/types";
-import { ChartCard, EmptyState, KpiCard, ProgressBar, StatusBadge } from "@/components/ui";
+import { KpiCard, ProgressBar, StatusBadge } from "@/components/ui";
 import { PageTopline } from "@/components/dashboard-shell";
-import { Reveal, useChartEntrance } from "@/components/motion";
+import { Reveal } from "@/components/motion";
 import { useDashboardData } from "@/components/dashboard-data-provider";
 import { DataSourceError } from "@/components/data-source-state";
 
@@ -48,10 +40,7 @@ function exportCsv(site: Site) {
     ["Fiscal year", "Allocation (PKR m)", "Release (PKR m)", "Utilized (PKR m)"],
     ...site.fiscalYears.map((year) => [year.label, year.allocation, year.release, year.utilized]),
   ];
-  const csv = rows.map((row) => row.map((cell) => {
-    const text = String(cell ?? "");
-    return `"${text.replaceAll('"', '""')}"`;
-  }).join(",")).join("\r\n");
+  const csv = serializeCsv(rows);
   const link = document.createElement("a");
   link.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
   link.download = `${site.id}-financial-report.csv`;
@@ -59,12 +48,16 @@ function exportCsv(site: Site) {
   URL.revokeObjectURL(link.href);
 }
 
-function ProjectDetail({ site }: { site: Site }) {
+function ProjectDetail({ site, invalidAmountCount }: { site: Site; invalidAmountCount: number }) {
   const [exported, setExported] = useState(false);
   const summary = useMemo(() => getPortfolioSummary([site]), [site]);
-  const { ref: chartRef, isInView: chartInView, animate: animateChart } = useChartEntrance();
   return (
     <div className="page-stack">
+      {invalidAmountCount > 0 && (
+        <p className="inline-alert" role="status">
+          {invalidAmountCount} malformed financial value{invalidAmountCount === 1 ? " was" : "s were"} treated as zero in the source data.
+        </p>
+      )}
       <PageTopline section="Project detail" date="Google Sheets" />
       <Link href="/" className="back-link"><ArrowLeft size={15} /> All tourism projects</Link>
 
@@ -112,37 +105,7 @@ function ProjectDetail({ site }: { site: Site }) {
           <div><p className="eyebrow">FINANCIAL PERFORMANCE</p><h2>Allocation to expenditure</h2><p className="section-description">Year-wise allocation, release and expenditure · PKR millions.</p></div>
         </div>
         <div className="detail-grid">
-          <ChartCard title="Funds by fiscal year" description="Compare planned funding with releases and spend.">
-            {site.fiscalYears.some((year) => year.allocation || year.release || year.utilized) ? (
-              <>
-                <div ref={chartRef} className="detail-chart" role="img" aria-label="Bar chart comparing annual allocation, release and utilization">
-                  {chartInView && <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={site.fiscalYears} margin={{ top: 10, right: 6, bottom: 1, left: -20 }} barGap={3} barCategoryGap="26%">
-                      <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
-                      <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#718078" }} dy={8} />
-                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#87918a" }} tickFormatter={(value: number) => value.toLocaleString("en-US")} />
-                      <Tooltip
-                        cursor={{ fill: "#f5f8f5" }}
-                        contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 11 }}
-                        formatter={(value) => [formatMillions(Number(value)), ""]}
-                        labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
-                      />
-                      <Bar dataKey="allocation" name="Allocated" fill="#d4a017" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={750} animationEasing="ease-out" />
-                      <Bar dataKey="release" name="Released" fill="#8bab98" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={750} animationEasing="ease-out" />
-                      <Bar dataKey="utilized" name="Utilized" fill="#0f4c3a" radius={[3, 3, 0, 0]} maxBarSize={24} isAnimationActive={animateChart} animationDuration={750} animationEasing="ease-out" />
-                    </BarChart>
-                  </ResponsiveContainer>}
-                </div>
-                <div className="detail-legend">
-                  <span><i className="legend-gold" />Allocated</span>
-                  <span><i className="legend-release" />Released</span>
-                  <span><i className="legend-utilized" />Utilized</span>
-                </div>
-              </>
-            ) : (
-              <EmptyState title="No year-wise funding available" description="This Google Sheet doesn’t contain annual allocation or expenditure for this project." />
-            )}
-          </ChartCard>
+          <LazySiteFiscalYearChart site={site} />
 
           <Reveal className="detail-table-reveal">
           <section className="chart-card detail-table-card">
@@ -166,7 +129,7 @@ function ProjectDetail({ site }: { site: Site }) {
         </div>
       </section>
 
-      <SiteFinancialAnalytics site={site} />
+      <LazySiteFinancialAnalytics site={site} />
 
       <section className="detail-note-section">
         <div className="data-note">
@@ -216,5 +179,5 @@ export function SiteDetail({
       </div>
     );
   }
-  return <ProjectDetail site={site} />;
+  return <ProjectDetail site={site} invalidAmountCount={currentData.invalidAmountCount} />;
 }

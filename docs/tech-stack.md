@@ -16,6 +16,7 @@ Versions below reflect the root `package.json` when this document was authored. 
 | Google Gen AI SDK | `@google/genai` | Server-side Gemini responses based on selected normalized dashboard data |
 | ESLint | `^10.14.0` | Static linting |
 | `eslint-config-next` | `^16.4.4` | Next.js and React lint rules |
+| `tsx` | lockfile-resolved dev dependency | Runs Node regression tests against TypeScript modules |
 | `@tailwindcss/postcss` | `^4.3.4` | Tailwind v4 PostCSS plugin |
 | `clsx`, `tailwind-merge` | `^2.1.1`, `^2.6.0` | Present utility dependencies; verify their use before expanding the component system |
 
@@ -28,4 +29,4 @@ Versions below reflect the root `package.json` when this document was authored. 
 - The shared normalizer in `lib/excel.ts` preserves the established column mapping and supports the retained offline Excel adapter without coupling the UI to source formats.
 - Lucide supplies consistent lightweight line icons.
 
-There is no UI primitive package dependency: the project uses custom React components and CSS rather than a configured shadcn/ui installation. There is also no database, test runner, or end-user authentication provider.
+There is no UI primitive package dependency: the project uses custom React components and CSS rather than a configured shadcn/ui installation. There is also no database or end-user authentication provider.

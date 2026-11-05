@@ -7,8 +7,8 @@
   --green-3: #e8f1ec;
   --gold: #d4a017;
   --ink: #1f2937;
-  --muted: #64748b;
-  --muted-2: #87918a;
+  --muted: #59665d;
+  --muted-2: #59665d;
   --line: #e5e9e6;
   --canvas: #f8faf8;
   --white: #fff;
@@ -224,6 +224,21 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .category-legend-name { min-width: 0; display: inline-flex; align-items: center; gap: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .category-legend-name i { width: 7px; height: 7px; flex: 0 0 auto; border-radius: 50%; }
 .category-legend-value { flex: 0 0 auto; color: #44544a; font-weight: 600; }
+.chart-data-table { margin-top: 9px; color: var(--muted); font-size: 10px; }
+.chart-data-table summary { width: fit-content; min-height: 32px; display: flex; align-items: center; cursor: pointer; color: var(--green); font-weight: 600; }
+.chart-data-table summary:focus-visible { outline: 3px solid rgba(46,125,50,.35); outline-offset: 2px; }
+.chart-data-table-scroll { max-height: 190px; overflow: auto; margin-top: 4px; border: 1px solid var(--line); border-radius: 6px; }
+.chart-data-table table { width: 100%; border-collapse: collapse; text-align: left; }
+.chart-data-table th, .chart-data-table td { padding: 7px 8px; border-bottom: 1px solid #edf0ed; }
+.chart-data-table th { position: sticky; top: 0; color: #34463b; background: #f8faf8; font-weight: 600; }
+.chart-data-table td { color: #59665d; }
+.chart-data-table tr:last-child td { border-bottom: 0; }
+.analytics-loading-placeholder { min-height: 860px; }
+.funding-chart-lazy { min-width: 0; }
+.funding-chart-loading { min-height: 272px; }
+.site-chart-lazy { min-width: 0; }
+.site-chart-loading { min-height: 230px; }
+.site-analytics-loading { min-height: 820px; }
 .distribution-chart { width: 100%; height: 224px; margin-top: 11px; }
 .progress-distribution-card { grid-column: 1 / -1; min-height: 306px; }
 .progress-distribution-card .distribution-chart { height: 213px; }
@@ -344,6 +359,20 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .detail-error .button { margin-top: 7px; }
 .recharts-tooltip-wrapper { transition: opacity .2s ease, transform .2s ease; }
 
+.brand-copy small, .sidebar-label, .sidebar-version, .breadcrumb, .topline-meta, .sort-select-wrap,
+.intro-kicker, .eyebrow, .intro-context span:not(.context-icon), .summary-section-label,
+.kpi-label, .kpi-foot, .section-description, .district-count, .filter-field,
+.results-meta, .site-location, .site-code, .site-description, .card-progress-label,
+.empty-state p, .chart-card-heading p, .chart-legend, .funding-note > p:not(.eyebrow),
+.funding-stat, .analytics-source-note, .signal-label, .signal-detail, .chart-footnote,
+.analytics-tooltip small, .donut-center span, .category-legend-row, .distribution-legend,
+.report-strip > div span, .report-source-pill, .page-footer, .detail-analytics-legend, .detail-chart-footnote,
+.detail-legend, .detail-donut-legend > div, .fiscal-table th, .table-footnote, .data-note-copy, .detail-export-copy span,
+.assistant-heading span, .assistant-welcome > span:last-child, .assistant-suggestions > span,
+.assistant-source, .assistant-typing, .assistant-footnote {
+  color: var(--muted-2);
+}
+
 @media (hover: hover) and (pointer: fine) {
   .site-card:hover { border-color: #d6e1d8; box-shadow: 0 10px 24px rgba(30,53,39,.09); }
   .site-card:hover .site-image { transform: scale(1.03); }
@@ -376,6 +405,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .signal-card { padding: 11px; }
 }
 @media (max-width: 760px) {
+  .analytics-loading-placeholder { min-height: 1380px; }
   .sidebar { width: min(290px, 84vw); z-index: 40; visibility: hidden; transform: translateX(-105%); transition: transform .3s cubic-bezier(.22,1,.36,1), visibility .3s ease; box-shadow: 15px 0 40px rgba(21,39,28,.12); }
   .sidebar-open { visibility: visible; transform: translateX(0); }
   .drawer-close { display: inline-flex; margin-left: auto; padding: 6px; border: 0; border-radius: 6px; color: #6d7b71; background: transparent; }
@@ -677,7 +707,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   line-height: 1.45;
 }
 .assistant-composer textarea:focus { border-color: #9ab6a2; box-shadow: 0 0 0 3px rgba(46,125,50,.08); }
-.assistant-composer textarea::placeholder { color: #99a39c; }
+.assistant-composer textarea::placeholder { color: var(--muted-2); }
 .assistant-send {
   width: 40px;
   height: 40px;

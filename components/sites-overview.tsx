@@ -14,8 +14,7 @@ import { getPortfolioSummary, combineFiscalYears, formatMillions, formatPercent 
 import type { DashboardData } from "@/lib/types";
 import { KpiCard, SectionHeading } from "@/components/ui";
 import { PageTopline } from "@/components/dashboard-shell";
-import { PortfolioFundingChart } from "@/components/portfolio-chart";
-import { PortfolioAnalytics } from "@/components/portfolio-analytics";
+import { LazyPortfolioAnalytics, LazyPortfolioFundingChart } from "@/components/lazy-portfolio-charts";
 import { PortfolioExportButton } from "@/components/portfolio-export-button";
 import { SiteGrid } from "@/components/site-grid";
 import { Reveal } from "@/components/motion";
@@ -48,6 +47,11 @@ export function SitesOverview({
       {currentData.skippedRows > 0 && (
         <p className="inline-alert" role="status">
           {currentData.skippedRows} non-empty row{currentData.skippedRows === 1 ? " was" : "s were"} skipped because no valid project name was found.
+        </p>
+      )}
+      {currentData.invalidAmountCount > 0 && (
+        <p className="inline-alert" role="status">
+          {currentData.invalidAmountCount} malformed financial value{currentData.invalidAmountCount === 1 ? " was" : "s were"} treated as zero in the source data.
         </p>
       )}
       <PageTopline section="Tourism sites" date="Google Sheets" />
@@ -90,7 +94,7 @@ export function SitesOverview({
           description="Approved project costs compared with year-wise allocation and expenditure."
         />
         <div className="portfolio-chart-layout">
-          <PortfolioFundingChart data={yearly} />
+          <LazyPortfolioFundingChart data={yearly} />
           <Reveal className="funding-note-reveal">
           <aside className="funding-note">
             <span className="funding-note-icon"><CircleAlert size={18} /></span>
@@ -105,7 +109,7 @@ export function SitesOverview({
         </div>
       </section>
 
-      <PortfolioAnalytics sites={sites} />
+      <LazyPortfolioAnalytics sites={sites} />
 
       <section id="report-export" className="report-strip">
         <div className="report-icon"><Banknote size={19} /></div>

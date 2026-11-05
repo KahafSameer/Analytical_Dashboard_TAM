@@ -2,16 +2,17 @@
 
 ## Automated checks currently available
 
-The project has no committed unit-test, browser-test or visual-regression framework. Available scripts:
+The project has focused Node-based regression tests for financial normalization diagnostics, generic category exclusion, and CSV formula-prefix handling. There is no browser-test or visual-regression framework. Available scripts:
 
 ```powershell
+npm run test
 npm run lint
 npm run typecheck
 npm run build
 npm audit --omit=dev
 ```
 
-For changes to the data layer, verify normalization and calculated totals against an approved sheet copy or the former workbook fixture; never print or commit credentials. Live integration checks require an authorized service account and spreadsheet. These checks are not yet a repeatable committed test suite.
+For changes to the data layer, verify normalization and calculated totals against an approved sheet copy or the former workbook fixture; never print or commit credentials. Live integration checks require an authorized service account and spreadsheet.
 
 ## Manual QA checklist
 
@@ -27,7 +28,8 @@ For changes to the data layer, verify normalization and calculated totals agains
 ### Analytics
 
 - [ ] Portfolio annual totals reconcile with the sheet within rounding differences.
-- [ ] District/category summaries cover all records; tooltip values are legible.
+- [ ] District summaries cover all records; category summaries include only projects with source-provided types.
+- [ ] Portfolio charts expose expandable data tables as well as chart visuals.
 - [ ] Financial-progress distribution counts total normalized projects.
 - [ ] Project annual funding chart and table agree with source.
 - [ ] Allocation utilization donut handles zero allocation and expenditure over allocation.
@@ -42,7 +44,7 @@ For changes to the data layer, verify normalization and calculated totals agains
 - [ ] Dynamic fiscal-year columns and duplicate identity grouping behave correctly.
 - [ ] Sheet edits appear in portfolio and detail analytics after the next successful 30-second refresh without reloading the browser.
 - [ ] A failed refresh retains existing data, shows a stale-data indicator and retries on a later cycle.
-- [ ] Project and portfolio CSV exports open correctly and have expected headers/amounts.
+- [ ] Project and portfolio CSV exports open correctly, have expected headers/amounts, and keep formula-leading source text inert.
 
 ### Responsive/accessibility
 

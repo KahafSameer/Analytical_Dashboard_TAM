@@ -21,9 +21,11 @@ When denominators are zero, portfolio ratio helpers return zero. Percentages are
 
 - **Annual portfolio funding area chart:** total annual allocation and expenditure. The current chart does not display release even though the normalized data contains it.
 - **Funding by district:** top eight districts by a user-selected funding amount; amount and project count are included in the chart tooltip.
-- **Portfolio by project type:** donut slices represent total approved cost. Categories use a source category/type column where available; if absent, projects receive the generic `Tourism project` category rather than an inferred type.
+- **Portfolio by project type:** donut slices represent total approved cost by source-provided category/type. Missing, generic “Tourism project,” and unclassified labels are excluded; if the sheet has no specific types, the chart shows an explanatory empty state instead of implying a real category mix.
 - **Financial progress distribution:** counts in no-expenditure, 1–25%, 26–50%, 51–75%, and 76–100% bands. “No expenditure” is based on a zero financial-progress fraction, and bands exclude zero.
-- **Signals:** remaining allocation is `max(totalAllocated − totalUtilized, 0)`; highest expenditure is the district with the largest aggregate utilization; investment category is the category with the largest approved total.
+- **Signals:** remaining allocation is `max(totalAllocated − totalUtilized, 0)`; highest expenditure is the district with the largest aggregate utilization; project-type coverage counts records with a specific source category.
+- **Normalization diagnostics:** malformed non-empty financial amount cells are counted, treated as zero for calculations, and disclosed on overview/detail pages. Empty cells remain valid zero values.
+- **Accessible alternatives:** portfolio visualizations provide expandable data tables with the values represented in each chart.
 
 ## Project calculations (`lib/site-analytics.ts`)
 

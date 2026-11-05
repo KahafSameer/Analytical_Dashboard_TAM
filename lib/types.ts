@@ -42,5 +42,6 @@ export type DashboardData = {
   sites: Site[];
   sheetName: string;
   skippedRows: number;
+  invalidAmountCount: number;
   fetchedAt: string;
 };

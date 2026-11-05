@@ -22,8 +22,8 @@ export function PortfolioFundingChart({ data }: { data: FiscalYear[] }) {
               <linearGradient id="utilizedGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#0f4c3a" stopOpacity={0.18} /><stop offset="100%" stopColor="#0f4c3a" stopOpacity={0.01} /></linearGradient>
             </defs>
             <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
-            <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#718078" }} dy={8} />
-            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#718078" }} tickFormatter={(value: number) => `${value}`} />
+            <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#59665d" }} dy={8} />
+            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#59665d" }} tickFormatter={(value: number) => `${value}`} />
             <Tooltip
               contentStyle={{ borderRadius: 10, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 12 }}
               formatter={(value) => [formatMillions(Number(value)), ""]}
@@ -34,6 +34,18 @@ export function PortfolioFundingChart({ data }: { data: FiscalYear[] }) {
           </AreaChart>
         </ResponsiveContainer>}
       </div>
+      <details className="chart-data-table">
+        <summary>View data table</summary>
+        <div className="chart-data-table-scroll">
+          <table>
+            <caption className="sr-only">Portfolio funding by fiscal year, PKR millions</caption>
+            <thead><tr><th scope="col">Fiscal year</th><th scope="col">Allocated</th><th scope="col">Utilized</th></tr></thead>
+            <tbody>{data.map((year) => (
+              <tr key={year.label}><th scope="row">{year.label}</th><td>{formatMillions(year.allocation)}</td><td>{formatMillions(year.utilized)}</td></tr>
+            ))}</tbody>
+          </table>
+        </div>
+      </details>
     </ChartCard>
   );
 }

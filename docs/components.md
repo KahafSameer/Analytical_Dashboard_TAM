@@ -15,12 +15,16 @@
 - `components/site-card.tsx`: image-led project card and navigation.
 - `components/portfolio-chart.tsx`: responsive portfolio allocation/utilization chart.
 - `components/portfolio-analytics.tsx`: district funding, category mix, progress distribution and derived financial signals.
+- `components/lazy-portfolio-charts.tsx` and `components/lazy-site-charts.tsx`: defer below-the-fold chart modules until they approach the viewport; chart data remains available in semantic tables.
+- `components/use-near-viewport.ts`: shared viewport-observation hook for deferred chart loading.
 - `components/portfolio-export-button.tsx`: downloads the currently loaded Google Sheets portfolio rows as CSV.
 
 ## Project detail
 
-- `components/site-detail.tsx`: project hero, financial KPIs, fiscal-year bar chart and table, and CSV download.
+- `components/site-detail.tsx`: project hero, financial KPIs, fiscal-year chart/table, and CSV download.
+- `components/site-fiscal-year-chart.tsx`: lazily loaded annual funding visualization.
 - `components/site-financial-analytics.tsx`: allocation donut, cumulative fiscal-year funding and annual execution-rate charts.
+- `lib/csv.ts`: shared CSV escaping and formula-prefix neutralization used by both export actions.
 
 ## App Router and shared data
 

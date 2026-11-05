@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Check, Download } from "lucide-react";
 import type { Site } from "@/lib/types";
+import { serializeCsv } from "@/lib/csv";
 
 export function PortfolioExportButton({ sites }: { sites: Site[] }) {
   const [exported, setExported] = useState(false);
@@ -22,7 +23,7 @@ export function PortfolioExportButton({ sites }: { sites: Site[] }) {
         Number((site.overallProgress * 100).toFixed(2)),
       ]),
     ];
-    const csv = rows.map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\r\n");
+    const csv = serializeCsv(rows);
     const url = URL.createObjectURL(new Blob([`\uFEFF${csv}`], { type: "text/csv;charset=utf-8" }));
     const link = document.createElement("a");
     link.href = url;

@@ -16,6 +16,10 @@ export type CategorySummary = {
   utilized: number;
 };
 
+export function hasReportedCategory(category: string): boolean {
+  return !["", "tourism project", "unclassified", "not specified"].includes(category.trim().toLowerCase());
+}
+
 export type ProgressBand = {
   band: string;
   count: number;
@@ -54,7 +58,7 @@ export function summarizeDistricts(items: Site[]): DistrictFundingSummary[] {
 
 export function summarizeCategories(items: Site[]): CategorySummary[] {
   const summaries = new Map<string, CategorySummary>();
-  for (const site of items) {
+  for (const site of items.filter((item) => hasReportedCategory(item.category))) {
     const summary = summaries.get(site.category) ?? {
       category: site.category,
       projects: 0,

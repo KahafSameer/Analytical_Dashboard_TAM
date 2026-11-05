@@ -101,8 +101,8 @@ function CumulativeFundingChart({ site }: { site: Site }) {
                   </linearGradient>
                 </defs>
                 <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
-                <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#718078" }} dy={7} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 8, fill: "#87918a" }} tickFormatter={(value: number) => value >= 1000 ? `${(value / 1000).toFixed(1)}k` : `${value}`} />
+                <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#59665d" }} dy={7} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 8, fill: "#59665d" }} tickFormatter={(value: number) => value >= 1000 ? `${(value / 1000).toFixed(1)}k` : `${value}`} />
                 <Tooltip
                   contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 10 }}
                   formatter={(value) => [formatMillions(Number(value)), ""]}
@@ -149,7 +149,7 @@ function AnnualExecutionChart({ site }: { site: Site }) {
                   domain={[0, Math.ceil(maxRate / 25) * 25]}
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 8, fill: "#829087" }}
+                  tick={{ fontSize: 8, fill: "#59665d" }}
                   tickFormatter={(value: number) => `${value}%`}
                 />
                 <YAxis type="category" dataKey="label" width={58} axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#65736a" }} />

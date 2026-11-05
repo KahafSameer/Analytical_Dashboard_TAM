@@ -60,6 +60,7 @@ function DistrictFundingChart({ sites }: { sites: Site[] }) {
   const rows = useMemo(() =>
     summarizeDistricts(sites).sort((a, b) => b[measure] - a[measure]).slice(0, 8),
   [measure, sites]);
+  const measureLabel = fundingMeasures.find((item) => item.id === measure)?.label ?? "Funding";
   return (
     <ChartCard
       title="Funding by reporting area"
@@ -75,7 +76,7 @@ function DistrictFundingChart({ sites }: { sites: Site[] }) {
       className="analysis-chart-card"
     >
       {rows.length ? (
-        <div ref={ref} className="analysis-bar-chart" role="img" aria-label={`${fundingMeasures.find((item) => item.id === measure)?.label} by district`}>
+        <div ref={ref} className="analysis-bar-chart" role="img" aria-label={`${measureLabel} by district`}>
           {isInView && <ResponsiveContainer width="100%" height="100%">
             <BarChart data={rows} layout="vertical" margin={{ top: 5, right: 12, bottom: 1, left: 3 }} barCategoryGap="27%">
               <CartesianGrid horizontal={false} stroke="#edf0ed" strokeDasharray="3 5" />
@@ -83,16 +84,23 @@ function DistrictFundingChart({ sites }: { sites: Site[] }) {
                 type="number"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 9, fill: "#829087" }}
+                tick={{ fontSize: 9, fill: "#59665d" }}
                 tickFormatter={(value: number) => value >= 1000 ? `${(value / 1000).toFixed(1)}k` : `${value}`}
               />
               <YAxis type="category" dataKey="district" width={104} axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#65736a" }} />
               <Tooltip content={<CompactTooltip />} cursor={{ fill: "#f4f7f4" }} />
-              <Bar dataKey={measure} name={fundingMeasures.find((item) => item.id === measure)?.label} fill="#0f4c3a" radius={[0, 4, 4, 0]} maxBarSize={20} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
+              <Bar dataKey={measure} name={measureLabel} fill="#0f4c3a" radius={[0, 4, 4, 0]} maxBarSize={20} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
             </BarChart>
           </ResponsiveContainer>}
         </div>
       ) : <EmptyState title="No district funding data" description="There are no funding records to compare." />}
+      {rows.length > 0 && (
+        <ChartDataTable
+          caption={`${measureLabel} by district`}
+          headers={["District", measureLabel, "Projects"]}
+          rows={rows.map((row) => [row.district, formatMillions(row[measure]), row.projects])}
+        />
+      )}
       <p className="chart-footnote">All values in PKR millions · Largest amounts shown</p>
     </ChartCard>
   );
@@ -103,7 +111,7 @@ function CategoryMixChart({ sites }: { sites: Site[] }) {
   const categories = useMemo(() => summarizeCategories(sites), [sites]);
   const summary = useMemo(() => getPortfolioSummary(sites), [sites]);
   return (
-    <ChartCard title="Portfolio by project type" description="Approved project cost grouped by project title." className="analysis-chart-card">
+    <ChartCard title="Approved cost by reported type" description="Only project type labels supplied by the source are included." className="analysis-chart-card">
       {categories.length && summary.totalApproved > 0 ? (
         <>
           <div className="category-donut-wrap">
@@ -127,9 +135,14 @@ function CategoryMixChart({ sites }: { sites: Site[] }) {
               </div>
             ))}
           </div>
+          <ChartDataTable
+            caption="Approved cost by reported project type"
+            headers={["Project type", "Projects", "Approved cost"]}
+            rows={categories.map((category) => [category.category, category.projects, formatMillions(category.approved)])}
+          />
         </>
-      ) : <EmptyState title="No category data available" description="Project costs aren’t available for category analysis." />}
-      <p className="chart-footnote">Categories are classified from project titles.</p>
+      ) : <EmptyState title="No reported project types" description="The source does not provide specific project type labels, so a category comparison is withheld." />}
+      <p className="chart-footnote">Projects without a specific source category are excluded.</p>
     </ChartCard>
   );
 }
@@ -145,8 +158,8 @@ function ProgressDistributionChart({ sites }: { sites: Site[] }) {
             {isInView && <ResponsiveContainer width="100%" height="100%">
               <BarChart data={distribution} margin={{ top: 12, right: 7, bottom: 1, left: -21 }} barCategoryGap="38%">
                 <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
-                <XAxis dataKey="band" axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#718078" }} dy={7} />
-                <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#87918a" }} />
+                <XAxis dataKey="band" axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#59665d" }} dy={7} />
+                <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#59665d" }} />
                 <Tooltip
                   contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 11 }}
                   formatter={(value) => [`${Number(value)} projects`, "Project count"]}
@@ -159,9 +172,39 @@ function ProgressDistributionChart({ sites }: { sites: Site[] }) {
             </ResponsiveContainer>}
           </div>
           <div className="distribution-legend"><i /><span>Projects with no expenditure recorded</span></div>
+          <ChartDataTable
+            caption="Projects by financial progress range"
+            headers={["Financial progress", "Projects"]}
+            rows={distribution.map((entry) => [entry.band, entry.count])}
+          />
         </>
       ) : <EmptyState title="No progress data available" description="Import project financial progress to see its distribution." />}
     </ChartCard>
+  );
+}
+
+function ChartDataTable({
+  caption,
+  headers,
+  rows,
+}: {
+  caption: string;
+  headers: string[];
+  rows: (string | number)[][];
+}) {
+  return (
+    <details className="chart-data-table">
+      <summary>View data table</summary>
+      <div className="chart-data-table-scroll">
+        <table>
+          <caption className="sr-only">{caption}</caption>
+          <thead><tr>{headers.map((header) => <th scope="col" key={header}>{header}</th>)}</tr></thead>
+          <tbody>{rows.map((row, index) => (
+            <tr key={`${row[0]}-${index}`}>{row.map((cell, cellIndex) => <td key={cellIndex}>{cell}</td>)}</tr>
+          ))}</tbody>
+        </table>
+      </div>
+    </details>
   );
 }
 
@@ -170,9 +213,8 @@ function PortfolioSignals({ sites }: { sites: Site[] }) {
   const districts = useMemo(() => summarizeDistricts(sites), [sites]);
   const categories = useMemo(() => summarizeCategories(sites), [sites]);
   const topDistrict = [...districts].sort((a, b) => b.utilized - a.utilized)[0];
-  const largestCategory = categories[0];
   const unspentAllocation = Math.max(0, summary.totalAllocated - summary.totalUtilized);
-  const concentrationShare = summary.totalApproved ? (largestCategory?.approved ?? 0) / summary.totalApproved : 0;
+  const classifiedProjects = categories.reduce((total, category) => total + category.projects, 0);
   const signals = [
     {
       icon: <Wallet size={16} />,
@@ -190,9 +232,9 @@ function PortfolioSignals({ sites }: { sites: Site[] }) {
     },
     {
       icon: <Layers3 size={16} />,
-      label: "Largest investment category",
-      value: largestCategory?.category ?? "—",
-      detail: largestCategory ? `${formatPercent(concentrationShare)} of approved cost` : "No category data",
+      label: "Projects with reported types",
+      value: `${classifiedProjects}`,
+      detail: `of ${summary.siteCount} projects`,
       tone: "neutral",
     },
     {
