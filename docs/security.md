@@ -19,10 +19,10 @@ Only publish a spreadsheet whose contents are approved for every dashboard visit
 - `.env.example` contains only the blank `GEMINI_API_KEY=` placeholder. Configure the key in ignored local environment files or Vercel server environment variables; never use a `NEXT_PUBLIC_` prefix.
 - `lib/gemini.ts` is server-only and calls Gemini 3.5 Flash-Lite. Browser code calls only `POST /api/assistant`; the key is not returned, logged, or sent to the browser.
 - The route bounds JSON bodies, message length and recent history, validates roles/content, and applies a process-local request limit. Vercel instances have independent limits; this is a basic abuse guard, not a distributed quota system.
-- Deterministic selection and calculations happen before a Gemini request. Only compact relevant facts are sent, not raw sheet rows or the full dataset. Context/history are treated as untrusted; instructions prohibit invented values and unrelated answers.
+- Gemini receives a live schema and bounded conversation to plan; TypeScript validates all field IDs and whitelisted operations before querying local normalized records. Answer generation receives the deterministic result and only relevant field metadata, not raw rows or the full dataset. Source values, labels and user/history text are untrusted.
 - Responses contain answer text and selected data references. The UI renders text and limited Markdown using React nodes; model output is never interpreted as HTML.
 - Questions outside the normalized source (for example status, delays, activities, milestones, physical progress or historical changes) are explicitly declined.
-- For an unrecognized-language query, a separate server-side translation step receives only the question and bounded recent history. It returns an English lookup query; site filtering, ranking and calculations still happen locally against normalized dashboard data.
+- The planner cannot execute code, SQL, arbitrary expressions or fields not present in the discovered schema. Safe arithmetic is restricted to fixed difference/ratio/percent-of operations over numeric fields; query limits and filter/aggregation counts are validated server-side.
 
 If a key has appeared in a source file, commit, log, or shared environment, revoke/rotate it with Google AI Studio immediately and update the server environment. Replacing a local example file does not remove prior Git history.
 

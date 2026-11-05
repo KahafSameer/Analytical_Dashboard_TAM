@@ -47,7 +47,7 @@ export function DashboardDataProvider({ children }: { children: ReactNode }) {
       });
       if (!response.ok) throw new Error("refresh-failed");
       const nextData = await response.json() as DashboardData;
-      if (!Array.isArray(nextData.sites) || nextData.sites.length === 0 || !nextData.fetchedAt) {
+      if (!Array.isArray(nextData.sites) || nextData.sites.length === 0 || !Array.isArray(nextData.sourceHeaders) || !nextData.fetchedAt) {
         throw new Error("invalid-refresh-payload");
       }
       setDataState(nextData);

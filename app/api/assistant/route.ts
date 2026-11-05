@@ -1,13 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
+import type { AssistantHistoryMessage, AssistantSource } from "@/lib/assistant-context";
+import { discoverDatasetSchema, publicSchema } from "@/lib/data-schema";
 import {
-  prepareAssistantContext,
-  type AssistantHistoryMessage,
-} from "@/lib/assistant-context";
+  executeDataQuery,
+  getQueryPlanFieldIds,
+  validateDataQueryPlan,
+} from "@/lib/dataset-query";
 import {
   getGeminiErrorStatus,
   generateDashboardAnswer,
-  interpretDashboardQuestion,
   isGeminiRateLimitError,
+  planDashboardQuery,
 } from "@/lib/gemini";
 import {
   GoogleSheetsDataError,
@@ -113,6 +116,49 @@ function isRateLimited(request: NextRequest) {
   return false;
 }
 
+function formatFieldValue(value: unknown, unit?: string) {
+  if (typeof value !== "number" || !Number.isFinite(value)) return String(value ?? "Not reported");
+  if (unit?.includes("percent")) return `${value.toLocaleString("en-US", { maximumFractionDigits: 2 })}%`;
+  if (unit?.includes("PKR millions")) return `PKR ${value.toLocaleString("en-PK", { maximumFractionDigits: 2 })}m`;
+  return value.toLocaleString("en-US", { maximumFractionDigits: 3 });
+}
+
+function makeAnswerSources(
+  result: ReturnType<typeof executeDataQuery>,
+  schema: ReturnType<typeof discoverDatasetSchema>,
+): AssistantSource[] {
+  const fields = new Map(schema.fields.map((field) => [field.id, field]));
+  if (result.rows?.length) {
+    return result.rows.slice(0, 8).flatMap((row) => {
+      const label = String(row.name ?? row.projectId ?? row.code ?? "Project");
+      return Object.entries(row)
+        .filter(([id]) => !["name", "projectId", "code"].includes(id))
+        .slice(0, 2)
+        .map(([id, value]) => ({
+          site: label,
+          field: fields.get(id)?.label ?? id,
+          value: formatFieldValue(value, fields.get(id)?.unit),
+        }));
+    }).slice(0, 8);
+  }
+  if (result.aggregations?.length) {
+    return result.aggregations.slice(0, 8).map((entry) => ({
+      site: "Dataset",
+      field: `${entry.operation} ${entry.label}`,
+      value: formatFieldValue(entry.value, entry.unit),
+    }));
+  }
+  if (result.groups?.length) {
+    const groupFields = result.groups[0] ? Object.entries(result.groups[0].key) : [];
+    return result.groups.slice(0, 8).map((group) => ({
+      site: groupFields.map(([id, value]) => `${fields.get(id)?.label ?? id}: ${String(value ?? "Not reported")}`).join(" · "),
+      field: "Record count",
+      value: String(group.count),
+    }));
+  }
+  return [];
+}
+
 export async function POST(request: NextRequest) {
   if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
     return NextResponse.json(
@@ -130,31 +176,96 @@ export async function POST(request: NextRequest) {
   try {
     const { message, history } = validateRequest(await readJsonBody(request));
     const dashboard = await getDashboardData();
-    let lookupQuestion: string | undefined;
-    let prepared = prepareAssistantContext(dashboard, message, history);
-    if (prepared.kind === "language-fallback") {
-      lookupQuestion = await interpretDashboardQuestion(message, history);
-      prepared = prepareAssistantContext(dashboard, lookupQuestion, []);
-      if (prepared.kind === "language-fallback") {
-        prepared = {
-          kind: "off-topic",
-          context: {},
-          sources: [],
-          immediateAnswer: "I could not match that request to available dashboard data. Offer dashboard questions about site progress, locations, funding, or fiscal years.",
-        };
-      }
+    const schema = discoverDatasetSchema(dashboard.sites, dashboard.sourceHeaders);
+    let rawPlan = await planDashboardQuery(message, history, schema);
+    let validation = validateDataQueryPlan(rawPlan, schema);
+    if (!validation.plan && validation.invalidFields.length) {
+      const availableIds = schema.fields.map((field) => field.id).join(", ");
+      rawPlan = await planDashboardQuery(
+        message,
+        history,
+        schema,
+        `Unknown field IDs: ${validation.invalidFields.join(", ")}. Available field IDs: ${availableIds}`,
+      );
+      validation = validateDataQueryPlan(rawPlan, schema);
     }
-    const answerContext = prepared.immediateAnswer
-      ? { ...prepared.context, responseGuidance: prepared.immediateAnswer }
-      : prepared.context;
+    let answerContext: Record<string, unknown>;
+    let sources: AssistantSource[] = [];
+
+    if (!validation.plan) {
+      answerContext = {
+        status: "query_plan_needs_clarification",
+        message: "The query planner could not map the request to a validated operation. Ask one concise clarification in the user's language. Do not guess or invent results.",
+        availableFields: publicSchema(schema).fields,
+        validationError: validation.error,
+      };
+    } else if (validation.plan.output === "clarify") {
+      answerContext = {
+        status: "clarification_needed",
+        reason: validation.plan.clarification ?? "This request is not a query about the connected dataset or needs clarification.",
+      };
+    } else if (validation.plan.unavailableFields.length) {
+      answerContext = {
+        status: "requested_fields_unavailable",
+        unavailableFields: validation.plan.unavailableFields,
+        availableFields: publicSchema(schema).fields,
+      };
+    } else {
+      const result = executeDataQuery(dashboard.sites, schema, validation.plan);
+      const relevantFieldIds = new Set(getQueryPlanFieldIds(validation.plan));
+      if (validation.plan.output === "analysis") {
+        for (const field of schema.fields) relevantFieldIds.add(field.id);
+      }
+      const querySummary = {
+        output: validation.plan.output,
+        filters: validation.plan.filters.map((filter) => ({
+          field: schema.fields.find((field) => field.id === filter.field)?.label ?? filter.field,
+          operator: filter.operator,
+          ...(filter.value !== undefined ? { value: filter.value } : {}),
+          ...(filter.value2 !== undefined ? { value2: filter.value2 } : {}),
+        })),
+        filterLogic: validation.plan.filterLogic,
+        groupBy: validation.plan.groupBy.map((id) => schema.fields.find((field) => field.id === id)?.label ?? id),
+        sort: validation.plan.sort.map((entry) => ({
+          field: schema.fields.find((field) => field.id === entry.field)?.label
+            ?? validation.plan?.calculations.find((calculation) => calculation.id === entry.field)?.id
+            ?? entry.field,
+          direction: entry.direction,
+        })),
+        limit: validation.plan.limit,
+        aggregations: validation.plan.aggregations.map((aggregation) => ({
+          id: aggregation.id,
+          operation: aggregation.operation,
+          field: aggregation.field ? schema.fields.find((field) => field.id === aggregation.field)?.label ?? aggregation.field : undefined,
+        })),
+        calculations: validation.plan.calculations.map((calculation) => ({
+          id: calculation.id,
+          operation: calculation.operation,
+          left: schema.fields.find((field) => field.id === calculation.left)?.label ?? calculation.left,
+          right: schema.fields.find((field) => field.id === calculation.right)?.label ?? calculation.right,
+        })),
+        ...(validation.plan.scenario ? { scenario: validation.plan.scenario } : {}),
+      };
+      const relevantFields = schema.fields
+        .filter((field) => relevantFieldIds.has(field.id))
+        .map(({ id, label, type, unit }) => ({ id, label, type, ...(unit ? { unit } : {}) }));
+      answerContext = {
+        status: "query_complete",
+        querySummary,
+        result,
+        relevantFields,
+      };
+      sources = makeAnswerSources(result, schema);
+    }
+
     const answer = await generateDashboardAnswer(
       message,
       history,
-      answerContext,
+      { question: message, ...answerContext },
     );
 
     return NextResponse.json(
-      { answer, sources: prepared.sources },
+      { answer, sources },
       { headers: { "Cache-Control": "no-store" } },
     );
   } catch (error) {

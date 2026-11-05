@@ -28,18 +28,19 @@ The assistant reuses that server repository and normalized contract:
 
 ```text
 Dashboard UI → POST /api/assistant → getDashboardData()
-                                  → lib/assistant-context.ts (selection/calculations)
-                                  → lib/gemini.ts (server-only Gemini request)
-                                  → concise answer + selected data references
+                                  → lib/data-schema.ts (live schema discovery)
+                                  → lib/gemini.ts (server-side generic JSON query plan)
+                                  → lib/dataset-query.ts (validated TypeScript execution)
+                                  → Gemini answer from deterministic relevant results
 ```
 
-Only relevant normalized facts or deterministic aggregates are sent to Gemini; raw rows and the full dataset are not. Supported fields are limited to what the current `Site` model actually contains. Status, delays, milestones, activities, physical progress and historical change are not inferred.
+The query-planning request receives the live field schema and bounded conversation, not project rows. The query engine accepts only discovered field IDs and whitelisted operations; it performs filters, groupings, rankings, aggregates, safe numeric calculations, scenarios, and field-wide statistical profiles in TypeScript. Answer generation receives the operation summary, relevant schema metadata, and computed result, not the full project dataset. Additional source columns are retained as typed `sourceFields` during normalization so the planner can discover columns beyond the core UI model. Missing fields are reported rather than inferred.
 
 ## Server repository and normalization
 
 - `lib/google-sheets.ts` is marked server-only. It reads `GOOGLE_SHEET_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, and `GOOGLE_PRIVATE_KEY`, authenticates with `spreadsheets.readonly`, discovers the first tab, fetches its values and calls the shared normalizer.
 - `lib/excel.ts` retains the prior workbook parser and exports `normalizeSheetRows`, the shared header and row mapping path. The current routes do not open the local Excel file.
-- `lib/types.ts` contains the normalized model and response type. Analytics and components do not depend on Google API row formats.
+- `lib/types.ts` contains the normalized model and response type, including original source headers and preserved extra scalar columns. Analytics and components do not depend on Google API row formats.
 - The repository coalesces concurrent requests and caches successful parsed data in memory for 20 seconds per warm process.
 - `app/api/dashboard-data/route.ts` exposes only normalized data and safe errors; it is uncached at the HTTP layer.
 

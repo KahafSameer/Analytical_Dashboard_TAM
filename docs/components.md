@@ -36,9 +36,11 @@
 - `lib/excel.ts`: retained Excel parser plus shared header/row validation, grouping and normalization; runtime routes use its normalizer only.
 - `lib/google-sheets.ts`: server-only service-account client, first-tab fetching, short process cache and normalization adapter.
 - `app/api/dashboard-data/route.ts`: safe normalized-data API response for background refresh.
-- `app/api/assistant/route.ts`: bounded, rate-limited question endpoint; reuses the normalized Sheets repository and returns only a concise answer and selected source references.
-- `lib/assistant-context.ts`: deterministic question intent, filtering, ranking, aggregate calculations and minimal Gemini context selection.
-- `lib/gemini.ts`: server-only Gemini API client and strict dashboard-data system instruction.
+- `app/api/assistant/route.ts`: bounded, rate-limited question endpoint; discovers the current schema, obtains/validates a generic query plan, executes it locally, and returns a concise answer and result references.
+- `lib/assistant-context.ts`: assistant message/source contracts shared by the API and chat UI.
+- `lib/data-schema.ts`: discovers queryable normalized and extra source fields, types and units from the live sheet schema.
+- `lib/dataset-query.ts`: validates whitelisted query plans and deterministically executes filters, grouping, ranking, aggregations, calculations, scenarios and data profiles.
+- `lib/gemini.ts`: server-only Gemini query planner and grounded natural-language answer generation.
 - `lib/analytics.ts`: portfolio calculations.
 - `lib/site-analytics.ts`: project fiscal-year series calculations.
 

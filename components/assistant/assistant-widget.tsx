@@ -85,7 +85,7 @@ export function AssistantWidget() {
     setIsSending(true);
 
     const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 30_000);
+    const timeout = window.setTimeout(() => controller.abort(), 65_000);
     try {
       const response = await fetch("/api/assistant", {
         method: "POST",
@@ -212,8 +212,8 @@ export function AssistantWidget() {
               <div className="assistant-messages" ref={messagesRef} role="log" aria-live="polite" aria-relevant="additions">
                 <div className="assistant-welcome">
                   <span className="assistant-welcome-icon"><Sparkles size={16} aria-hidden="true" /></span>
-                  <p>Hi! I can help you explore the dashboard data.</p>
-                  <span>Answers are based on the latest available financial reporting.</span>
+                  <p>Ask me anything about the project data.</p>
+                  <span>I can filter, compare, summarize, and analyze the fields in the connected sheet.</span>
                 </div>
                 {messages.map((message) => (
                   <article className={`assistant-message assistant-message-${message.role}${message.isError ? " assistant-message-error" : ""}`} key={message.id}>
@@ -276,7 +276,7 @@ export function AssistantWidget() {
                   <ArrowUp size={17} aria-hidden="true" />
                 </button>
               </form>
-              <div className="assistant-footnote">Dashboard data only · No project status or activity history</div>
+              <div className="assistant-footnote">Answers use the connected dataset; unavailable fields are identified clearly.</div>
             </motion.section>
           </>
         )}

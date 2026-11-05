@@ -2,7 +2,7 @@
 
 ## Automated checks currently available
 
-The project has focused Node-based regression tests for financial normalization diagnostics, generic category exclusion, and CSV formula-prefix handling. There is no browser-test or visual-regression framework. Available scripts:
+The project has focused Node-based regression tests for financial normalization diagnostics, generic category exclusion, CSV formula-prefix handling, dynamic schema discovery, query validation/execution, grouping, ranking, scenarios and statistical summaries. There is no browser-test or visual-regression framework. Available scripts:
 
 ```powershell
 npm run test
@@ -45,6 +45,10 @@ For changes to the data layer, verify normalization and calculated totals agains
 - [ ] Sheet edits appear in portfolio and detail analytics after the next successful 30-second refresh without reloading the browser.
 - [ ] A failed refresh retains existing data, shows a stale-data indicator and retries on a later cycle.
 - [ ] Project and portfolio CSV exports open correctly, have expected headers/amounts, and keep formula-leading source text inert.
+- [ ] Assistant planner uses the current source headers, including extra columns, and returns only validated schema IDs.
+- [ ] Assistant records/aggregate/grouped/analysis plans match independently calculated fixture results.
+- [ ] Assistant asks for clarification or reports unavailable source fields rather than substituting or inventing values.
+- [ ] Assistant follow-up queries preserve the intended conversation scope and answer in the latest user's language/script.
 
 ### Responsive/accessibility
 

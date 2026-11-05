@@ -5,6 +5,7 @@ export type SheetRecord = Record<string, unknown>;
 
 export type WorkbookResult = {
   sites: Site[];
+  sourceHeaders: string[];
   sheetName: string;
   skippedRows: number;
   invalidAmountCount: number;
@@ -22,6 +23,15 @@ export class WorkbookDataError extends Error {
 
 const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1100&q=85";
 const normalizeHeader = (header: string) => header.trim().replace(/\s+/g, " ").toLowerCase();
+const normalizedAliases = new Set([
+  "name", "project name", "site name", "scheme name", "description", "district", "location",
+  "province", "region", "category", "project type", "site type", "image", "image url", "photo url",
+  "gestation period", "gs no", "project id", "site id", "project code",
+  "total approval cost", "approved cost", "total funds allocation in millions", "allocated",
+  "total fd release in millions", "released", "total funds utilization all fys in millions",
+  "funds utilized", "project overall financial progress %", "financial progress",
+  "project cfy financial progress %", "current year financial progress",
+]);
 
 function findField(row: SheetRecord, ...aliases: string[]) {
   const keys = Object.keys(row);
@@ -71,6 +81,30 @@ function readAmount(value: unknown): { amount: number; invalid: boolean } {
   }
   if (value === undefined || value === null) return { amount: 0, invalid: false };
   return { amount: 0, invalid: true };
+}
+
+function readSourceFields(row: SheetRecord, years: ReturnType<typeof findYearColumns>) {
+  const yearHeaders = new Set(years.flatMap((year) => [year.allocation, year.release, year.utilized].filter((value): value is string => Boolean(value))));
+  const sourceFields: NonNullable<Site["sourceFields"]> = {};
+  for (const [header, value] of Object.entries(row)) {
+    const key = normalizeHeader(header);
+    if (!header.trim() || normalizedAliases.has(key) || yearHeaders.has(header)) continue;
+    if (typeof value === "number" && /\b(date|deadline|due|started|start|completion|completed|approved on)\b/i.test(header) && value > 1) {
+      sourceFields[header] = new Date(Date.UTC(1899, 11, 30) + value * 86_400_000).toISOString().slice(0, 10);
+      continue;
+    }
+    if (value === null || value === undefined || value === "") {
+      sourceFields[header] = null;
+    } else if (typeof value === "string" && !/\b(name|code|id|date|year|phone|no\.?)\b/i.test(header)) {
+      const numeric = Number(value.replace(/,/g, "").trim());
+      sourceFields[header] = value.trim() && Number.isFinite(numeric) ? numeric : value.trim();
+    } else if (typeof value === "string") {
+      sourceFields[header] = value.trim();
+    } else if (typeof value === "number" || typeof value === "boolean") {
+      sourceFields[header] = value;
+    }
+  }
+  return sourceFields;
 }
 
 function readProgress(value: unknown, utilized: number, approved: number): number {
@@ -161,6 +195,7 @@ function toSite(
     overallProgress: readProgress(findField(row, "Project Overall Financial Progress %", "Financial Progress"), utilized, approvedCost),
     currentYearProgress: readProgress(findField(row, "Project CFY Financial Progress %", "Current Year Financial Progress"), 0, 0),
     fiscalYears,
+    sourceFields: readSourceFields(row, years),
   };
 }
 
@@ -184,6 +219,7 @@ function combineDuplicateRows(existing: Site, incoming: Site): Site {
     utilized,
     overallProgress: approvedCost > 0 ? Math.max(0, Math.min(1, utilized / approvedCost)) : 0,
     fiscalYears: [...yearTotals.values()],
+    sourceFields: { ...existing.sourceFields, ...incoming.sourceFields },
   };
 }
 
@@ -216,7 +252,7 @@ export function normalizeSheetRows(
   });
 
   if (!grouped.size) throw new WorkbookDataError("missing-projects");
-  return { sites: [...grouped.values()], sheetName, skippedRows, invalidAmountCount };
+  return { sites: [...grouped.values()], sourceHeaders: [...headers], sheetName, skippedRows, invalidAmountCount };
 }
 
 export function parseWorkbook(buffer: ArrayBuffer | Uint8Array): WorkbookResult {

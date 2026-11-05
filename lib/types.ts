@@ -23,6 +23,7 @@ export type Site = {
   overallProgress: number;
   currentYearProgress?: number;
   fiscalYears: FiscalYear[];
+  sourceFields?: Record<string, string | number | boolean | null>;
 };
 
 export type AnalyticsSummary = {
@@ -40,6 +41,7 @@ export type AnalyticsSummary = {
 
 export type DashboardData = {
   sites: Site[];
+  sourceHeaders: string[];
   sheetName: string;
   skippedRows: number;
   invalidAmountCount: number;

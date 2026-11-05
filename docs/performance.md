@@ -11,8 +11,9 @@
 ## Assistant
 
 - Each accepted question reuses the existing `getDashboardData()` server cache; no independent Sheets polling loop is created.
-- Deterministic filtering, ranking and aggregation run locally in `lib/assistant-context.ts`. Only selected facts or aggregate results, plus at most six short history messages, go to Gemini.
-- Gemini requests have a 20-second timeout and bounded output. The API limits body size, question length, history and per-process request rate.
+- Schema discovery and deterministic filtering, ranking, grouping, aggregation, and profile generation run locally in `lib/data-schema.ts` and `lib/dataset-query.ts`. Gemini receives the live schema to plan and only relevant results to answer; project rows are not sent as planning context.
+- Query planning has a 15-second timeout and answer generation a 20-second timeout. The API limits body size, question length, history, query-plan complexity, and per-process request rate.
+- Additional sheet columns expand the normalized response and live schema in proportion to the source sheet; large sheets should be monitored for schema token size and data payload growth.
 - The assistant is mounted once in the dashboard shell. Messages scroll independently; panel transitions use opacity/transform, and reduced-motion preference is respected.
 - Rate limiting and Sheets caching are process-local optimizations, not shared across Vercel instances.
 
