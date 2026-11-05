@@ -39,3 +39,17 @@ The sidebar and mobile drawer share the workspace navigation. `app/loading.tsx` 
 ## Empty states
 
 Search/filter no-results and missing annual funding have designed empty states. Several chart-level no-data branches are also present. Further QA should check all-zero and partial-schema workbooks.
+
+## Dashboard assistant
+
+- A floating AI Assistant opens a compact desktop chat panel or mobile bottom sheet, with suggested questions and a bounded conversation history.
+- The server-only `POST /api/assistant` route reads the same normalized Google Sheets dataset used by dashboard pages.
+- Deterministic TypeScript logic calculates portfolio totals/averages, filters progress thresholds, ranks sites and selects site/district details before Gemini is called. Only a compact relevant context is sent; raw sheet rows and the full portfolio are not.
+- Progress filters accept percentage thresholds with or without a percent sign and bounded ranges; combined “or” conditions are interpreted literally and clarified when their ranges overlap.
+- Topic searches match the normalized project names and source categories, such as asking which projects relate to a specific topic. They do not infer a category from project descriptions.
+- The assistant can answer questions about financial progress, project count, ranking, district, supported funding totals and fiscal-year funding.
+- It can also summarize the number of records with or without recorded spend; those are financial indicators, not project completion statuses.
+- Project status/completion, delays, milestones, activities, physical progress, historical changes and planned-versus-actual data are not in the normalized source and are explicitly unsupported.
+- Questions outside dashboard data, missing sites and unavailable source/API states receive concise non-technical responses. The assistant does not render HTML.
+- Gemini 3.5 Flash-Lite uses `GEMINI_API_KEY` on the server only. A 1,500-character question limit, bounded six-message history, 16 KB request cap and process-local request limit protect the endpoint.
+- Replies follow the detected language and writing script. If local query matching does not recognize a language, a server-side Gemini step translates only the question for local data selection; only the selected normalized facts are passed to answer generation. Google does not publish a fixed supported-language count for this model, and language quality can vary.

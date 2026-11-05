@@ -24,6 +24,17 @@ lib/types.ts: DashboardData / Site[] / FiscalYear[]
        └── DashboardDataProvider → existing cards, detail pages and charts
 ```
 
+The assistant reuses that server repository and normalized contract:
+
+```text
+Dashboard UI → POST /api/assistant → getDashboardData()
+                                  → lib/assistant-context.ts (selection/calculations)
+                                  → lib/gemini.ts (server-only Gemini request)
+                                  → concise answer + selected data references
+```
+
+Only relevant normalized facts or deterministic aggregates are sent to Gemini; raw rows and the full dataset are not. Supported fields are limited to what the current `Site` model actually contains. Status, delays, milestones, activities, physical progress and historical change are not inferred.
+
 ## Server repository and normalization
 
 - `lib/google-sheets.ts` is marked server-only. It reads `GOOGLE_SHEET_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, and `GOOGLE_PRIVATE_KEY`, authenticates with `spreadsheets.readonly`, discovers the first tab, fetches its values and calls the shared normalizer.
@@ -43,6 +54,8 @@ If refresh fails, the provider retains the last valid data and exposes a stale-d
 ## Security boundaries
 
 Google credentials and API calls are restricted to `lib/google-sheets.ts` on the server. Client modules call only the application endpoint, which returns `DashboardData` and safe error text. Never add credentials to client code or `NEXT_PUBLIC_*`.
+
+The Gemini key is read only by `lib/gemini.ts`. The browser sends questions to `/api/assistant`; that route validates bounded input, loads the existing data layer, selects relevant context, then calls Gemini server-side.
 
 ## Explicitly absent
 

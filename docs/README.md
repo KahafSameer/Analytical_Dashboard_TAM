@@ -13,9 +13,9 @@ Fieldnotes is a tourism and heritage project-finance dashboard built with Next.j
 | [Technology stack](tech-stack.md) | Runtime, libraries and rationale |
 | [Data model](data-model.md) | The normalized project/fiscal-year schema and source mapping |
 | [UI and UX](ui-ux.md) | Visual system, interaction and accessibility |
-| [Features](features.md) | Implemented feature behavior and boundaries |
+| [Features](features.md) | Implemented dashboard, analytics and AI assistant behavior and boundaries |
 | [Analytics](analytics.md) | Metrics, formulas, visualizations and data caveats |
-| [Google Sheets](google-sheets.md) | Current non-integration and future configuration options |
+| [Google Sheets](google-sheets.md) | Current Google Sheets API integration and setup |
 | [Components](components.md) | Important reusable components and responsibilities |
 | [Routes](routes.md) | App Router paths and rendering behavior |
 | [Security](security.md) | Data handling, dependencies, secrets and deployment risks |

@@ -76,6 +76,7 @@ function ProjectDetail({ site }: { site: Site }) {
             fill
             sizes="(max-width: 760px) 100vw, 1200px"
             priority
+            loading="eager"
           />
         </div>
         <div className="detail-hero-copy">

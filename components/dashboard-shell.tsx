@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "motion/react";
 import { DashboardDataProvider, useDashboardData } from "@/components/dashboard-data-provider";
+import { AssistantWidget } from "@/components/assistant/assistant-widget";
 import {
   Activity,
   BarChart3,
@@ -117,6 +118,7 @@ function DashboardShellContent({ children, siteCount }: { children: React.ReactN
         >{children}</motion.main>
       </div>
     </div>
+    <AssistantWidget />
     </MotionConfig>
   );
 }

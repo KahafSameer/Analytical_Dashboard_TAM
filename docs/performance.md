@@ -8,6 +8,14 @@
 - The app polls data into React state; it does not reload the document. Failed refreshes preserve the last valid payload.
 - Vercel may run multiple serverless instances with independent short-lived caches; no disk persistence or long-running process is required.
 
+## Assistant
+
+- Each accepted question reuses the existing `getDashboardData()` server cache; no independent Sheets polling loop is created.
+- Deterministic filtering, ranking and aggregation run locally in `lib/assistant-context.ts`. Only selected facts or aggregate results, plus at most six short history messages, go to Gemini.
+- Gemini requests have a 20-second timeout and bounded output. The API limits body size, question length, history and per-process request rate.
+- The assistant is mounted once in the dashboard shell. Messages scroll independently; panel transitions use opacity/transform, and reduced-motion preference is respected.
+- Rate limiting and Sheets caching are process-local optimizations, not shared across Vercel instances.
+
 ## Rendering
 
 - App Router server pages obtain initial data server-side and pass normalized records to client-rendered analytics.

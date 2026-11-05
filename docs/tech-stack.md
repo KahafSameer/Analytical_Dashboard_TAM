@@ -13,6 +13,7 @@ Versions below reflect the root `package.json` when this document was authored. 
 | Lucide React | `^1.67.0` | Interface iconography |
 | SheetJS / `xlsx` | SheetJS `0.20.3` tarball | Retained Excel parser/normalization adapter; not used for runtime source retrieval |
 | Google APIs | `googleapis` | Read-only access to the master Google Spreadsheet from server code |
+| Google Gen AI SDK | `@google/genai` | Server-side Gemini responses based on selected normalized dashboard data |
 | ESLint | `^10.14.0` | Static linting |
 | `eslint-config-next` | `^16.4.4` | Next.js and React lint rules |
 | `@tailwindcss/postcss` | `^4.3.4` | Tailwind v4 PostCSS plugin |

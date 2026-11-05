@@ -47,8 +47,9 @@ function getErrorStatus(error: unknown) {
 
 async function fetchDashboardData(): Promise<DashboardData> {
   const { spreadsheetId, clientEmail, privateKey } = getCredentials();
-  const auth = new google.auth.GoogleAuth({
-    credentials: { client_email: clientEmail, private_key: privateKey },
+  const auth = new google.auth.JWT({
+    email: clientEmail,
+    key: privateKey,
     scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
   });
   const sheets = google.sheets({ version: "v4", auth });

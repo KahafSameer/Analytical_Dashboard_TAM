@@ -4,6 +4,7 @@
 
 - `components/dashboard-shell.tsx`: responsive fixed sidebar, navigation links, mobile header/drawer, profile popover and freshness-aware `PageTopline`. Gets live project counts from the dashboard data provider.
 - `components/dashboard-data-provider.tsx`: one client-held normalized dataset, 30-second background polling, request deduplication, freshness/error state and stale-data retention.
+- `components/assistant/assistant-widget.tsx`: compact floating assistant launcher, responsive chat panel, suggestions, bounded local history, safe text/Markdown rendering and accessible keyboard interaction.
 - `components/ui.tsx`: shared `StatusBadge`, `ProgressBar`, `SectionHeading`, `EmptyState`, `KpiCard`, `ChartCard` and a milestone-data note. `MilestonePlaceholder` is a data-absence notice, not an implemented milestone timeline.
 - `components/motion.tsx`: reusable viewport reveal and chart entrance hooks used to keep animation logic small and localized.
 
@@ -31,6 +32,9 @@
 - `lib/excel.ts`: retained Excel parser plus shared header/row validation, grouping and normalization; runtime routes use its normalizer only.
 - `lib/google-sheets.ts`: server-only service-account client, first-tab fetching, short process cache and normalization adapter.
 - `app/api/dashboard-data/route.ts`: safe normalized-data API response for background refresh.
+- `app/api/assistant/route.ts`: bounded, rate-limited question endpoint; reuses the normalized Sheets repository and returns only a concise answer and selected source references.
+- `lib/assistant-context.ts`: deterministic question intent, filtering, ranking, aggregate calculations and minimal Gemini context selection.
+- `lib/gemini.ts`: server-only Gemini API client and strict dashboard-data system instruction.
 - `lib/analytics.ts`: portfolio calculations.
 - `lib/site-analytics.ts`: project fiscal-year series calculations.
 
