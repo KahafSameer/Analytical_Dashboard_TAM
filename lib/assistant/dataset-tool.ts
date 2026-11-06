@@ -31,7 +31,7 @@ async function planQuery(question: string, history: AssistantHistoryMessage[], s
 function formatFieldValue(value: unknown, unit?: string) {
   if (typeof value !== "number" || !Number.isFinite(value)) return String(value ?? "Not reported");
   if (unit?.includes("percent")) return `${value.toLocaleString("en-US", { maximumFractionDigits: 2 })}%`;
-  if (unit?.includes("PKR millions")) return `PKR ${value.toLocaleString("en-PK", { maximumFractionDigits: 2 })}m`;
+  if (unit?.includes("PKR millions")) return `PKR ${value.toLocaleString("en-US", { maximumFractionDigits: 2 })}m`;
   return value.toLocaleString("en-US", { maximumFractionDigits: 3 });
 }
 

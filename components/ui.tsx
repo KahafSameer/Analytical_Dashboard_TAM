@@ -182,7 +182,7 @@ function parseMetric(value: string) {
 }
 
 function formatMetric(value: number, decimals: number) {
-  return value.toLocaleString("en-PK", {
+  return value.toLocaleString("en-US", {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   });

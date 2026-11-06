@@ -5,46 +5,15 @@ import { useSyncExternalStore } from "react";
 import { BookOpen, Compass, X } from "lucide-react";
 import { motion } from "motion/react";
 import { ATTENTION_COLOR, SERIES_COLORS } from "@/lib/chart-theme";
-
-const STORAGE_KEY = "fieldnotes-welcome-dismissed";
-const CHANGE_EVENT = "fieldnotes-welcome-change";
-// Fallback when storage is blocked (private mode): dismissal still lasts for this visit.
-let dismissedThisVisit = false;
-
-function readDismissed(): boolean {
-  if (dismissedThisVisit) return true;
-  try {
-    return window.localStorage.getItem(STORAGE_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function subscribe(onChange: () => void) {
-  window.addEventListener("storage", onChange);
-  window.addEventListener(CHANGE_EVENT, onChange);
-  return () => {
-    window.removeEventListener("storage", onChange);
-    window.removeEventListener(CHANGE_EVENT, onChange);
-  };
-}
-
-function dismiss() {
-  dismissedThisVisit = true;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, "1");
-  } catch {
-    // Storage unavailable: the in-memory flag keeps it hidden for this visit.
-  }
-  window.dispatchEvent(new Event(CHANGE_EVENT));
-}
+import { dismissWelcome, isWelcomeDismissed, subscribeWelcome } from "@/lib/welcome-state";
 
 /**
  * First-visit orientation: the money journey, the colors and where to get help. Rendered only in
- * the browser (server snapshot = dismissed), so returning visitors never see it flash.
+ * the browser (server snapshot = dismissed), so returning visitors never see it flash. Opening
+ * the guide counts as "seen", so the card does not come back after reading it.
  */
 export function WelcomeCard() {
-  const dismissed = useSyncExternalStore(subscribe, readDismissed, () => true);
+  const dismissed = useSyncExternalStore(subscribeWelcome, isWelcomeDismissed, () => true);
   if (dismissed) return null;
   return (
     <motion.section
@@ -70,10 +39,10 @@ export function WelcomeCard() {
         </ol>
         <div className="welcome-actions">
           <Link href="/guide" className="button button-primary"><BookOpen size={15} /> Read the 2-minute guide</Link>
-          <button type="button" className="button button-outline" onClick={dismiss}>Got it</button>
+          <button type="button" className="button button-outline" onClick={dismissWelcome}>Got it</button>
         </div>
       </div>
-      <button type="button" className="welcome-close" aria-label="Close the welcome message" onClick={dismiss}><X size={16} /></button>
+      <button type="button" className="welcome-close" aria-label="Close the welcome message" onClick={dismissWelcome}><X size={16} /></button>
     </motion.section>
   );
 }

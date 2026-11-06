@@ -68,7 +68,7 @@ function YearBars({ site }: { site: Site }) {
                   <div className="year-bar-row" key={entry.key} style={revealIndex(yearIndex * 2 + seriesIndex)}>
                     <span className="sr-only">{entry.label}</span>
                     <span className="flow-track" aria-hidden="true"><i style={{ width: `${(year[entry.key] / max) * 100}%`, backgroundColor: entry.color }} /></span>
-                    <b>{year[entry.key] > 0 ? year[entry.key].toLocaleString("en-PK", { maximumFractionDigits: 1 }) : "—"}</b>
+                    <b>{year[entry.key] > 0 ? year[entry.key].toLocaleString("en-US", { maximumFractionDigits: 1 }) : "—"}</b>
                   </div>
                 ))}
               </div>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, BookOpen, CircleAlert, Info, Lightbulb } from "lucide-react";
 import { PageTopline } from "@/components/dashboard-shell";
-import { EnsureDashboardData } from "@/components/dashboard-data-provider";
+import { GuideVisit } from "@/components/guide-visit";
 import { ATTENTION_COLOR, NEUTRAL_COLOR, SERIES_COLORS, heatCellStyle } from "@/lib/chart-theme";
 import { COLOR_GUIDE, GLOSSARY } from "@/lib/guide-content";
 
@@ -31,7 +31,7 @@ const SECTIONS = [
 export default function GuidePage() {
   return (
     <div className="page-stack guide-page">
-      <EnsureDashboardData />
+      <GuideVisit />
       <PageTopline section="How to read this dashboard" date="Official project records" />
       <section className="page-intro">
         <div>

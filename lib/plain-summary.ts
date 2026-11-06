@@ -11,12 +11,12 @@ import type { AnalyticsSummary, Site } from "@/lib/types";
 /** Amount in PKR millions as crore (1 crore = 10 million) or lakh (1 million = 10 lakh). */
 export function croreLabel(millions: number): string {
   const crore = millions / 10;
-  if (crore >= 100) return `about ${Math.round(crore).toLocaleString("en-PK")} crore`;
-  if (crore >= 1) return `about ${crore.toLocaleString("en-PK", { maximumFractionDigits: 1 })} crore`;
-  return `about ${(millions * 10).toLocaleString("en-PK", { maximumFractionDigits: 1 })} lakh`;
+  if (crore >= 100) return `about ${Math.round(crore).toLocaleString("en-US")} crore`;
+  if (crore >= 1) return `about ${crore.toLocaleString("en-US", { maximumFractionDigits: 1 })} crore`;
+  return `about ${(millions * 10).toLocaleString("en-US", { maximumFractionDigits: 1 })} lakh`;
 }
 
-const plural = (count: number, one: string, many: string) => `${count.toLocaleString("en-PK")} ${count === 1 ? one : many}`;
+const plural = (count: number, one: string, many: string) => `${count.toLocaleString("en-US")} ${count === 1 ? one : many}`;
 
 export function portfolioInShort(
   summary: AnalyticsSummary,

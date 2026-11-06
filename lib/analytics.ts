@@ -302,7 +302,7 @@ export function formatPercent(value: number, digits = 1): string {
 }
 
 export function formatMillions(value: number, digits = 1): string {
-  return `Rs ${value.toLocaleString("en-PK", {
+  return `Rs ${value.toLocaleString("en-US", {
     maximumFractionDigits: digits,
     minimumFractionDigits: digits,
   })}m`;

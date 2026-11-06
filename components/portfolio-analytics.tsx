@@ -38,9 +38,9 @@ const palette = ["#1f7a55", "#4d8fc4", "#c9971a", "#7d5ba6", "#d0632f", "#3a9e9a
 const RANK_GREENS = ["#11533a", "#236f4b", "#4a9668", "#7db894", "#acd4ba"];
 /** Compact heatmap figures (colour carries the magnitude): 7.4 · 141.8 → 142 · 12,345 → 12.3k. */
 function heatValue(value: number): string {
-  if (value >= 10_000) return `${(value / 1_000).toLocaleString("en-PK", { maximumFractionDigits: 1 })}k`;
-  if (value >= 100) return Math.round(value).toLocaleString("en-PK");
-  return value.toLocaleString("en-PK", { maximumFractionDigits: 1 });
+  if (value >= 10_000) return `${(value / 1_000).toLocaleString("en-US", { maximumFractionDigits: 1 })}k`;
+  if (value >= 100) return Math.round(value).toLocaleString("en-US");
+  return value.toLocaleString("en-US", { maximumFractionDigits: 1 });
 }
 
 const yearMeasures: { id: YearMeasure; label: string }[] = [

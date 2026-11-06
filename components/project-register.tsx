@@ -50,7 +50,7 @@ const PHONE_PAGE_SIZE = 8;
 const MIN_DISPLAYED_AMOUNT = 0.05;
 
 function amount(value: number) {
-  return value.toLocaleString("en-PK", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  return value.toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 }
 
 export function ProjectRegister({ sites, asOf }: { sites: Site[]; asOf: string }) {

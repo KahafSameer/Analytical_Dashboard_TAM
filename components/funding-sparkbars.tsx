@@ -19,7 +19,7 @@ const WIDTH = 132;
 const HEIGHT = 34;
 const GAP = 1.5;
 
-const amount = (value: number) => value.toLocaleString("en-PK", { maximumFractionDigits: 1 });
+const amount = (value: number) => value.toLocaleString("en-US", { maximumFractionDigits: 1 });
 
 /** "2025–26" → "25–26". */
 export function shortYearLabel(label: string): string {
