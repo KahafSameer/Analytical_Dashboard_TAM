@@ -2,6 +2,43 @@
 
 This is a user-oriented summary of the work represented in the current repository. It is not a release/tag history; inspect Git history for commit-level provenance.
 
+## Unreleased — sharing, schedule analytics and new visuals
+
+- Share any view, project or assistant answer: device share sheet, WhatsApp, Facebook, X, LinkedIn, Telegram, email, copy link or summary. Shared links show a generated preview card (Open Graph image) once the site is deployed publicly.
+- Filters are stored in the URL, so a shared or bookmarked link opens the same selection.
+- New Schedule & delivery section from the sheet's gestation periods: past planned end, ending soon, not started, spending behind the calendar, planned completions and a project size vs financial progress scatter.
+- New visuals: funding pipeline, district × fiscal-year heatmap, approved-cost concentration; fiscal-year funding is now grouped bars (the smoothed curve implied trends between three points).
+- Selecting a district in the district chart or heatmap filters the whole page, with an Undo toast.
+- Project page: schedule vs spend card, comparison with district and portfolio, related projects, Share and Print/PDF; cumulative funding uses straight segments.
+- Print / Save as PDF layout hides navigation and controls.
+- Chart colors use a validated palette (allocated gold, released blue, utilized green) that stays distinguishable for colorblind readers; tooltips now name each series.
+- Navigation adds a Schedule link.
+- Assistant no longer reveals where the data is stored: progress steps read "Analyzing project data", sources are labelled "Dashboard data", the welcome text and footnote no longer mention Google Sheets, and the assistant is instructed to call it "the dashboard data" (never naming sheets, files, APIs or AI providers). Configuration errors show a neutral "temporarily unavailable" message in the user's language; details stay in the server log.
+- Mobile pass (checked at 320, 360, 390, 768 and 1024 px): no horizontal overflow on any page; 8 projects per page on phones and no redundant Table/Cards switch; the district heatmap fits a phone (compact figures, short year headers); long names and values wrap instead of being cut off; dropdowns and heatmap districts have full-size tap targets; distribution axis labels no longer collide.
+- Project register fits laptop screens without sideways scrolling: fixed column widths from 1181 px up (project names wrap), a tighter layout with a "Details" button between 1181 and 1400 px, and cards below 1181 px. Checked at 1181–1920 px, including with a progress panel open.
+- Project register moved directly after the overview summary (before the analytics) and redesigned: year-wise funding mini chart and progress ring per project, and a View progress button that opens money flow, fiscal-year and schedule details in place, with Share and Open full project. Rows become cards on tablets and phones.
+
+## Unreleased — assistant quota resilience
+
+- Fixed: questions failed with "The assistant is busy right now" once `gemini-3.5-flash` hit its free-tier daily cap (20 requests/day). The daily cap was not recognized in the SDK's escaped error JSON, so the exhausted model was retried on every question. It is now skipped for the quota window and the assistant answers with `gemini-3.5-flash-lite` or Groq.
+- Live web search and the Groq backup agent no longer share one model's tokens-per-minute quota (search uses `openai/gpt-oss-20b`); the backup agent fails over to `qwen/qwen3.8-27b` and waits briefly for a short Groq rate-limit window instead of giving up.
+- With a Groq key, an overloaded Gemini model is not retried; the backup answers sooner (the reported Urdu question went from failing to ~12 s).
+- Sheet questions keep working when Gemini cannot plan: the query plan falls back to Groq JSON mode and is validated as before.
+- Error messages follow the user's language (Urdu script / Roman Urdu / English).
+- Assistant answers render Markdown tables (scrollable, right-to-left for Urdu) and `<br>` line breaks.
+
+## Unreleased — AI assistant as a tool-using agent
+
+- The assistant now answers any question: sheet analytics (still computed in TypeScript), single-project profiles, locations with map links / nearby places / straight-line distance, web and general-knowledge questions, and specific URLs — combining tools for mixed questions.
+- Web search uses Google Search grounding when the Gemini plan allows it and otherwise falls back to Wikipedia; places use OpenStreetMap (plus Google Maps grounding when available). Sources are shown separately as sheet / web / map.
+- Answers stream live with visible tool steps; the widget adds Stop, Copy, New chat, page-aware suggestions, a "Viewing: project" chip and right-to-left rendering for Urdu.
+- Resilience for free-tier limits: model fallback, retry using the API's suggested delay, and synthesis from already-gathered results instead of failing.
+- Fixed: follow-up questions failed with "Please send a valid question" after any answer longer than 500 characters (history entries are now trimmed, not rejected).
+- Links in answers are clickable only for dashboard paths, map/Wikipedia hosts or tool-returned URLs.
+- Live web search via Groq (`browser_search`) when Google grounding is unavailable; Groq also runs the agent as a backup when Gemini is unavailable. NVIDIA is supported as an opt-in extra backup.
+- New derived sheet field "Released but unspent funds" so rankings of idle money are computed directly; reply language (Urdu script / Roman Urdu / English) is detected and enforced for every model.
+- Review hardening: SDK timeouts are retryable; all model turns and tools respect the time budget; empty final turns use gathered results; every function call gets a response; `read_webpage` only opens user-written or tool-returned URLs; per-tool budgets and a concurrency cap limit cost; the OpenStreetMap queue is bounded; ranked lists keep their numbering; stop/double-click, focus, scroll and screen-reader fixes in the widget.
+
 ## Unreleased — analytical dashboard overhaul
 
 - Overview reorganized as filters → KPIs → funding flow → analytics → project register → export, so analysis is no longer below 89 project cards.

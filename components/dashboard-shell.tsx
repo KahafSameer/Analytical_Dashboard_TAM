@@ -9,6 +9,7 @@ import { AssistantWidget } from "@/components/assistant/assistant-widget";
 import {
   Activity,
   BarChart3,
+  CalendarClock,
   Command,
   FileText,
   LayoutDashboard,
@@ -20,8 +21,9 @@ import {
 
 const navigation = [
   { label: "Overview", href: "/", icon: LayoutDashboard },
-  { label: "Analytics", href: "/#portfolio-analytics", icon: BarChart3 },
   { label: "Project register", href: "/#sites", icon: Table2 },
+  { label: "Analytics", href: "/#portfolio-analytics", icon: BarChart3 },
+  { label: "Schedule", href: "/#schedule", icon: CalendarClock },
   { label: "Export", href: "/#report-export", icon: FileText },
 ];
 

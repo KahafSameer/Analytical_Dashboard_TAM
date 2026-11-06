@@ -18,6 +18,7 @@ import {
 import { getPortfolioSummary, formatMillions, formatPercent } from "@/lib/analytics";
 import { serializeCsv } from "@/lib/csv";
 import { formatLocation, isSpecified } from "@/lib/portfolio-filters";
+import { projectSharePayload } from "@/lib/share";
 import { LazySiteFinancialAnalytics, LazySiteFiscalYearChart } from "@/components/lazy-site-charts";
 import type { DashboardData, Site } from "@/lib/types";
 import { KpiCard, ProgressBar, StatusBadge } from "@/components/ui";
@@ -25,6 +26,8 @@ import { PageTopline } from "@/components/dashboard-shell";
 import { Reveal } from "@/components/motion";
 import { useDashboardData } from "@/components/dashboard-data-provider";
 import { DataSourceError } from "@/components/data-source-state";
+import { PrintButton, ShareMenu } from "@/components/share-menu";
+import { RelatedProjects, SiteContext } from "@/components/site-insights";
 
 function exportCsv(site: Site) {
   const rows = [
@@ -49,7 +52,7 @@ function exportCsv(site: Site) {
   URL.revokeObjectURL(link.href);
 }
 
-function ProjectDetail({ site, invalidAmountCount }: { site: Site; invalidAmountCount: number }) {
+function ProjectDetail({ site, sites, asOf, invalidAmountCount }: { site: Site; sites: Site[]; asOf: string; invalidAmountCount: number }) {
   const [exported, setExported] = useState(false);
   const summary = useMemo(() => getPortfolioSummary([site]), [site]);
   return (
@@ -60,7 +63,13 @@ function ProjectDetail({ site, invalidAmountCount }: { site: Site; invalidAmount
         </p>
       )}
       <PageTopline section="Project detail" date="Google Sheets" />
-      <Link href="/" className="back-link"><ArrowLeft size={15} /> All tourism projects</Link>
+      <div className="detail-toolbar">
+        <Link href="/" className="back-link"><ArrowLeft size={15} /> All tourism projects</Link>
+        <div className="page-actions">
+          <ShareMenu label="Share project" getPayload={(url) => projectSharePayload(site, url)} />
+          <PrintButton />
+        </div>
+      </div>
 
       <section className="detail-hero">
         <div className="detail-hero-image">
@@ -130,7 +139,11 @@ function ProjectDetail({ site, invalidAmountCount }: { site: Site; invalidAmount
         </div>
       </section>
 
+      <SiteContext site={site} sites={sites} asOf={asOf} />
+
       <LazySiteFinancialAnalytics site={site} />
+
+      <RelatedProjects site={site} sites={sites} />
 
       <section className="detail-note-section">
         <div className="data-note">
@@ -180,5 +193,5 @@ export function SiteDetail({
       </div>
     );
   }
-  return <ProjectDetail site={site} invalidAmountCount={currentData.invalidAmountCount} />;
+  return <ProjectDetail site={site} sites={currentData.sites} asOf={currentData.fetchedAt} invalidAmountCount={currentData.invalidAmountCount} />;
 }

@@ -6,29 +6,37 @@ import {
   ArrowUpRight,
   Banknote,
   BriefcaseBusiness,
-  CircleAlert,
   Landmark,
   MapPin,
   ShieldCheck,
+  X,
 } from "lucide-react";
 import { getPortfolioSummary, combineFiscalYears, formatMillions, formatPercent } from "@/lib/analytics";
 import {
+  ALL_DISTRICTS,
   DEFAULT_FILTERS,
   countActiveFilters,
+  describeFilters,
   filterSites,
+  filtersFromSearchParams,
+  filtersToQueryString,
   getDistricts,
   type PortfolioFilters,
 } from "@/lib/portfolio-filters";
+import { portfolioSharePayload } from "@/lib/share";
 import type { DashboardData } from "@/lib/types";
 import { EmptyState, KpiCard, SectionHeading } from "@/components/ui";
 import { PageTopline } from "@/components/dashboard-shell";
-import { LazyPortfolioAnalytics, LazyPortfolioFundingChart } from "@/components/lazy-portfolio-charts";
+import { LazyPortfolioAnalytics, LazyPortfolioFundingChart, LazyScheduleInsights } from "@/components/lazy-portfolio-charts";
+import { FundingPipeline } from "@/components/funding-pipeline";
 import { PortfolioExportButton } from "@/components/portfolio-export-button";
 import { PortfolioFilterBar } from "@/components/portfolio-filter-bar";
 import { ProjectRegister } from "@/components/project-register";
-import { Reveal } from "@/components/motion";
+import { PrintButton, ShareMenu } from "@/components/share-menu";
 import { useDashboardData } from "@/components/dashboard-data-provider";
 import { DataSourceError, NoProjectsState } from "@/components/data-source-state";
+
+type Toast = { district: string; previous: PortfolioFilters };
 
 export function SitesOverview({
   initialData,
@@ -38,7 +46,9 @@ export function SitesOverview({
   initialError?: string | null;
 }) {
   const query = useSearchParams();
-  const [filters, setFilters] = useState<PortfolioFilters>(() => ({ ...DEFAULT_FILTERS, search: query.get("q") ?? "" }));
+  // Filters live in the URL (?q=&district=&spend=&progress=) so a view can be shared or bookmarked.
+  const [filters, setFilters] = useState<PortfolioFilters>(() => filtersFromSearchParams(query));
+  const [toast, setToast] = useState<Toast | null>(null);
   const { data, setData, setError } = useDashboardData();
   useEffect(() => {
     if (initialData) setData(initialData);
@@ -49,17 +59,43 @@ export function SitesOverview({
     : data;
 
   const allSites = currentData?.sites;
-  const sites = useMemo(() => (allSites ? filterSites(allSites, filters) : []), [allSites, filters]);
   const districts = useMemo(() => (allSites ? getDistricts(allSites) : []), [allSites]);
+  // A shared link may name a district that is no longer in the sheet: ignore it rather than show nothing.
+  const activeFilters = useMemo(
+    () => (filters.district !== ALL_DISTRICTS && districts.length && !districts.includes(filters.district) ? { ...filters, district: ALL_DISTRICTS } : filters),
+    [filters, districts],
+  );
+  const sites = useMemo(() => (allSites ? filterSites(allSites, activeFilters) : []), [allSites, activeFilters]);
   const summary = useMemo(() => getPortfolioSummary(sites), [sites]);
   const yearly = useMemo(() => combineFiscalYears(sites), [sites]);
+
+  useEffect(() => {
+    const queryString = filtersToQueryString(activeFilters);
+    const next = `${window.location.pathname}${queryString ? `?${queryString}` : ""}${window.location.hash}`;
+    if (next !== `${window.location.pathname}${window.location.search}${window.location.hash}`) {
+      window.history.replaceState(null, "", next);
+    }
+  }, [activeFilters]);
+
+  useEffect(() => {
+    if (!toast) return;
+    const timer = window.setTimeout(() => setToast(null), 7_000);
+    return () => window.clearTimeout(timer);
+  }, [toast]);
 
   if (!currentData || !allSites) return <DataSourceError message={initialError ?? undefined} />;
   if (!allSites.length) return <NoProjectsState />;
 
-  const isFiltered = countActiveFilters(filters) > 0;
+  const isFiltered = countActiveFilters(activeFilters) > 0;
+  const selection = describeFilters(activeFilters);
   const areaCount = new Set(sites.map((site) => site.district)).size;
   const scopeLabel = isFiltered ? "selection" : "portfolio";
+
+  const selectDistrict = (district: string) => {
+    if (district === activeFilters.district) return;
+    setToast({ district, previous: activeFilters });
+    setFilters({ ...activeFilters, district });
+  };
 
   return (
     <div className="page-stack">
@@ -79,15 +115,25 @@ export function SitesOverview({
           <div className="intro-kicker"><span className="intro-kicker-line" /> TOURISM & HERITAGE PORTFOLIO</div>
           <h1>Portfolio overview<span className="title-period">.</span></h1>
           <p>Funding, releases and expenditure across {allSites.length} tourism projects, live from the master sheet.</p>
+          {isFiltered && <p className="print-only print-selection">Selection: {selection} · {sites.length} of {allSites.length} projects</p>}
         </div>
-        <div className="intro-context">
-          <span className="context-icon"><MapPin size={17} /></span>
-          <div><strong>{districts.length} reporting areas</strong><span>Source: Google Sheets · PKR millions</span></div>
+        <div className="intro-side">
+          <div className="intro-context">
+            <span className="context-icon"><MapPin size={17} /></span>
+            <div><strong>{districts.length} reporting areas</strong><span>Source: Google Sheets · PKR millions</span></div>
+          </div>
+          <div className="page-actions">
+            <ShareMenu
+              label={isFiltered ? "Share this view" : "Share"}
+              getPayload={(url) => portfolioSharePayload(summary, { total: allSites.length, selection: selection || undefined, url })}
+            />
+            <PrintButton />
+          </div>
         </div>
       </section>
 
       <PortfolioFilterBar
-        filters={filters}
+        filters={activeFilters}
         onChange={setFilters}
         districts={districts}
         matchCount={sites.length}
@@ -115,38 +161,30 @@ export function SitesOverview({
             </div>
           </section>
 
-          <section id="portfolio-analytics" className="portfolio-section">
-            <SectionHeading
-              eyebrow="FUNDING FLOW"
-              title="Where the funding stands"
-              description={`Year-wise allocation, release and expenditure for the ${scopeLabel}.`}
-            />
-            <div className="portfolio-chart-layout">
-              <LazyPortfolioFundingChart data={yearly} />
-              <Reveal className="funding-note-reveal">
-                <aside className="funding-note">
-                  <span className="funding-note-icon"><CircleAlert size={18} /></span>
-                  <p className="eyebrow">HOW TO READ THIS</p>
-                  <h3>Financial progress, not construction progress.</h3>
-                  <p>This source reports budgets, releases and expenditure. Activity completion, visitor counts and physical progress aren’t included.</p>
-                  <div className="funding-stat"><span>Utilized of allocation</span><strong>{formatPercent(summary.utilizationRate)}</strong></div>
-                  <div className="funding-stat"><span>Released to date</span><strong>{formatMillions(summary.totalReleased)}</strong></div>
-                  <div className="funding-stat"><span>Released, not yet spent</span><strong>{formatMillions(Math.max(0, summary.totalReleased - summary.totalUtilized))}</strong></div>
-                </aside>
-              </Reveal>
-            </div>
-          </section>
-
-          <LazyPortfolioAnalytics sites={sites} />
-
           <section id="sites" className="projects-section">
             <SectionHeading
               eyebrow="PROJECT REGISTER"
               title={isFiltered ? "Projects in this selection" : "All projects"}
-              description="Sort any column, then open a project for its fiscal-year breakdown."
+              description="Each row shows year-wise funding at a glance. Select View progress for the money flow, fiscal years and schedule, or open the full project."
             />
-            <ProjectRegister sites={sites} />
+            <ProjectRegister sites={sites} asOf={currentData.fetchedAt} />
           </section>
+
+          <section id="portfolio-analytics" className="portfolio-section">
+            <SectionHeading
+              eyebrow="FUNDING FLOW"
+              title="Where the funding stands"
+              description={`Year-wise allocation, release and expenditure for the ${scopeLabel}, and how approved cost converts into spending.`}
+            />
+            <div className="portfolio-chart-layout">
+              <LazyPortfolioFundingChart data={yearly} />
+              <FundingPipeline sites={sites} />
+            </div>
+          </section>
+
+          <LazyPortfolioAnalytics sites={sites} onSelectDistrict={selectDistrict} />
+
+          <LazyScheduleInsights sites={sites} asOf={currentData.fetchedAt} />
 
           <section id="report-export" className="report-strip">
             <div className="report-icon"><Banknote size={19} /></div>
@@ -159,6 +197,14 @@ export function SitesOverview({
         </>
       )}
       <footer className="page-footer"><span>FIELDNOTES <b>·</b> TOURISM INTELLIGENCE</span><span>Google Sheets · Financial reporting snapshot</span></footer>
+
+      {toast && (
+        <div className="page-toast" role="status">
+          <span>Showing <strong>{toast.district}</strong> · {sites.length} project{sites.length === 1 ? "" : "s"}</span>
+          <button type="button" className="page-toast-action" onClick={() => { setFilters(toast.previous); setToast(null); }}>Undo</button>
+          <button type="button" className="page-toast-close" aria-label="Dismiss" onClick={() => setToast(null)}><X size={14} /></button>
+        </div>
+      )}
     </div>
   );
 }

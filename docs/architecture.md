@@ -27,12 +27,17 @@ lib/types.ts: DashboardData / Site[] / FiscalYear[]
 The assistant reuses that server repository and normalized contract:
 
 ```text
-Dashboard UI → POST /api/assistant → getDashboardData()
-                                  → lib/data-schema.ts (live schema discovery)
-                                  → lib/gemini.ts (server-side generic JSON query plan)
-                                  → lib/dataset-query.ts (validated TypeScript execution)
-                                  → Gemini answer from deterministic relevant results
+Dashboard UI → POST /api/assistant (NDJSON stream) → getDashboardData()
+             → lib/assistant/agent.ts (Gemini function-calling loop)
+                 ├─ query_dashboard_data → lib/gemini.ts planner → lib/dataset-query.ts (TypeScript execution)
+                 ├─ get_project_details  → lib/assistant/project-lookup.ts
+                 ├─ web_search           → Google Search grounding | Wikipedia fallback
+                 ├─ find_place           → OpenStreetMap + Wikipedia geosearch (+ Google Maps grounding)
+                 └─ read_webpage         → Gemini URL context
+             → streamed answer with sheet / web / map sources
 ```
+
+See [assistant.md](assistant.md) for tools, fallbacks, limits and configuration.
 
 The query-planning request receives the live field schema and bounded conversation, not project rows. The query engine accepts only discovered field IDs and whitelisted operations; it performs filters, groupings, rankings, aggregates, safe numeric calculations, scenarios, and field-wide statistical profiles in TypeScript. Answer generation receives the operation summary, relevant schema metadata, and computed result, not the full project dataset. Additional source columns are retained as typed `sourceFields` during normalization so the planner can discover columns beyond the core UI model. Missing fields are reported rather than inferred.
 

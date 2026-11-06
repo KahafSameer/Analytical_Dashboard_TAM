@@ -18,17 +18,35 @@ import {
 import {
   formatMillions,
   formatPercent,
+  getCostConcentration,
+  getDistrictYearMatrix,
   getPortfolioSummary,
   summarizeCategories,
   summarizeDistricts,
   summarizeProgressBands,
+  type YearMeasure,
 } from "@/lib/analytics";
+import { ATTENTION_COLOR, AXIS_TICK, GRID_STROKE, PRIMARY_COLOR, TOOLTIP_LABEL_STYLE, TOOLTIP_STYLE, heatCellStyle } from "@/lib/chart-theme";
 import { getUnspentRelease } from "@/lib/portfolio-filters";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState } from "@/components/ui";
 import { Reveal, useChartEntrance } from "@/components/motion";
 
-const palette = ["#0f4c3a", "#508065", "#8cac91", "#d4a017", "#789081", "#c5a341", "#b8c8bc", "#57725f"];
+const palette = ["#1f7a55", "#4d8fc4", "#c9971a", "#7d5ba6", "#d0632f", "#3a9e9a", "#9c7b3c", "#6b7f8e"];
+/** Rank order for concentration segments: one hue, dark (largest) → light. */
+const RANK_GREENS = ["#11533a", "#236f4b", "#4a9668", "#7db894", "#acd4ba"];
+/** Compact heatmap figures (colour carries the magnitude): 7.4 · 141.8 → 142 · 12,345 → 12.3k. */
+function heatValue(value: number): string {
+  if (value >= 10_000) return `${(value / 1_000).toLocaleString("en-PK", { maximumFractionDigits: 1 })}k`;
+  if (value >= 100) return Math.round(value).toLocaleString("en-PK");
+  return value.toLocaleString("en-PK", { maximumFractionDigits: 1 });
+}
+
+const yearMeasures: { id: YearMeasure; label: string }[] = [
+  { id: "utilized", label: "Utilized" },
+  { id: "release", label: "Released" },
+  { id: "allocation", label: "Allocated" },
+];
 type FundingMeasure = "approved" | "allocated" | "released" | "utilized";
 const fundingMeasures: { id: FundingMeasure; label: string }[] = [
   { id: "approved", label: "Approved cost" },
@@ -56,17 +74,18 @@ function CompactTooltip({
   );
 }
 
-function DistrictFundingChart({ sites }: { sites: Site[] }) {
+function DistrictFundingChart({ sites, onSelectDistrict }: { sites: Site[]; onSelectDistrict?: (district: string) => void }) {
   const [measure, setMeasure] = useState<FundingMeasure>("utilized");
   const { ref, isInView, animate } = useChartEntrance();
   const rows = useMemo(() =>
     summarizeDistricts(sites).sort((a, b) => b[measure] - a[measure]).slice(0, 8),
   [measure, sites]);
   const measureLabel = fundingMeasures.find((item) => item.id === measure)?.label ?? "Funding";
+  const canFilter = Boolean(onSelectDistrict) && rows.length > 1;
   return (
     <ChartCard
       title="Funding by district"
-      description="Top eight districts for the selected funding measure."
+      description={`Top eight districts for the selected funding measure.${canFilter ? " Select a bar to filter the page." : ""}`}
       action={
         <label className="chart-select-wrap">
           <span className="sr-only">Funding measure</span>
@@ -81,17 +100,31 @@ function DistrictFundingChart({ sites }: { sites: Site[] }) {
         <div ref={ref} className="analysis-bar-chart" role="img" aria-label={`${measureLabel} by district`}>
           {isInView && <ResponsiveContainer width="100%" height="100%">
             <BarChart data={rows} layout="vertical" margin={{ top: 5, right: 12, bottom: 1, left: 3 }} barCategoryGap="27%">
-              <CartesianGrid horizontal={false} stroke="#edf0ed" strokeDasharray="3 5" />
+              <CartesianGrid horizontal={false} stroke={GRID_STROKE} strokeDasharray="3 5" />
               <XAxis
                 type="number"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 11, fill: "#59665d" }}
+                tick={AXIS_TICK}
                 tickFormatter={(value: number) => value >= 1000 ? `${(value / 1000).toFixed(1)}k` : `${value}`}
               />
-              <YAxis type="category" dataKey="district" width={112} interval={0} axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#65736a" }} />
+              <YAxis type="category" dataKey="district" width={112} interval={0} axisLine={false} tickLine={false} tick={AXIS_TICK} />
               <Tooltip content={<CompactTooltip />} cursor={{ fill: "#f4f7f4" }} />
-              <Bar dataKey={measure} name={measureLabel} fill="#0f4c3a" radius={[0, 4, 4, 0]} maxBarSize={20} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
+              <Bar
+                dataKey={measure}
+                name={measureLabel}
+                fill={PRIMARY_COLOR}
+                radius={[0, 4, 4, 0]}
+                maxBarSize={20}
+                cursor={canFilter ? "pointer" : undefined}
+                onClick={canFilter ? (entry) => {
+                  const district = (entry as { payload?: { district?: string } }).payload?.district;
+                  if (district) onSelectDistrict?.(district);
+                } : undefined}
+                isAnimationActive={animate}
+                animationDuration={750}
+                animationEasing="ease-out"
+              />
             </BarChart>
           </ResponsiveContainer>}
         </div>
@@ -153,22 +186,24 @@ function ProgressDistributionChart({ sites }: { sites: Site[] }) {
   const { ref, isInView, animate } = useChartEntrance();
   const distribution = useMemo(() => summarizeProgressBands(sites), [sites]);
   return (
-    <ChartCard title="Financial progress distribution" description="How many projects fall into each expenditure band." className="analysis-chart-card progress-distribution-card">
+    <ChartCard title="Financial progress distribution" description="How many projects fall into each expenditure band (% of approved cost spent)." className="analysis-chart-card progress-distribution-card">
       {sites.length ? (
         <>
           <div ref={ref} className="distribution-chart" role="img" aria-label="Number of projects by financial progress range">
             {isInView && <ResponsiveContainer width="100%" height="100%">
               <BarChart data={distribution} margin={{ top: 12, right: 7, bottom: 1, left: -21 }} barCategoryGap="38%">
-                <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
-                <XAxis dataKey="band" interval={0} axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#59665d" }} dy={7} />
-                <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#59665d" }} />
+                <CartesianGrid vertical={false} stroke={GRID_STROKE} strokeDasharray="3 5" />
+                {/* Short labels ("None", "1–25") keep ticks apart on phones; the description gives the unit and the tooltip the full band. */}
+                <XAxis dataKey="band" interval={0} axisLine={false} tickLine={false} tick={AXIS_TICK} dy={7} tickFormatter={(band: string) => (band === "No expenditure" ? "None" : band.replace("%", ""))} />
+                <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={AXIS_TICK} />
                 <Tooltip
-                  contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 11 }}
+                  cursor={{ fill: "#f4f7f4" }}
+                  contentStyle={TOOLTIP_STYLE}
                   formatter={(value) => [`${Number(value)} projects`, "Project count"]}
-                  labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
+                  labelStyle={TOOLTIP_LABEL_STYLE}
                 />
-                <Bar dataKey="count" name="Projects" fill="#508065" radius={[4, 4, 0, 0]} maxBarSize={34} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out">
-                  {distribution.map((entry, index) => <Cell key={entry.band} fill={index === 0 ? "#d4a017" : "#508065"} />)}
+                <Bar dataKey="count" name="Projects" fill={PRIMARY_COLOR} radius={[4, 4, 0, 0]} maxBarSize={34} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out">
+                  {distribution.map((entry, index) => <Cell key={entry.band} fill={index === 0 ? ATTENTION_COLOR : PRIMARY_COLOR} />)}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>}
@@ -297,7 +332,117 @@ function UnspentReleaseWatchlist({ sites, wide }: { sites: Site[]; wide: boolean
   );
 }
 
-export function PortfolioAnalytics({ sites }: { sites: Site[] }) {
+function CostConcentrationCard({ sites }: { sites: Site[] }) {
+  const concentration = useMemo(() => getCostConcentration(sites, 5), [sites]);
+  const segments = [
+    ...concentration.top.map((entry, index) => ({ key: entry.site.id, label: entry.site.name, share: entry.share, color: RANK_GREENS[index] })),
+    ...(concentration.restCount ? [{ key: "rest", label: `Other ${concentration.restCount} projects`, share: concentration.restShare, color: "#dfe6e1" }] : []),
+  ];
+  return (
+    <ChartCard
+      title="Where the approved cost sits"
+      description={concentration.total > 0
+        ? `The ${concentration.top.length} largest projects hold ${formatPercent(concentration.topShare, 0)} of ${formatMillions(concentration.total, 0)} approved.`
+        : "No approved cost recorded."}
+      className="analysis-chart-card concentration-card"
+    >
+      {concentration.total > 0 ? (
+        <>
+          <div className="concentration-bar" role="img" aria-label={`Largest ${concentration.top.length} projects hold ${formatPercent(concentration.topShare, 0)} of approved cost`}>
+            {segments.map((segment) => (
+              <i key={segment.key} style={{ width: `${segment.share * 100}%`, backgroundColor: segment.color }} title={`${segment.label}: ${formatPercent(segment.share)}`} />
+            ))}
+          </div>
+          <ol className="concentration-list">
+            {concentration.top.map((entry, index) => (
+              <li key={entry.site.id}>
+                <i style={{ backgroundColor: RANK_GREENS[index] }} aria-hidden="true" />
+                <Link href={`/sites/${entry.site.id}`} className="concentration-name">{entry.site.name}</Link>
+                <span className="concentration-value">{formatMillions(entry.approved, 0)}</span>
+                <span className="concentration-share">{formatPercent(entry.share, 0)}</span>
+              </li>
+            ))}
+            {concentration.restCount > 0 && (
+              <li className="concentration-rest">
+                <i style={{ backgroundColor: "#dfe6e1" }} aria-hidden="true" />
+                <span className="concentration-name">Other {concentration.restCount} projects</span>
+                <span className="concentration-value">{formatMillions(concentration.restApproved, 0)}</span>
+                <span className="concentration-share">{formatPercent(concentration.restShare, 0)}</span>
+              </li>
+            )}
+          </ol>
+        </>
+      ) : <EmptyState title="No approved cost" description="Approved costs are needed to show concentration." />}
+      <p className="chart-footnote">Share of total approved cost · PKR millions</p>
+    </ChartCard>
+  );
+}
+
+function DistrictYearHeatmap({ sites, onSelectDistrict }: { sites: Site[]; onSelectDistrict?: (district: string) => void }) {
+  const [measure, setMeasure] = useState<YearMeasure>("utilized");
+  const matrix = useMemo(() => getDistrictYearMatrix(sites, measure), [sites, measure]);
+  const measureLabel = yearMeasures.find((item) => item.id === measure)?.label ?? "Funding";
+  const canFilter = Boolean(onSelectDistrict) && matrix.rows.length > 1;
+  return (
+    <ChartCard
+      title="District funding over time"
+      description={`${measureLabel} by district and fiscal year; darker cells mean more money.${canFilter ? " Select a district to filter the page." : ""}`}
+      action={
+        <label className="chart-select-wrap">
+          <span className="sr-only">Heatmap measure</span>
+          <select aria-label="Heatmap measure" value={measure} onChange={(event) => setMeasure(event.target.value as YearMeasure)}>
+            {yearMeasures.map((option) => <option value={option.id} key={option.id}>{option.label}</option>)}
+          </select>
+        </label>
+      }
+      className="analysis-chart-card heatmap-card"
+    >
+      {matrix.rows.length && matrix.years.length ? (
+        <div className="heatmap-scroll" tabIndex={0} role="region" aria-label={`${measureLabel} by district and fiscal year`}>
+          <table className="heatmap">
+            <caption className="sr-only">{measureLabel} by district and fiscal year, PKR millions</caption>
+            <thead>
+              <tr>
+                <th scope="col">District</th>
+                {matrix.years.map((year) => (
+                  <th scope="col" key={year}>
+                    <span className="year-long">{year}</span>
+                    <span className="year-short" aria-hidden="true">{year.replace(/^20(\d{2})/, "$1")}</span>
+                  </th>
+                ))}
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {matrix.rows.map((row) => (
+                <tr key={row.district}>
+                  <th scope="row">
+                    {canFilter
+                      ? <button type="button" onClick={() => onSelectDistrict?.(row.district)} title={`Filter the page to ${row.district}`}>{row.district}</button>
+                      : row.district}
+                    <small>{row.projects} project{row.projects === 1 ? "" : "s"}</small>
+                  </th>
+                  {row.values.map((value, index) => (
+                    <td key={matrix.years[index]} style={heatCellStyle(value, matrix.max)}>{value > 0 ? heatValue(value) : "—"}</td>
+                  ))}
+                  <td className="heatmap-total">{heatValue(row.total)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : <EmptyState title="No fiscal-year funding" description="The sheet has no year-wise amounts for these projects." />}
+      <div className="heatmap-scale" aria-hidden="true">
+        <span>Less</span>
+        {[0.02, 0.1, 0.25, 0.45, 0.7, 1].map((share) => <i key={share} style={{ background: heatCellStyle(share, 1).background }} />)}
+        <span>More</span>
+        <small>PKR millions · square-root scale so smaller districts stay visible</small>
+      </div>
+    </ChartCard>
+  );
+}
+
+export function PortfolioAnalytics({ sites, onSelectDistrict }: { sites: Site[]; onSelectDistrict?: (district: string) => void }) {
   const hasCategories = useMemo(() => summarizeCategories(sites).length > 0, [sites]);
   return (
     <section className="analytics-section" aria-labelledby="analytics-title">
@@ -305,25 +450,18 @@ export function PortfolioAnalytics({ sites }: { sites: Site[] }) {
         <div>
           <p className="eyebrow">PORTFOLIO ANALYTICS</p>
           <h2 id="analytics-title">A closer look at delivery</h2>
-          <p className="section-description">Explore funding concentration, portfolio mix and recorded financial progress.</p>
+          <p className="section-description">Explore funding concentration, district patterns over time and recorded financial progress.</p>
         </div>
         <span className="analytics-source-note"><CircleAlert size={13} /> Financial data only</span>
       </div>
       <PortfolioSignals sites={sites} />
       <div className="analytics-chart-grid">
-        <DistrictFundingChart sites={sites} />
-        {hasCategories ? (
-          <>
-            <CategoryMixChart sites={sites} />
-            <UnspentReleaseWatchlist sites={sites} wide={false} />
-            <ProgressDistributionChart sites={sites} />
-          </>
-        ) : (
-          <>
-            <ProgressDistributionChart sites={sites} />
-            <UnspentReleaseWatchlist sites={sites} wide />
-          </>
-        )}
+        <DistrictFundingChart sites={sites} onSelectDistrict={onSelectDistrict} />
+        {hasCategories ? <CategoryMixChart sites={sites} /> : <CostConcentrationCard sites={sites} />}
+        <DistrictYearHeatmap sites={sites} onSelectDistrict={onSelectDistrict} />
+        <UnspentReleaseWatchlist sites={sites} wide={false} />
+        <ProgressDistributionChart sites={sites} />
+        {hasCategories && <CostConcentrationCard sites={sites} />}
       </div>
       {!hasCategories && <p className="chart-footnote">The source sheet has no project-type labels, so a type comparison is not shown.</p>}
     </section>

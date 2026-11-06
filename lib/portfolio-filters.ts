@@ -49,6 +49,44 @@ export function getUnspentRelease(site: Site): number {
   return Math.max(0, site.released - site.utilized);
 }
 
+type SearchParamsLike = { get(name: string): string | null };
+
+/**
+ * Filters ↔ URL query, so a filtered view can be bookmarked or shared. Unknown values fall back
+ * to the defaults; `districts` (when known) drops districts that are not in the data.
+ */
+export function filtersFromSearchParams(params: SearchParamsLike, districts?: string[]): PortfolioFilters {
+  const district = params.get("district")?.trim();
+  const activity = params.get("spend");
+  const progress = params.get("progress");
+  return {
+    search: params.get("q")?.slice(0, 120) ?? "",
+    district: district && (!districts || districts.includes(district)) ? district : ALL_DISTRICTS,
+    activity: activityOptions.some((option) => option.id === activity) ? activity as ActivityFilter : "all",
+    progress: progressRangeOptions.some((option) => option.id === progress) ? progress as ProgressRangeFilter : "all",
+  };
+}
+
+/** Query string for the active filters ("" when none), without a leading "?". */
+export function filtersToQueryString(filters: PortfolioFilters): string {
+  const params = new URLSearchParams();
+  if (filters.search.trim()) params.set("q", filters.search.trim());
+  if (filters.district !== ALL_DISTRICTS) params.set("district", filters.district);
+  if (filters.activity !== "all") params.set("spend", filters.activity);
+  if (filters.progress !== "all") params.set("progress", filters.progress);
+  return params.toString();
+}
+
+/** Short human description of the active filters, e.g. "Lahore · No spend yet · “museum”". */
+export function describeFilters(filters: PortfolioFilters): string {
+  return [
+    filters.district !== ALL_DISTRICTS ? filters.district : "",
+    filters.activity !== "all" ? activityOptions.find((option) => option.id === filters.activity)?.label ?? "" : "",
+    filters.progress !== "all" ? `Financial progress ${progressRangeOptions.find((option) => option.id === filters.progress)?.label.toLowerCase() ?? ""}` : "",
+    filters.search.trim() ? `“${filters.search.trim()}”` : "",
+  ].filter(Boolean).join(" · ");
+}
+
 export function countActiveFilters(filters: PortfolioFilters): number {
   return [
     filters.search.trim() !== "",

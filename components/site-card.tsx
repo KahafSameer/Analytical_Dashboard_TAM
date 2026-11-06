@@ -5,6 +5,7 @@ import type { Site } from "@/lib/types";
 import { formatMillions, formatPercent } from "@/lib/analytics";
 import { formatLocation, isSpecified } from "@/lib/portfolio-filters";
 import { ProgressBar, StatusBadge } from "@/components/ui";
+import { FundingSparkbars } from "@/components/funding-sparkbars";
 
 export function SiteCard({
   site,
@@ -45,6 +46,7 @@ export function SiteCard({
           <span>Approved <strong>{formatMillions(site.approvedCost)}</strong></span>
           <span>Utilized <strong>{formatMillions(site.utilized)}</strong></span>
         </div>
+        <div className="card-spark"><span>Funding by year</span><FundingSparkbars years={site.fiscalYears} /></div>
         <div className="site-card-footer">
           <StatusBadge status={hasSpend ? "Spend recorded" : "No spend yet"} tone={hasSpend ? "green" : "gold"} />
           <Link href={`/sites/${site.id}`} className="text-link">View details <ArrowUpRight size={14} /></Link>

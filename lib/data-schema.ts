@@ -41,6 +41,7 @@ const fixedFields: DataField[] = [
   { id: "overallProgress", label: "Financial progress", type: "number", description: "Normalized overall financial progress.", unit: "percent (0-100)" },
   { id: "currentYearProgress", label: "Current-year financial progress", type: "number", description: "Normalized current fiscal-year financial progress.", unit: "percent (0-100)" },
   { id: "utilizationRate", label: "Utilization of allocation", type: "number", description: "Utilized funds divided by allocated funds.", unit: "percent (0-100; may exceed 100)" },
+  { id: "releasedNotSpent", label: "Released but unspent funds", type: "number", description: "Released funds minus utilized funds (unspent release), never below zero. Use for questions about unspent, idle or remaining released money.", unit: "PKR millions" },
 ];
 
 const textLikeHeader = /\b(name|code|id|date|year|phone|no\.?)\b/i;
@@ -102,6 +103,7 @@ export function discoverDatasetSchema(sites: Site[], sourceHeaders?: string[]): 
   const availableFixedFields = fixedFields.filter((field) => {
     if (field.id === "name") return true;
     if (field.id === "utilizationRate") return hasHeader(...headerAliases.allocated) && hasHeader(...headerAliases.utilized);
+    if (field.id === "releasedNotSpent") return hasHeader(...headerAliases.released) && hasHeader(...headerAliases.utilized);
     if (field.id === "overallProgress") {
       return hasHeader(...headerAliases.overallProgress)
         || (hasHeader(...headerAliases.approvedCost) && hasHeader(...headerAliases.utilized));
@@ -179,6 +181,7 @@ export function getFieldValue(site: Site, field: DataField): string | number | b
     case "overallProgress": return site.overallProgress * 100;
     case "currentYearProgress": return (site.currentYearProgress ?? 0) * 100;
     case "utilizationRate": return site.allocated > 0 ? (site.utilized / site.allocated) * 100 : null;
+    case "releasedNotSpent": return Math.max(0, site.released - site.utilized);
     default: return null;
   }
 }

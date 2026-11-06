@@ -28,6 +28,11 @@ The API reads the first tab and expects the same first-row column headers as the
 3. Enter the private key exactly as a secret. If entered with escaped newlines (`\n`), the server converts them to newline characters.
 4. Confirm the spreadsheet is shared with the configured service-account email.
 5. Redeploy after setting or rotating credentials. Do not set a custom output directory such as `public` or `.next`.
+6. Optional: set `GROQ_API_KEY` (live web search and backup model for the assistant) and `NEXT_PUBLIC_SITE_URL` (the public address, e.g. `https://tourism.example.org`). On Vercel the production domain is used automatically when `NEXT_PUBLIC_SITE_URL` is not set.
+
+### Link previews
+
+Shared links (WhatsApp, Facebook, X, LinkedIn, Telegram) show a generated preview card from `app/opengraph-image.tsx` and `app/sites/[siteId]/opengraph-image.tsx`. Messaging apps fetch these images from the public URL, so previews only appear for a deployed, publicly reachable site — not for `localhost`. After deploying, check a project link with a preview debugger (for example Facebook's Sharing Debugger) to refresh any cached preview.
 
 The application does not use a local workbook, service-account file, filesystem persistence, or a permanent Node process. Sheets API calls execute in serverless route/page invocations; the 20-second memory cache is opportunistic per warm instance.
 
@@ -39,7 +44,7 @@ npm run typecheck
 npm run build
 ```
 
-The build does not require Google or Gemini credentials because routes are dynamic; runtime credentials must exist for those integrations to succeed. After deployment, verify `/`, a `/sites/[siteId]` link, `GET /api/dashboard-data`, and a dashboard question in the assistant.
+The build does not require Google or Gemini credentials because routes (including the preview images) are dynamic; runtime credentials must exist for those integrations to succeed. After deployment, verify `/`, a `/sites/[siteId]` link, `/opengraph-image`, `GET /api/dashboard-data`, a filtered view link (e.g. `/?district=Lahore`), and a dashboard question in the assistant.
 
 ## Operational notes
 

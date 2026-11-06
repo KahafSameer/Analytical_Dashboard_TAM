@@ -125,6 +125,171 @@ export function combineFiscalYears(items: Site[]): FiscalYear[] {
   return [...years.values()];
 }
 
+export type PipelineStageId = "approved" | "allocated" | "released" | "utilized";
+export type PipelineStage = {
+  id: PipelineStageId;
+  label: string;
+  value: number;
+  /** Share of the approved cost (0–1). */
+  ofApproved: number;
+  /** Share of the previous stage (0–1), or null for the first stage. */
+  ofPrevious: number | null;
+  /** How the previous stage converts into this one, e.g. "allocated". */
+  verb: string;
+};
+
+/** Approved → allocated → released → utilized, with stage-to-stage conversion. */
+export function getFundingPipeline(items: Site[]): PipelineStage[] {
+  const summary = getPortfolioSummary(items);
+  const stages: [PipelineStageId, string, number, string][] = [
+    ["approved", "Approved cost", summary.totalApproved, ""],
+    ["allocated", "Allocated", summary.totalAllocated, "allocated"],
+    ["released", "Released", summary.totalReleased, "released"],
+    ["utilized", "Utilized", summary.totalUtilized, "spent"],
+  ];
+  return stages.map(([id, label, value, verb], index) => {
+    const previous = index > 0 ? stages[index - 1][2] : null;
+    return {
+      id,
+      label,
+      value,
+      verb,
+      ofApproved: summary.totalApproved ? value / summary.totalApproved : 0,
+      ofPrevious: previous === null ? null : previous ? value / previous : 0,
+    };
+  });
+}
+
+export type ConcentrationEntry = { site: Site; approved: number; share: number };
+export type CostConcentration = {
+  top: ConcentrationEntry[];
+  topShare: number;
+  restCount: number;
+  restApproved: number;
+  restShare: number;
+  total: number;
+};
+
+/** How much of the approved cost sits in the largest projects. */
+export function getCostConcentration(items: Site[], topN = 5): CostConcentration {
+  const total = items.reduce((sum, site) => sum + site.approvedCost, 0);
+  const sorted = [...items].sort((a, b) => b.approvedCost - a.approvedCost || a.name.localeCompare(b.name));
+  const top = sorted.slice(0, topN).map((site) => ({ site, approved: site.approvedCost, share: total ? site.approvedCost / total : 0 }));
+  const topApproved = top.reduce((sum, entry) => sum + entry.approved, 0);
+  const restApproved = Math.max(0, total - topApproved);
+  return {
+    top,
+    topShare: total ? topApproved / total : 0,
+    restCount: Math.max(0, items.length - top.length),
+    restApproved,
+    restShare: total ? restApproved / total : 0,
+    total,
+  };
+}
+
+export type YearMeasure = "allocation" | "release" | "utilized";
+export type DistrictYearRow = { district: string; values: number[]; total: number; projects: number };
+export type DistrictYearMatrix = { years: string[]; rows: DistrictYearRow[]; max: number };
+
+/** District × fiscal-year totals for one measure, districts sorted by their total. */
+export function getDistrictYearMatrix(items: Site[], measure: YearMeasure): DistrictYearMatrix {
+  const years = combineFiscalYears(items).map((year) => year.label);
+  const rows = new Map<string, DistrictYearRow>();
+  for (const site of items) {
+    const row = rows.get(site.district) ?? { district: site.district, values: years.map(() => 0), total: 0, projects: 0 };
+    row.projects += 1;
+    for (const year of site.fiscalYears) {
+      const index = years.indexOf(year.label);
+      if (index === -1) continue;
+      row.values[index] += year[measure];
+      row.total += year[measure];
+    }
+    rows.set(site.district, row);
+  }
+  const sorted = [...rows.values()].sort((a, b) => b.total - a.total || a.district.localeCompare(b.district));
+  return { years, rows: sorted, max: Math.max(0, ...sorted.flatMap((row) => row.values)) };
+}
+
+export type BenchmarkMetric = {
+  id: string;
+  label: string;
+  description: string;
+  project: number | null;
+  district: number | null;
+  portfolio: number | null;
+};
+
+const ratio = (numerator: number, denominator: number) => (denominator > 0 ? numerator / denominator : null);
+
+function groupRates(group: Site[]) {
+  const totals = getPortfolioSummary(group);
+  const withCurrentYear = group.filter((site) => site.currentYearProgress !== undefined);
+  return {
+    progress: ratio(totals.totalUtilized, totals.totalApproved),
+    spendOfRelease: ratio(totals.totalUtilized, totals.totalReleased),
+    releaseOfAllocation: ratio(totals.totalReleased, totals.totalAllocated),
+    currentYear: withCurrentYear.length
+      ? withCurrentYear.reduce((sum, site) => sum + (site.currentYearProgress ?? 0), 0) / withCurrentYear.length
+      : null,
+  };
+}
+
+/**
+ * Compares one project with its district and the whole portfolio. District and portfolio rates
+ * are amount-weighted (e.g. total utilized ÷ total approved); the district value is omitted when
+ * the project is the only one in its district.
+ */
+export function getProjectBenchmarks(site: Site, sites: Site[]): { districtProjects: number; metrics: BenchmarkMetric[] } {
+  const districtSites = sites.filter((entry) => entry.district === site.district);
+  const district = districtSites.length > 1 ? groupRates(districtSites) : null;
+  const portfolio = groupRates(sites);
+  const metrics: BenchmarkMetric[] = [
+    {
+      id: "progress",
+      label: "Financial progress",
+      description: "Utilized ÷ approved cost",
+      project: site.overallProgress,
+      district: district?.progress ?? null,
+      portfolio: portfolio.progress,
+    },
+    {
+      id: "spendOfRelease",
+      label: "Released funds spent",
+      description: "Utilized ÷ released",
+      project: ratio(site.utilized, site.released),
+      district: district?.spendOfRelease ?? null,
+      portfolio: portfolio.spendOfRelease,
+    },
+    {
+      id: "releaseOfAllocation",
+      label: "Allocation released",
+      description: "Released ÷ allocated",
+      project: ratio(site.released, site.allocated),
+      district: district?.releaseOfAllocation ?? null,
+      portfolio: portfolio.releaseOfAllocation,
+    },
+  ];
+  if (site.currentYearProgress !== undefined) {
+    metrics.push({
+      id: "currentYear",
+      label: "Current-year progress",
+      description: "Reported CFY financial progress (average)",
+      project: site.currentYearProgress,
+      district: district?.currentYear ?? null,
+      portfolio: portfolio.currentYear,
+    });
+  }
+  return { districtProjects: districtSites.length, metrics };
+}
+
+/** Other projects in the same district, largest approved cost first. */
+export function getRelatedProjects(site: Site, sites: Site[], limit = 5): Site[] {
+  return sites
+    .filter((entry) => entry.id !== site.id && entry.district === site.district)
+    .sort((a, b) => b.approvedCost - a.approvedCost || a.name.localeCompare(b.name))
+    .slice(0, limit);
+}
+
 export function getFinancialVariance(site: Site): number {
   return site.overallProgress - site.allocated / Math.max(site.approvedCost, 1);
 }
