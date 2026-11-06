@@ -196,8 +196,13 @@ export function ChartCard({
   className?: string;
 }) {
   const reduceMotion = useReducedMotion();
+  // Hand-built bars, cells and rings inside the card animate in when it scrolls into view.
+  const revealRef = useRef<HTMLElement>(null);
+  const revealed = useInView(revealRef, { once: true, amount: 0.15 });
   return (
     <motion.section
+      ref={revealRef}
+      data-reveal={revealed ? "shown" : "pending"}
       className={`chart-card ${className}`}
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}

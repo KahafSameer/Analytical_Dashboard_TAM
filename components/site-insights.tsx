@@ -9,6 +9,7 @@ import { filtersToQueryString, DEFAULT_FILTERS } from "@/lib/portfolio-filters";
 import { describeScheduleState, formatScheduleDate, getScheduleStatus, referenceDate, type ScheduleState } from "@/lib/schedule";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState, ProgressBar, StatusBadge } from "@/components/ui";
+import { revealIndex } from "@/components/motion";
 
 const TIME_COLOR = "#8ea0b4";
 const STATE_BADGE: Record<ScheduleState, { label: string; tone: "green" | "gold" | "neutral" }> = {
@@ -48,12 +49,12 @@ function ScheduleCard({ site, today }: { site: Site; today: Date }) {
         <div><dt>Status</dt><dd>{describeScheduleState(status)}</dd></div>
       </dl>
       <div className="schedule-compare">
-        <div>
+        <div style={revealIndex(3)}>
           <span>Time elapsed</span>
           <span className="gap-track"><i style={{ width: `${status.elapsed * 100}%`, backgroundColor: TIME_COLOR }} /></span>
           <strong>{formatPercent(status.elapsed, 0)}</strong>
         </div>
-        <div>
+        <div style={revealIndex(5)}>
           <span>Financial progress</span>
           <span className="gap-track"><i style={{ width: `${Math.min(1, site.overallProgress) * 100}%`, backgroundColor: SCHEDULE_COLORS["in-progress"] }} /></span>
           <strong>{formatPercent(site.overallProgress, 1)}</strong>
@@ -87,14 +88,14 @@ function BenchmarkCard({ site, sites }: { site: Site; sites: Site[] }) {
         {series.filter((entry) => entry.key !== "district" || districtProjects > 1).map((entry) => <span key={entry.key}><i style={{ backgroundColor: entry.color }} />{entry.label}</span>)}
       </div>
       <div className="benchmark-list">
-        {metrics.map((metric) => {
+        {metrics.map((metric, metricIndex) => {
           const values = series.map((entry) => ({ ...entry, value: metric[entry.key] })).filter((entry) => entry.value !== null);
           const scale = Math.max(1, ...values.map((entry) => entry.value ?? 0));
           return (
             <div className="benchmark-metric" key={metric.id}>
               <div className="benchmark-head"><strong>{metric.label}</strong><span>{metric.description}</span></div>
-              {values.map((entry) => (
-                <div className="benchmark-row" key={entry.key}>
+              {values.map((entry, rowIndex) => (
+                <div className="benchmark-row" key={entry.key} style={revealIndex(metricIndex * 3 + rowIndex)}>
                   <span className="benchmark-label">{entry.key === "project" ? "This project" : entry.key === "district" ? site.district : "Portfolio"}</span>
                   <span className="gap-track"><i style={{ width: `${((entry.value ?? 0) / scale) * 100}%`, backgroundColor: entry.color }} /></span>
                   <b>{formatPercent(entry.value ?? 0, 1)}</b>

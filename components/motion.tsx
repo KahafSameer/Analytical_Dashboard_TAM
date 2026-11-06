@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useRef, type CSSProperties, type ReactNode } from "react";
 import { motion, useInView, useReducedMotion } from "motion/react";
 
 export function Reveal({
@@ -31,6 +31,22 @@ export function useChartEntrance() {
   const isInView = useInView(ref, { once: true, margin: "80px 0px" });
   const reduceMotion = useReducedMotion();
   return { ref, isInView, animate: isInView && !reduceMotion };
+}
+
+/**
+ * Entrance trigger for hand-built (non-Recharts) visuals. Put `ref` and `data-reveal={state}` on
+ * the container; CSS in globals.css grows bars, fades heatmap cells and fills rings once it scrolls
+ * into view. Server and first client render are both "pending", so hydration matches.
+ */
+export function useReveal<T extends Element = HTMLDivElement>(amount = 0.15) {
+  const ref = useRef<T>(null);
+  const inView = useInView(ref, { once: true, amount });
+  return { ref, revealState: inView ? "shown" : "pending" } as const;
+}
+
+/** Stagger position for an element inside a reveal container (each step adds a short delay). */
+export function revealIndex(index: number): CSSProperties {
+  return { ["--reveal-index" as string]: index } as CSSProperties;
 }
 
 export { motion, useReducedMotion };

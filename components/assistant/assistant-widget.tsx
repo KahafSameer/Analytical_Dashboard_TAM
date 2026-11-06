@@ -411,7 +411,9 @@ export function AssistantWidget() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.96 }}
             transition={{ duration: reduceMotion ? 0.12 : 0.24 }}
-            whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+            // Always set (not conditional on reduced motion): the server cannot know the user's setting, and a
+            // conditional gesture changes the rendered tabindex. MotionConfig reducedMotion="user" skips the scale.
+            whileTap={{ scale: 0.97 }}
           >
             <Sparkles size={17} aria-hidden="true" />
             <span>AI Assistant</span>
