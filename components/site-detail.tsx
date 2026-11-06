@@ -9,6 +9,7 @@ import {
   Banknote,
   CalendarDays,
   Check,
+  Compass,
   Download,
   FileSpreadsheet,
   Landmark,
@@ -23,6 +24,8 @@ import { GLOSSARY_BY_ID, KPI_HELP } from "@/lib/guide-content";
 import { projectInShort } from "@/lib/plain-summary";
 import { getScheduleStatus, referenceDate } from "@/lib/schedule";
 import { InShort } from "@/components/in-short";
+import { ProductTour } from "@/components/product-tour";
+import { PROJECT_TOUR } from "@/lib/tour";
 import { LazySiteFinancialAnalytics, LazySiteFiscalYearChart } from "@/components/lazy-site-charts";
 import type { DashboardData, Site } from "@/lib/types";
 import { KpiCard, ProgressBar, StatusBadge } from "@/components/ui";
@@ -60,6 +63,8 @@ function ProjectDetail({ site, sites, asOf, invalidAmountCount }: { site: Site; 
   const [exported, setExported] = useState(false);
   const summary = useMemo(() => getPortfolioSummary([site]), [site]);
   const inShort = useMemo(() => projectInShort(site, getScheduleStatus(site, referenceDate(asOf))), [site, asOf]);
+  const [tourOpen, setTourOpen] = useState(false);
+  const [tourRun, setTourRun] = useState(0);
   return (
     <div className="page-stack">
       {invalidAmountCount > 0 && (
@@ -70,13 +75,16 @@ function ProjectDetail({ site, sites, asOf, invalidAmountCount }: { site: Site; 
       <PageTopline section="Project detail" date="Google Sheets" />
       <div className="detail-toolbar">
         <Link href="/" className="back-link"><ArrowLeft size={15} /> All tourism projects</Link>
-        <div className="page-actions">
+        <div className="page-actions" data-tour="project-actions">
+          <button type="button" className="button button-outline tour-trigger" onClick={() => { setTourRun((run) => run + 1); setTourOpen(true); }}>
+            <Compass size={15} /> Tour this page
+          </button>
           <ShareMenu label="Share project" getPayload={(url) => projectSharePayload(site, url)} />
           <PrintButton />
         </div>
       </div>
 
-      <section className="detail-hero">
+      <section className="detail-hero" data-tour="project-hero">
         <div className="detail-hero-image">
           <Image
             src={site.image}
@@ -109,7 +117,7 @@ function ProjectDetail({ site, sites, asOf, invalidAmountCount }: { site: Site; 
 
       <section aria-label="Project financial summary">
         <div className="summary-section-label"><span>KEY NUMBERS</span><span className="summary-privacy"><Check size={13} /> From the project records</span></div>
-        <div className="kpi-grid detail-kpis">
+        <div className="kpi-grid detail-kpis" data-tour="project-kpis">
           <KpiCard label="Financial progress" value={formatPercent(site.overallProgress)} supporting="Share of the budget spent" icon={<ArrowUpRight size={17} />} accent help={KPI_HELP.financialProgress} helpAnchor="financial-progress" />
           <KpiCard label="Approved cost" value={formatMillions(site.approvedCost)} supporting="Total budget for the project" icon={<Landmark size={17} />} help={KPI_HELP.approvedCost} helpAnchor="approved-cost" />
           <KpiCard label="Money spent" value={formatMillions(site.utilized)} supporting={`of ${formatMillions(site.allocated)} set aside`} icon={<Banknote size={17} />} help={GLOSSARY_BY_ID.spent.short} helpAnchor="spent" />
@@ -121,7 +129,7 @@ function ProjectDetail({ site, sites, asOf, invalidAmountCount }: { site: Site; 
         <div className="section-heading">
           <div><p className="eyebrow">MONEY BY YEAR</p><h2>Set aside, handed over and spent</h2><p className="section-description">For each budget year (July–June) · millions of rupees.</p></div>
         </div>
-        <div className="detail-grid">
+        <div className="detail-grid" data-tour="project-years">
           <LazySiteFiscalYearChart site={site} />
 
           <Reveal className="detail-table-reveal">
@@ -167,6 +175,7 @@ function ProjectDetail({ site, sites, asOf, invalidAmountCount }: { site: Site; 
         </div>
       </section>
       <footer className="page-footer"><span>FIELDNOTES <b>·</b> TOURISM INTELLIGENCE</span><span>Project {site.code ?? site.id} · millions of rupees · <Link href="/guide">How to read this page</Link></span></footer>
+      <ProductTour key={tourRun} steps={PROJECT_TOUR} open={tourOpen} onClose={() => setTourOpen(false)} label="Project page tour" />
     </div>
   );
 }

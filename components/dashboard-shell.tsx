@@ -68,6 +68,7 @@ function DashboardShellContent({ children, siteCount }: { children: React.ReactN
                 key={label}
                 className={`nav-link${active ? " nav-link-active" : ""}`}
                 aria-current={active ? "page" : undefined}
+                data-tour={href === "/guide" ? "guide-link" : undefined}
                 onClick={() => setDrawerOpen(false)}
               >
                 {active && <motion.span className="nav-active-indicator" layoutId="sidebar-active-indicator" transition={{ duration: reduceMotion ? 0.12 : 0.3, ease: [0.22, 1, 0.36, 1] }} />}
@@ -109,7 +110,7 @@ function DashboardShellContent({ children, siteCount }: { children: React.ReactN
 
       <div className="main-column">
         <header className="mobile-header">
-          <button className="icon-button mobile-menu-button" onClick={() => setDrawerOpen(true)} aria-label="Open navigation" aria-expanded={drawerOpen} aria-controls="primary-navigation"><Menu size={20} /></button>
+          <button className="icon-button mobile-menu-button" data-tour="menu" onClick={() => setDrawerOpen(true)} aria-label="Open navigation" aria-expanded={drawerOpen} aria-controls="primary-navigation"><Menu size={20} /></button>
           <Link href="/" className="mobile-brand"><span className="brand-mark"><Command size={15} /></span>Fieldnotes</Link>
           <span className="mobile-header-meta">Punjab</span>
         </header>

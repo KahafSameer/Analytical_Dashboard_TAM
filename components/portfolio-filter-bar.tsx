@@ -43,7 +43,7 @@ export function PortfolioFilterBar({
   const update = <K extends keyof PortfolioFilters>(key: K, value: PortfolioFilters[K]) => onChange({ ...filters, [key]: value });
 
   return (
-    <section className="filter-bar" aria-label="Portfolio filters">
+    <section className="filter-bar" aria-label="Portfolio filters" data-tour="filters">
       <div className="filter-bar-row">
         <div className="site-search-wrap">
           <Search size={17} />

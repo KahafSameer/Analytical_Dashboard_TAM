@@ -105,6 +105,7 @@ function SpendGapList({ summary }: { summary: ReturnType<typeof summarizeSchedul
       description="Started projects where much more time has passed than money has been spent."
       className="analysis-chart-card gap-card"
       help={CHART_HELP.spendingGap}
+      tourId="schedule-gap"
     >
       <div className="gap-legend" aria-hidden="true">
         <span><i style={{ backgroundColor: TIME_COLOR }} />Time elapsed</span>
@@ -131,7 +132,7 @@ function SpendGapList({ summary }: { summary: ReturnType<typeof summarizeSchedul
           ))}
         </ol>
       ) : <EmptyState title="Spending keeps pace" description="No started project has spending more than 10 points behind its elapsed time." />}
-      <p className="chart-footnote">A gap is a prompt to check, not proof of delay: the sheet has spending, not physical progress.</p>
+      <p className="chart-footnote">A gap is a reason to ask, not proof of delay: the records show spending, not building work.</p>
     </ChartCard>
   );
 }

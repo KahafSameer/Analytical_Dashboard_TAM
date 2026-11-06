@@ -88,6 +88,7 @@ function DistrictFundingChart({ sites, onSelectDistrict }: { sites: Site[]; onSe
       title="Money by district"
       description={`The eight districts with the most money for the chosen measure.${canFilter ? " Select a bar to show only that district." : ""}`}
       help={CHART_HELP.districtFunding}
+      tourId="district-chart"
       action={
         <label className="chart-select-wrap">
           <span className="sr-only">Funding measure</span>

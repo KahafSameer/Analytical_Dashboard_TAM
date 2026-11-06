@@ -17,7 +17,7 @@ const ScheduleInsights = lazy(() =>
 export function LazyPortfolioAnalytics({ sites, onSelectDistrict }: { sites: Site[]; onSelectDistrict?: (district: string) => void }) {
   const { ref, isNearViewport } = useNearViewport<HTMLDivElement>();
   return (
-    <div ref={ref}>
+    <div ref={ref} data-tour-anchor="analytics">
       {isNearViewport ? (
         <Suspense fallback={<div className="analytics-loading-placeholder" role="status">Loading portfolio analytics…</div>}>
           <PortfolioAnalytics sites={sites} onSelectDistrict={onSelectDistrict} />

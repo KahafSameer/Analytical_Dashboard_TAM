@@ -38,6 +38,7 @@ function ScheduleCard({ site, today }: { site: Site; today: Date }) {
       action={<StatusBadge status={badge.label} tone={badge.tone} />}
       className="detail-analytics-card schedule-card"
       help={CHART_HELP.schedule}
+      tourId="project-schedule"
     >
       <div className="schedule-timeline" aria-hidden="true">
         <div className="schedule-timeline-track">
@@ -86,6 +87,7 @@ function BenchmarkCard({ site, sites }: { site: Site; sites: Site[] }) {
       description={districtProjects > 1 ? "This project against the average of its district and of all projects." : "This project against the average of all projects (it is the only project in its district)."}
       className="detail-analytics-card benchmark-card"
       help={CHART_HELP.compare}
+      tourId="project-compare"
     >
       <div className="gap-legend" aria-hidden="true">
         {series.filter((entry) => entry.key !== "district" || districtProjects > 1).map((entry) => <span key={entry.key}><i style={{ backgroundColor: entry.color }} />{entry.label}</span>)}
@@ -118,7 +120,7 @@ export function RelatedProjects({ site, sites }: { site: Site; sites: Site[] }) 
   const total = sites.filter((entry) => entry.district === site.district).length;
   const districtLink = `/?${filtersToQueryString({ ...DEFAULT_FILTERS, district: site.district })}#sites`;
   return (
-    <section className="related-section" aria-labelledby="related-title">
+    <section className="related-section" aria-labelledby="related-title" data-tour="related">
       <div className="section-heading">
         <div>
           <p className="eyebrow">MORE IN {site.district.toUpperCase()}</p>

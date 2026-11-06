@@ -24,7 +24,7 @@ export function FundingPipeline({ sites }: { sites: Site[] }) {
   const utilized = stages[3].value;
   return (
     <Reveal className="funding-note-reveal">
-      <section ref={ref} data-reveal={revealState} className="chart-card pipeline-card" aria-labelledby="pipeline-title">
+      <section ref={ref} data-reveal={revealState} data-tour="pipeline" className="chart-card pipeline-card" aria-labelledby="pipeline-title">
         <div className="chart-card-heading">
           <div>
             <h3 id="pipeline-title">Where the money is<InfoTip title="Where the money is" label="How to read “Where the money is”" guideAnchor="money-journey">{CHART_HELP.pipeline}</InfoTip></h3>

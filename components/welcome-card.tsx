@@ -12,7 +12,7 @@ import { dismissWelcome, isWelcomeDismissed, subscribeWelcome } from "@/lib/welc
  * the browser (server snapshot = dismissed), so returning visitors never see it flash. Opening
  * the guide counts as "seen", so the card does not come back after reading it.
  */
-export function WelcomeCard() {
+export function WelcomeCard({ onStartTour }: { onStartTour?: () => void }) {
   const dismissed = useSyncExternalStore(subscribeWelcome, isWelcomeDismissed, () => true);
   if (dismissed) return null;
   return (
@@ -38,7 +38,10 @@ export function WelcomeCard() {
           <li><strong>Need help?</strong> Tap <span className="welcome-info" aria-label="the info button">i</span> next to any chart or number for a simple explanation.</li>
         </ol>
         <div className="welcome-actions">
-          <Link href="/guide" className="button button-primary"><BookOpen size={15} /> Read the 2-minute guide</Link>
+          {onStartTour && (
+            <button type="button" className="button button-primary" onClick={onStartTour}><Compass size={15} /> Take the 1-minute tour</button>
+          )}
+          <Link href="/guide" className={`button ${onStartTour ? "button-outline" : "button-primary"}`}><BookOpen size={15} /> Read the 2-minute guide</Link>
           <button type="button" className="button button-outline" onClick={dismissWelcome}>Got it</button>
         </div>
       </div>

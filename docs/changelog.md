@@ -10,6 +10,7 @@ A version of the dashboard for readers without a finance background (branch `eas
 - ⓘ buttons on every chart, headline number and the project-list columns with a short plain explanation and a link to the guide.
 - "In short" summaries on the overview and project pages, generated from the live figures (with crore equivalents and schedule notes).
 - Welcome card for first-time visitors.
+- Interactive guided tour: spotlight + explanation box with Back / Next / Skip and progress, 12 stops on the overview and 8 on project pages; keyboard and phone friendly. Start it from the welcome card, the "Take the tour" button or the guide.
 - Everyday wording: "Spent", "Not spent", "Money by budget year", "Where the money is", "Time passed vs money spent", etc.; data-source wording reads "official project records".
 - The AI assistant explains money terms in plain words and has an "Explain this dashboard in simple words" suggestion.
 

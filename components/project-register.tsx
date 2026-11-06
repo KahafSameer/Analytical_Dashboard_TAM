@@ -158,7 +158,7 @@ export function ProjectRegister({ sites, asOf }: { sites: Site[]; asOf: string }
                 const panelId = `progress-${site.id}`;
                 return (
                   <Fragment key={site.id}>
-                    <tr className={`register-row${expanded ? " is-expanded" : ""}`}>
+                    <tr className={`register-row${expanded ? " is-expanded" : ""}`} data-tour="register-row">
                       <th scope="row" className="cell-project">
                         <Link href={`/sites/${site.id}`}>{site.name}</Link>
                         <span className="cell-sub">
@@ -183,6 +183,7 @@ export function ProjectRegister({ sites, asOf }: { sites: Site[]; asOf: string }
                         <button
                           type="button"
                           className={`progress-toggle${expanded ? " is-open" : ""}`}
+                          data-tour="view-progress"
                           aria-expanded={expanded}
                           aria-controls={expanded ? panelId : undefined}
                           aria-label={`${expanded ? "Hide" : "View"} progress details for ${site.name}`}

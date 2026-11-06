@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, BookOpen, CircleAlert, Info, Lightbulb } from "lucide-react";
+import { ArrowRight, BookOpen, CircleAlert, Compass, Info, Lightbulb } from "lucide-react";
 import { PageTopline } from "@/components/dashboard-shell";
 import { GuideVisit } from "@/components/guide-visit";
 import { ATTENTION_COLOR, NEUTRAL_COLOR, SERIES_COLORS, heatCellStyle } from "@/lib/chart-theme";
@@ -38,6 +38,9 @@ export default function GuidePage() {
           <div className="intro-kicker"><span className="intro-kicker-line" /> GUIDE</div>
           <h1>How to read this dashboard<span className="title-period">.</span></h1>
           <p>A 2-minute guide for anyone — no finance background needed.</p>
+        </div>
+        <div className="page-actions">
+          <Link href="/?tour=1" className="button button-primary"><Compass size={15} /> Take the interactive tour</Link>
         </div>
       </section>
 
@@ -173,7 +176,8 @@ export default function GuidePage() {
       </section>
 
       <div className="guide-cta">
-        <Link href="/" className="button button-primary"><BookOpen size={15} /> Go to the dashboard</Link>
+        <Link href="/?tour=1" className="button button-primary"><Compass size={15} /> Take the interactive tour</Link>
+        <Link href="/" className="button button-outline"><BookOpen size={15} /> Go to the dashboard</Link>
         <Link href="/#sites" className="button button-outline">See all projects</Link>
       </div>
       <footer className="page-footer"><span>FIELDNOTES <b>·</b> TOURISM INTELLIGENCE</span><span>Guide · money in millions of rupees</span></footer>

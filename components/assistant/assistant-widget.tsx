@@ -405,6 +405,7 @@ export function AssistantWidget() {
             ref={buttonRef}
             type="button"
             className="assistant-launcher"
+            data-tour="assistant"
             aria-label="Open AI Assistant"
             onClick={() => setOpen(true)}
             initial={{ opacity: 0, y: 8 }}

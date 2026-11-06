@@ -195,6 +195,7 @@ export function ChartCard({
   action,
   className = "",
   help,
+  tourId,
 }: {
   title: string;
   description?: string;
@@ -203,6 +204,8 @@ export function ChartCard({
   className?: string;
   /** Plain-language "how to read this chart" behind an ⓘ button next to the title. */
   help?: string;
+  /** Marks the card as a guided-tour stop (`data-tour`, see lib/tour.ts). */
+  tourId?: string;
 }) {
   const reduceMotion = useReducedMotion();
   // Hand-built bars, cells and rings inside the card animate in when it scrolls into view.
@@ -212,6 +215,7 @@ export function ChartCard({
     <motion.section
       ref={revealRef}
       data-reveal={revealed ? "shown" : "pending"}
+      data-tour={tourId}
       className={`chart-card ${className}`}
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}

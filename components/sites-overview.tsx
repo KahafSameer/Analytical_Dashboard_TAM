@@ -7,6 +7,7 @@ import {
   ArrowUpRight,
   Banknote,
   BriefcaseBusiness,
+  Compass,
   Landmark,
   MapPin,
   ShieldCheck,
@@ -31,6 +32,9 @@ import { portfolioInShort } from "@/lib/plain-summary";
 import { referenceDate, summarizeSchedule } from "@/lib/schedule";
 import { InShort } from "@/components/in-short";
 import { WelcomeCard } from "@/components/welcome-card";
+import { ProductTour } from "@/components/product-tour";
+import { OVERVIEW_TOUR } from "@/lib/tour";
+import { dismissWelcome } from "@/lib/welcome-state";
 import type { DashboardData } from "@/lib/types";
 import { EmptyState, KpiCard, SectionHeading } from "@/components/ui";
 import { PageTopline } from "@/components/dashboard-shell";
@@ -56,6 +60,17 @@ export function SitesOverview({
   // Filters live in the URL (?q=&district=&spend=&progress=) so a view can be shared or bookmarked.
   const [filters, setFilters] = useState<PortfolioFilters>(() => filtersFromSearchParams(query));
   const [toast, setToast] = useState<Toast | null>(null);
+  // Guided tour: opened by the buttons below or a "/?tour=1" link (e.g. from the guide page).
+  const [tourOpen, setTourOpen] = useState(() => query.get("tour") === "1");
+  const [tourRun, setTourRun] = useState(0);
+  const startTour = () => {
+    setTourRun((run) => run + 1);
+    setTourOpen(true);
+  };
+  const closeTour = () => {
+    setTourOpen(false);
+    dismissWelcome();
+  };
   const { data, setData, setError } = useDashboardData();
   useEffect(() => {
     if (initialData) setData(initialData);
@@ -142,7 +157,10 @@ export function SitesOverview({
             <span className="context-icon"><MapPin size={17} /></span>
             <div><strong>{districts.length} reporting areas</strong><span>Official project records · millions of rupees</span></div>
           </div>
-          <div className="page-actions">
+          <div className="page-actions" data-tour="page-actions">
+            <button type="button" className="button button-outline tour-trigger" onClick={startTour}>
+              <Compass size={15} /> Take the tour
+            </button>
             <ShareMenu
               label={isFiltered ? "Share this view" : "Share"}
               getPayload={(url) => portfolioSharePayload(summary, { total: allSites.length, selection: selection || undefined, url })}
@@ -152,7 +170,7 @@ export function SitesOverview({
         </div>
       </section>
 
-      <WelcomeCard />
+      <WelcomeCard onStartTour={startTour} />
 
       <PortfolioFilterBar
         filters={activeFilters}
@@ -177,7 +195,7 @@ export function SitesOverview({
               <span>{isFiltered ? "THIS SELECTION IN NUMBERS" : "KEY NUMBERS"}</span>
               <span className="summary-privacy"><ShieldCheck size={13} /> From the official records</span>
             </div>
-            <div className="kpi-grid">
+            <div className="kpi-grid" data-tour="kpis">
               <KpiCard label="Projects" value={`${summary.siteCount}`} supporting={isFiltered ? `of ${allSites.length} · ${areaCount} area${areaCount === 1 ? "" : "s"}` : `In ${areaCount} areas`} icon={<Landmark size={17} />} help={KPI_HELP.projects} />
               <KpiCard label="Financial progress" value={formatPercent(summary.weightedProgress)} supporting="Share of the total budget spent" icon={<ArrowUpRight size={17} />} accent help={KPI_HELP.financialProgress} helpAnchor="financial-progress" />
               <KpiCard label="Money spent" value={formatMillions(summary.totalUtilized)} supporting={`of ${formatMillions(summary.totalApproved)} approved`} icon={<Banknote size={17} />} help={KPI_HELP.spent} helpAnchor="spent" />
@@ -221,6 +239,8 @@ export function SitesOverview({
         </>
       )}
       <footer className="page-footer"><span>FIELDNOTES <b>·</b> TOURISM INTELLIGENCE</span><span>Official project records · <Link href="/guide">How to read this dashboard</Link></span></footer>
+
+      <ProductTour key={tourRun} steps={OVERVIEW_TOUR} open={tourOpen} onClose={closeTour} label="Dashboard tour" />
 
       {toast && (
         <div className="page-toast" role="status">

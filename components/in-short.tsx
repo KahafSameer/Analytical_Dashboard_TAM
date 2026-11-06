@@ -5,7 +5,7 @@ import { Lightbulb } from "lucide-react";
 export function InShort({ sentences, guideLink = true }: { sentences: string[]; guideLink?: boolean }) {
   if (!sentences.length) return null;
   return (
-    <section className="in-short" aria-labelledby="in-short-title">
+    <section className="in-short" aria-labelledby="in-short-title" data-tour="in-short">
       <span className="in-short-icon" aria-hidden="true"><Lightbulb size={17} /></span>
       <div>
         <h2 id="in-short-title" className="in-short-title">In short</h2>
