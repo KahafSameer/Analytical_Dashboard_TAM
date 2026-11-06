@@ -6,6 +6,8 @@ import { formatMillions, formatPercent, getFundingPipeline, type PipelineStageId
 import { NEUTRAL_COLOR, SERIES_COLORS } from "@/lib/chart-theme";
 import type { Site } from "@/lib/types";
 import { Reveal, revealIndex, useReveal } from "@/components/motion";
+import { InfoTip } from "@/components/info-tip";
+import { CHART_HELP } from "@/lib/guide-content";
 
 const STAGE_COLORS: Record<PipelineStageId, string> = {
   approved: NEUTRAL_COLOR,
@@ -25,8 +27,8 @@ export function FundingPipeline({ sites }: { sites: Site[] }) {
       <section ref={ref} data-reveal={revealState} className="chart-card pipeline-card" aria-labelledby="pipeline-title">
         <div className="chart-card-heading">
           <div>
-            <h3 id="pipeline-title">Funding pipeline</h3>
-            <p>How approved cost moves to spending · bars are shares of approved cost.</p>
+            <h3 id="pipeline-title">Where the money is<InfoTip title="Where the money is" label="How to read “Where the money is”" guideAnchor="money-journey">{CHART_HELP.pipeline}</InfoTip></h3>
+            <p>From the approved budget to money actually spent · bar length = share of the approved budget.</p>
           </div>
         </div>
         <ol className="pipeline">
@@ -53,8 +55,8 @@ export function FundingPipeline({ sites }: { sites: Site[] }) {
             </Fragment>
           ))}
         </ol>
-        <div className="funding-stat"><span>Released, not yet spent</span><strong>{formatMillions(Math.max(0, released - utilized), 0)}</strong></div>
-        <p className="pipeline-note"><CircleAlert size={13} /> Financial progress, not construction progress: the sheet reports budgets, releases and spending only.</p>
+        <div className="funding-stat"><span>Handed over but not spent yet</span><strong>{formatMillions(Math.max(0, released - utilized), 0)}</strong></div>
+        <p className="pipeline-note"><CircleAlert size={13} /> This is about money, not construction: it shows spending, not how much work is finished.</p>
       </section>
     </Reveal>
   );

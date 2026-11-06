@@ -19,6 +19,10 @@ import { getPortfolioSummary, formatMillions, formatPercent } from "@/lib/analyt
 import { serializeCsv } from "@/lib/csv";
 import { formatLocation, isSpecified } from "@/lib/portfolio-filters";
 import { projectSharePayload } from "@/lib/share";
+import { GLOSSARY_BY_ID, KPI_HELP } from "@/lib/guide-content";
+import { projectInShort } from "@/lib/plain-summary";
+import { getScheduleStatus, referenceDate } from "@/lib/schedule";
+import { InShort } from "@/components/in-short";
 import { LazySiteFinancialAnalytics, LazySiteFiscalYearChart } from "@/components/lazy-site-charts";
 import type { DashboardData, Site } from "@/lib/types";
 import { KpiCard, ProgressBar, StatusBadge } from "@/components/ui";
@@ -55,6 +59,7 @@ function exportCsv(site: Site) {
 function ProjectDetail({ site, sites, asOf, invalidAmountCount }: { site: Site; sites: Site[]; asOf: string; invalidAmountCount: number }) {
   const [exported, setExported] = useState(false);
   const summary = useMemo(() => getPortfolioSummary([site]), [site]);
+  const inShort = useMemo(() => projectInShort(site, getScheduleStatus(site, referenceDate(asOf))), [site, asOf]);
   return (
     <div className="page-stack">
       {invalidAmountCount > 0 && (
@@ -90,29 +95,31 @@ function ProjectDetail({ site, sites, asOf, invalidAmountCount }: { site: Site; 
             <span><MapPin size={13} />{formatLocation(site)}</span>
             {site.code && <span><FileSpreadsheet size={13} /> Project {site.code}</span>}
             {site.gestationPeriod && <span><CalendarDays size={13} />{site.gestationPeriod}</span>}
-            <StatusBadge status={site.utilized > 0 ? "Spend recorded" : "No spend yet"} tone={site.utilized > 0 ? "green" : "gold"} />
+            <StatusBadge status={site.utilized > 0 ? "Spending started" : "No spending yet"} tone={site.utilized > 0 ? "green" : "gold"} />
           </div>
         </div>
         <div className="detail-hero-stat">
-          <div className="hero-stat-top"><span>Overall financial progress</span><strong>{formatPercent(site.overallProgress)}</strong></div>
+          <div className="hero-stat-top"><span>Budget spent so far</span><strong>{formatPercent(site.overallProgress)}</strong></div>
           <ProgressBar value={site.overallProgress} />
-          <div className="hero-stat-note"><span>Utilized against approved cost</span><strong>{formatMillions(site.utilized)}</strong></div>
+          <div className="hero-stat-note"><span>Spent of the approved budget</span><strong>{formatMillions(site.utilized)}</strong></div>
         </div>
       </section>
 
+      <InShort sentences={inShort} />
+
       <section aria-label="Project financial summary">
-        <div className="summary-section-label"><span>FINANCIAL SNAPSHOT</span><span className="summary-privacy"><Check size={13} /> From Google Sheets</span></div>
+        <div className="summary-section-label"><span>KEY NUMBERS</span><span className="summary-privacy"><Check size={13} /> From the project records</span></div>
         <div className="kpi-grid detail-kpis">
-          <KpiCard label="Financial progress" value={formatPercent(site.overallProgress)} supporting="Utilized / approved cost" icon={<ArrowUpRight size={17} />} accent />
-          <KpiCard label="Approved cost" value={formatMillions(site.approvedCost)} supporting="Total project approval" icon={<Landmark size={17} />} />
-          <KpiCard label="Funds utilized" value={formatMillions(site.utilized)} supporting={`of ${formatMillions(site.allocated)} allocated`} icon={<Banknote size={17} />} />
-          <KpiCard label="Funds released" value={formatMillions(site.released)} supporting={`${formatPercent(summary.utilizationRate)} of allocation utilized`} icon={<Wallet size={17} />} />
+          <KpiCard label="Financial progress" value={formatPercent(site.overallProgress)} supporting="Share of the budget spent" icon={<ArrowUpRight size={17} />} accent help={KPI_HELP.financialProgress} helpAnchor="financial-progress" />
+          <KpiCard label="Approved cost" value={formatMillions(site.approvedCost)} supporting="Total budget for the project" icon={<Landmark size={17} />} help={KPI_HELP.approvedCost} helpAnchor="approved-cost" />
+          <KpiCard label="Money spent" value={formatMillions(site.utilized)} supporting={`of ${formatMillions(site.allocated)} set aside`} icon={<Banknote size={17} />} help={GLOSSARY_BY_ID.spent.short} helpAnchor="spent" />
+          <KpiCard label="Money handed over" value={formatMillions(site.released)} supporting={`${formatPercent(summary.utilizationRate)} of the money set aside is spent`} icon={<Wallet size={17} />} help={KPI_HELP.released} helpAnchor="released" />
         </div>
       </section>
 
       <section>
         <div className="section-heading">
-          <div><p className="eyebrow">FINANCIAL PERFORMANCE</p><h2>Allocation to expenditure</h2><p className="section-description">Year-wise allocation, release and expenditure · PKR millions.</p></div>
+          <div><p className="eyebrow">MONEY BY YEAR</p><h2>Set aside, handed over and spent</h2><p className="section-description">For each budget year (July–June) · millions of rupees.</p></div>
         </div>
         <div className="detail-grid">
           <LazySiteFiscalYearChart site={site} />
@@ -120,11 +127,11 @@ function ProjectDetail({ site, sites, asOf, invalidAmountCount }: { site: Site; 
           <Reveal className="detail-table-reveal">
           <section className="chart-card detail-table-card">
             <div className="table-headline">
-              <div className="chart-card-heading"><div><h3>Fiscal-year breakdown</h3><p>Reported funding flows, PKR millions.</p></div></div>
+              <div className="chart-card-heading"><div><h3>Year-by-year numbers</h3><p>Exact amounts in millions of rupees.</p></div></div>
             </div>
             <div className="fiscal-table-wrap">
               <table className="fiscal-table">
-                <thead><tr><th>Fiscal year</th><th>Allocated</th><th>Released</th><th>Utilized</th></tr></thead>
+                <thead><tr><th>Budget year</th><th>Allocated</th><th>Released</th><th>Spent</th></tr></thead>
                 <tbody>
                   {site.fiscalYears.map((year) => (
                     <tr key={year.label}><td>{year.label}</td><td>{year.allocation.toFixed(2)}</td><td>{year.release.toFixed(2)}</td><td>{year.utilized.toFixed(2)}</td></tr>
@@ -148,7 +155,7 @@ function ProjectDetail({ site, sites, asOf, invalidAmountCount }: { site: Site; 
       <section className="detail-note-section">
         <div className="data-note">
           <div className="data-note-icon"><CalendarDays size={17} /></div>
-          <div><p className="data-note-title">Activity-level reporting not included</p><p className="data-note-copy">This source tracks project finances, not task completion, physical works or milestones.</p></div>
+          <div><p className="data-note-title">Money only, not construction work</p><p className="data-note-copy">These records track budgets and spending — not how much building work, tasks or milestones are finished.</p></div>
           <Check size={15} className="data-note-check" />
         </div>
         <div className="detail-export">
@@ -159,7 +166,7 @@ function ProjectDetail({ site, sites, asOf, invalidAmountCount }: { site: Site; 
           </button>
         </div>
       </section>
-      <footer className="page-footer"><span>FIELDNOTES <b>·</b> TOURISM INTELLIGENCE</span><span>Project {site.code ?? site.id} · PKR millions</span></footer>
+      <footer className="page-footer"><span>FIELDNOTES <b>·</b> TOURISM INTELLIGENCE</span><span>Project {site.code ?? site.id} · millions of rupees · <Link href="/guide">How to read this page</Link></span></footer>
     </div>
   );
 }

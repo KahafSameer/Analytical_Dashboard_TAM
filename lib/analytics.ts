@@ -145,7 +145,7 @@ export function getFundingPipeline(items: Site[]): PipelineStage[] {
     ["approved", "Approved cost", summary.totalApproved, ""],
     ["allocated", "Allocated", summary.totalAllocated, "allocated"],
     ["released", "Released", summary.totalReleased, "released"],
-    ["utilized", "Utilized", summary.totalUtilized, "spent"],
+    ["utilized", "Spent", summary.totalUtilized, "spent"],
   ];
   return stages.map(([id, label, value, verb], index) => {
     const previous = index > 0 ? stages[index - 1][2] : null;
@@ -247,23 +247,23 @@ export function getProjectBenchmarks(site: Site, sites: Site[]): { districtProje
     {
       id: "progress",
       label: "Financial progress",
-      description: "Utilized ÷ approved cost",
+      description: "spent ÷ approved budget",
       project: site.overallProgress,
       district: district?.progress ?? null,
       portfolio: portfolio.progress,
     },
     {
       id: "spendOfRelease",
-      label: "Released funds spent",
-      description: "Utilized ÷ released",
+      label: "Handed-over money spent",
+      description: "spent ÷ handed over",
       project: ratio(site.utilized, site.released),
       district: district?.spendOfRelease ?? null,
       portfolio: portfolio.spendOfRelease,
     },
     {
       id: "releaseOfAllocation",
-      label: "Allocation released",
-      description: "Released ÷ allocated",
+      label: "Set-aside money handed over",
+      description: "handed over ÷ set aside",
       project: ratio(site.released, site.allocated),
       district: district?.releaseOfAllocation ?? null,
       portfolio: portfolio.releaseOfAllocation,
@@ -272,8 +272,8 @@ export function getProjectBenchmarks(site: Site, sites: Site[]): { districtProje
   if (site.currentYearProgress !== undefined) {
     metrics.push({
       id: "currentYear",
-      label: "Current-year progress",
-      description: "Reported CFY financial progress (average)",
+      label: "This year's progress",
+      description: "share of this year's money spent (average)",
       project: site.currentYearProgress,
       district: district?.currentYear ?? null,
       portfolio: portfolio.currentYear,

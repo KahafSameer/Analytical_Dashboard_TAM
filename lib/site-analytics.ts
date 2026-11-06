@@ -39,8 +39,8 @@ export function getAllocationComposition(site: Site) {
   const spendingAboveAllocation = Math.max(site.utilized - site.allocated, 0);
 
   return [
-    { name: "Utilized", value: utilizedWithinAllocation, color: "#1f7a55" },
-    { name: "Allocated, not utilized", value: unspentAllocation, color: "#dce8df" },
-    { name: "Utilized above allocation", value: spendingAboveAllocation, color: "#d08a12" },
+    { name: "Spent", value: utilizedWithinAllocation, color: "#1f7a55" },
+    { name: "Set aside, not spent yet", value: unspentAllocation, color: "#dce8df" },
+    { name: "Spent above the amount set aside", value: spendingAboveAllocation, color: "#d08a12" },
   ].filter((segment) => segment.value > 0);
 }

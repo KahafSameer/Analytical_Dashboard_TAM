@@ -10,6 +10,17 @@
 - **Project register** (shown right after the summary): each row has the project name, district and code, a year-wise funding mini chart (allocated / released / utilized), approved, utilized and unspent amounts, and a financial-progress ring. **View progress** opens an in-row panel with the money flow (approved → allocated → released → utilized and unspent release), fiscal-year bars with values, and the schedule (time elapsed vs money spent and this year's progress), plus Share and Open full project. Sortable and paginated; below 1180 px rows become cards; an optional card view remains.
 - **Share & print:** Share the current view (device share sheet, WhatsApp, Facebook, X, LinkedIn, Telegram, email, copy link or summary) and Print / Save as PDF with a print layout.
 
+## Plain-language help (easy-view)
+
+The dashboard is written for readers with no finance background:
+
+- **How to read guide** (`/guide`, "How to read" in the sidebar): what the dashboard shows and does not show, the money journey (approved → set aside → handed over → spent) with an example, what every color means, reading amounts (millions ↔ lakh/crore table), budget years, a glossary of key words, how to use filters/register/charts/share/assistant, and limits to keep in mind.
+- **ⓘ buttons** next to every chart title, headline number and the project-list columns open a short "how to read this" explanation with a link to the guide. They work by tap on phones and close with Escape.
+- **"In short"** boxes on the overview and every project page turn the current figures into plain sentences (with crore equivalents and schedule notes).
+- **Welcome card** for first-time visitors (remembered after "Got it").
+- Labels use everyday words where possible ("Spent", "Not spent", "Money by budget year"); official terms stay in the glossary and CSV exports.
+- All help text lives in `lib/guide-content.ts`; summaries in `lib/plain-summary.ts`.
+
 ## Project detail (`/sites/[siteId]`)
 
 - Project details, source code, district, gestation range, category, status and overall financial progress.

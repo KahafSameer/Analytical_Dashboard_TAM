@@ -1257,6 +1257,107 @@ a.concentration-name:hover { color: var(--green); text-decoration: underline; te
   .watchlist-head, .gap-head { align-items: flex-start; }
 }
 
+/* ---------- Plain-language help: ⓘ tips, "In short", welcome card, guide page ---------- */
+.info-tip-button { width: 20px; height: 20px; display: inline-grid; flex: none; place-items: center; margin-left: 5px; padding: 0; border: 1px solid #d8e3db; border-radius: 50%; color: #4c7a5e; background: #f4f8f5; vertical-align: -3px; transition: background .2s ease, color .2s ease, border-color .2s ease; }
+/* Invisible 36px tap area around the 20px icon, so it is easy to hit on phones. */
+.info-tip-button { position: relative; }
+.info-tip-button::before { content: ""; position: absolute; inset: -8px; border-radius: 50%; }
+.info-tip-button:hover, .info-tip-button.is-open { border-color: var(--green); color: #fff; background: var(--green); }
+.info-tip-panel { position: fixed; z-index: 1000; top: 0; left: 0; width: min(300px, calc(100vw - 20px)); display: grid; gap: 6px; padding: 12px 14px; border: 1px solid #dbe5de; border-radius: 10px; color: #33443a; background: #fff; box-shadow: 0 14px 38px rgba(22,40,30,.18); font-size: 12.5px; line-height: 1.55; animation: reveal .16s ease; }
+.info-tip-panel strong { color: #1f3329; font-family: Manrope, sans-serif; font-size: 13px; }
+.info-tip-panel p { margin: 0; }
+.info-tip-link { color: var(--green); font-size: 12px; font-weight: 600; }
+.info-tip-link:hover { text-decoration: underline; }
+.kpi-label { display: inline-flex; align-items: center; }
+.chart-card-heading h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 0 2px; }
+
+.in-short { display: flex; gap: 13px; padding: 15px 17px; border: 1px solid #d7e6dc; border-radius: 12px; background: linear-gradient(120deg, #f2f8f4, #fbfcfb 70%); }
+.in-short-icon { width: 34px; height: 34px; display: grid; flex: none; place-items: center; border-radius: 9px; color: #8a6510; background: #fbf1d8; }
+.in-short-title { margin: 0 0 4px; color: #1f3329; font-family: Manrope, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: -.2px; }
+.in-short-text { max-width: 980px; margin: 0; color: #2f4036; font-size: 13.5px; line-height: 1.7; }
+.in-short-link { display: inline-block; margin-top: 7px; color: var(--green); font-size: 12px; font-weight: 600; }
+.in-short-link:hover { text-decoration: underline; }
+
+.welcome-card { position: relative; display: flex; gap: 14px; padding: 17px 44px 16px 17px; border: 1px solid #cfe0d4; border-radius: 12px; background: #fff; box-shadow: 0 6px 20px rgba(26,60,40,.06); }
+.welcome-icon { width: 38px; height: 38px; display: grid; flex: none; place-items: center; border-radius: 10px; color: #fff; background: var(--green); }
+.welcome-body h2 { margin: 2px 0 9px; color: #1f3329; font-family: Manrope, sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -.25px; }
+.welcome-steps { display: grid; gap: 7px; margin: 0; padding-left: 19px; color: #33443a; font-size: 13px; line-height: 1.55; list-style: decimal; }
+.welcome-steps li::marker { color: var(--green-2); font-weight: 700; }
+.welcome-swatch { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; white-space: nowrap; }
+.welcome-swatch i { width: 10px; height: 10px; border-radius: 3px; }
+.welcome-info { display: inline-grid; width: 17px; height: 17px; place-items: center; border: 1px solid #d8e3db; border-radius: 50%; color: #4c7a5e; background: #f4f8f5; font-size: 11px; font-weight: 700; font-style: italic; font-family: Georgia, serif; }
+.welcome-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 13px; }
+.welcome-actions .button { min-height: 38px; padding: 0 14px; font-size: 12.5px; font-weight: 600; }
+.welcome-close { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; display: grid; place-items: center; border: 0; border-radius: 8px; color: #6d7b71; background: transparent; }
+.welcome-close:hover { color: var(--green); background: #f2f7f3; }
+
+.guide-page { max-width: 920px; }
+.guide-toc { display: flex; flex-wrap: wrap; gap: 8px; }
+.guide-toc a { min-height: 34px; display: inline-flex; align-items: center; padding: 0 12px; border: 1px solid #dfe7e1; border-radius: 999px; color: #34503f; background: #fff; font-size: 12.5px; font-weight: 600; }
+.guide-toc a:hover { border-color: #b9d1bf; color: var(--green); background: #f4f8f5; }
+.guide-section { scroll-margin-top: 16px; padding: 20px 22px; border: 1px solid #e3e9e4; border-radius: 12px; background: #fff; }
+.guide-section h2 { margin: 0 0 9px; color: #1f3329; font-family: Manrope, sans-serif; font-size: 19px; font-weight: 700; letter-spacing: -.4px; }
+.guide-section > p { margin: 0 0 12px; color: #33443a; font-size: 14px; line-height: 1.7; }
+.guide-callout, .guide-example { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; padding: 12px 14px; border-radius: 10px; font-size: 13.5px; line-height: 1.6; }
+.guide-callout { color: #6b4a06; background: #fcf3e1; }
+.guide-example { color: #24402f; background: #eef6f1; }
+.guide-callout p, .guide-example p { margin: 0; }
+.guide-callout svg, .guide-example svg { flex: none; margin-top: 3px; }
+.journey { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 6px 0 0; padding: 0; list-style: none; }
+.journey li { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 13px; border: 1px solid #e3e9e4; border-radius: 10px; background: #fafcfa; }
+.journey-step { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; color: #fff; font-weight: 800; font-size: 13px; text-shadow: 0 1px 1px rgba(0,0,0,.2); }
+.journey li strong { display: block; color: #1f3329; font-size: 14.5px; }
+.journey-word { display: block; margin-top: 2px; color: var(--muted); font-size: 11.5px; }
+.journey li p { margin: 6px 0 0; color: #33443a; font-size: 13px; line-height: 1.55; }
+.journey-arrow { position: absolute; top: 50%; right: -12px; z-index: 1; color: #9fb2a5; background: var(--canvas); transform: translate(50%, -50%); }
+.color-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.color-group { padding: 13px 14px; border: 1px solid #e7ece8; border-radius: 10px; background: #fafcfa; }
+.color-group h3 { margin: 0 0 6px; color: #1f3329; font-family: Manrope, sans-serif; font-size: 14px; }
+.color-group-note { margin: 0 0 9px; color: #4b5b51; font-size: 12.5px; line-height: 1.55; }
+.color-list { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+.color-list li { display: flex; gap: 10px; align-items: flex-start; color: #33443a; font-size: 13px; line-height: 1.5; }
+.color-list small { display: block; margin-top: 1px; color: var(--muted); font-size: 11.5px; }
+.color-swatch { width: 18px; height: 18px; flex: none; margin-top: 1px; border-radius: 5px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+.color-ramp { display: flex; align-items: center; gap: 4px; color: var(--muted); font-size: 11.5px; }
+.color-ramp i { width: 26px; height: 12px; border-radius: 3px; }
+.guide-note { margin: 12px 0 0 !important; color: #4b5b51 !important; font-size: 13px !important; }
+.guide-dot { display: inline-block; width: 10px; height: 10px; margin-right: 3px; border-radius: 3px; vertical-align: -1px; }
+.inline-icon { display: inline; vertical-align: -2px; color: #4c7a5e; }
+.guide-list, .how-to { display: grid; gap: 9px; margin: 0; padding-left: 20px; color: #33443a; font-size: 14px; line-height: 1.65; }
+.guide-list { list-style: disc; }
+.how-to { list-style: decimal; }
+.how-to li::marker, .guide-list li::marker { color: var(--green-2); font-weight: 700; }
+.guide-table-wrap { max-width: 100%; margin-top: 14px; overflow-x: auto; }
+.guide-table { width: 100%; min-width: 360px; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+.guide-table caption { margin-bottom: 6px; color: #1f3329; font-weight: 700; text-align: left; }
+.guide-table th, .guide-table td { padding: 8px 10px; border-bottom: 1px solid #edf1ee; text-align: left; }
+.guide-table th { color: #4a5a50; background: #f8faf8; font-size: 12px; }
+.glossary { display: grid; gap: 0; margin: 0; }
+.glossary-item { scroll-margin-top: 16px; padding: 11px 0; border-bottom: 1px solid #eef2ef; }
+.glossary-item:last-child { border-bottom: 0; }
+.glossary-item:target { margin: 0 -10px; padding: 11px 10px; border-radius: 8px; background: #fbf5e3; }
+.glossary dt { color: #1f3329; font-size: 14px; font-weight: 700; }
+.glossary dd { margin: 3px 0 0; color: #33443a; font-size: 13.5px; line-height: 1.6; }
+.glossary-example { display: block; margin-top: 4px; color: #4b5b51; font-size: 12.5px; font-style: italic; }
+.guide-cta { display: flex; flex-wrap: wrap; gap: 10px; }
+.guide-cta .button { min-height: 40px; padding: 0 16px; font-size: 13px; font-weight: 600; }
+.page-footer a { color: var(--green); font-weight: 600; }
+
+@media (max-width: 760px) {
+  .in-short { padding: 13px; }
+  .in-short-text { font-size: 13px; }
+  .welcome-card { padding: 14px 40px 14px 14px; }
+  .welcome-icon { display: none; }
+  .welcome-actions .button { flex: 1; }
+  .guide-section { padding: 16px; }
+  .journey { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .journey-arrow { display: none; }
+  .color-groups { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) {
+  .journey { grid-template-columns: 1fr; }
+}
+
 /* ---------- Entrance motion for hand-built visuals (Recharts charts animate themselves) ----------
  * Containers carry data-reveal="pending" until they scroll into view (components/motion.tsx:
  * useReveal, and every ChartCard), then "shown". --reveal-index staggers items.
@@ -1296,7 +1397,7 @@ svg[data-reveal="pending"] .ring-value { stroke-dashoffset: var(--ring-length); 
   body { background: #fff; font-size: 12px; }
   .sidebar, .mobile-header, .mobile-scrim, .assistant-launcher, .assistant-panel, .page-actions, .filter-bar,
   .register-controls, .pager, .report-strip, .chart-select-wrap, .page-toast, .back-link, .chart-data-table summary,
-  .col-action, .cell-action, .progress-panel-actions { display: none !important; }
+  .col-action, .cell-action, .progress-panel-actions, .welcome-card, .info-tip-button, .guide-toc, .guide-cta { display: none !important; }
   .main-column { margin-left: 0 !important; }
   .main-content { width: 100% !important; padding: 0 !important; }
   .print-only { display: block; }

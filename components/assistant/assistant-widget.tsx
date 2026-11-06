@@ -56,9 +56,9 @@ const REQUEST_TIMEOUT_MS = 80_000;
 const DEFAULT_ERROR = "Sorry, I couldn’t answer that right now. Please try again.";
 
 const overviewSuggestions = [
+  "Explain this dashboard in simple words",
   "Which 5 projects have the most released but unspent funds?",
   "Kotli Sattian chair lift project kahan hai aur iski progress kya hai?",
-  "Which district has the lowest financial progress, and what is it known for?",
   "پنجاب میں سیاحت کے بڑے مقامات کون سے ہیں؟",
 ];
 

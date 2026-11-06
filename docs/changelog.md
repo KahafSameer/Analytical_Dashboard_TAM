@@ -2,6 +2,17 @@
 
 This is a user-oriented summary of the work represented in the current repository. It is not a release/tag history; inspect Git history for commit-level provenance.
 
+## easy-view branch — plain-language version
+
+A version of the dashboard for readers without a finance background (branch `easy-view`):
+
+- New "How to read this dashboard" guide (`/guide`, sidebar "How to read"): the money journey, what each color means, reading amounts (millions ↔ lakh/crore), budget years, key words, how to use the dashboard and its limits.
+- ⓘ buttons on every chart, headline number and the project-list columns with a short plain explanation and a link to the guide.
+- "In short" summaries on the overview and project pages, generated from the live figures (with crore equivalents and schedule notes).
+- Welcome card for first-time visitors.
+- Everyday wording: "Spent", "Not spent", "Money by budget year", "Where the money is", "Time passed vs money spent", etc.; data-source wording reads "official project records".
+- The AI assistant explains money terms in plain words and has an "Explain this dashboard in simple words" suggestion.
+
 ## Unreleased — sharing, schedule analytics and new visuals
 
 - Share any view, project or assistant answer: device share sheet, WhatsApp, Facebook, X, LinkedIn, Telegram, email, copy link or summary. Shared links show a generated preview card (Open Graph image) once the site is deployed publicly.

@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { formatMillions } from "@/lib/analytics";
 import { AXIS_TICK, GRID_STROKE, SERIES_COLORS, TOOLTIP_LABEL_STYLE, TOOLTIP_STYLE } from "@/lib/chart-theme";
+import { CHART_HELP } from "@/lib/guide-content";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState } from "@/components/ui";
 import { useChartEntrance } from "@/components/motion";
@@ -20,7 +21,7 @@ export function SiteFiscalYearChart({ site }: { site: Site }) {
   const hasFunding = site.fiscalYears.some((year) => year.allocation || year.release || year.utilized);
 
   return (
-    <ChartCard title="Funds by fiscal year" description="Compare planned funding with releases and spend.">
+    <ChartCard title="Money by budget year" description="Money set aside, handed over and spent in each year." help={CHART_HELP.projectYears}>
       {hasFunding ? (
         <>
           <div ref={ref} className="detail-chart" role="img" aria-label="Bar chart comparing annual allocation, release and utilization">
@@ -37,14 +38,14 @@ export function SiteFiscalYearChart({ site }: { site: Site }) {
                 />
                 <Bar dataKey="allocation" name="Allocated" fill={SERIES_COLORS.allocation} radius={[4, 4, 0, 0]} maxBarSize={24} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
                 <Bar dataKey="release" name="Released" fill={SERIES_COLORS.release} radius={[4, 4, 0, 0]} maxBarSize={24} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
-                <Bar dataKey="utilized" name="Utilized" fill={SERIES_COLORS.utilized} radius={[4, 4, 0, 0]} maxBarSize={24} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
+                <Bar dataKey="utilized" name="Spent" fill={SERIES_COLORS.utilized} radius={[4, 4, 0, 0]} maxBarSize={24} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
               </BarChart>
             </ResponsiveContainer>}
           </div>
           <div className="detail-legend">
             <span><i className="legend-gold" />Allocated</span>
             <span><i className="legend-release" />Released</span>
-            <span><i className="legend-utilized" />Utilized</span>
+            <span><i className="legend-utilized" />Spent</span>
           </div>
         </>
       ) : (

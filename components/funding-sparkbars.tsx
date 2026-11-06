@@ -12,7 +12,7 @@ import { revealIndex, useReveal } from "@/components/motion";
 const SERIES = [
   { key: "allocation", label: "Allocated" },
   { key: "release", label: "Released" },
-  { key: "utilized", label: "Utilized" },
+  { key: "utilized", label: "Spent" },
 ] as const;
 
 const WIDTH = 132;
@@ -34,17 +34,17 @@ export function FundingSparkbars({ years }: { years: FiscalYear[] }) {
   const group = WIDTH / years.length;
   const bar = Math.max(2, Math.min(9, (group - 10 - GAP * 2) / 3));
   const summary = years
-    .map((year) => `${year.label}: allocated ${amount(year.allocation)}, released ${amount(year.release)}, utilized ${amount(year.utilized)}`)
+    .map((year) => `${year.label}: set aside ${amount(year.allocation)}, handed over ${amount(year.release)}, spent ${amount(year.utilized)}`)
     .join("; ");
   return (
     <span className="spark">
-      <svg ref={ref} data-reveal={revealState} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} preserveAspectRatio="none" role="img" aria-label={`Funding by fiscal year, PKR millions — ${summary}`}>
+      <svg ref={ref} data-reveal={revealState} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} preserveAspectRatio="none" role="img" aria-label={`Money by budget year, millions of rupees — ${summary}`}>
         <line x1="0" x2={WIDTH} y1={HEIGHT - 0.5} y2={HEIGHT - 0.5} stroke="#dfe6e1" strokeWidth="1" vectorEffect="non-scaling-stroke" />
         {years.map((year, index) => {
           const start = index * group + (group - (bar * 3 + GAP * 2)) / 2;
           return (
             <g key={year.label}>
-              <title>{`${year.label} — Allocated ${amount(year.allocation)} · Released ${amount(year.release)} · Utilized ${amount(year.utilized)} (PKR m)`}</title>
+              <title>{`${year.label} — Set aside ${amount(year.allocation)} · Handed over ${amount(year.release)} · Spent ${amount(year.utilized)} (Rs millions)`}</title>
               {SERIES.map((series, position) => {
                 const value = year[series.key];
                 const height = Math.max(value > 0 ? 2 : 0, (value / max) * (HEIGHT - 3));

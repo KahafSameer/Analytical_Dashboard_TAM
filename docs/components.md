@@ -7,6 +7,10 @@
 - `components/assistant/assistant-widget.tsx`: floating assistant launcher and chat panel. Reads the NDJSON stream (live tool steps, streamed text), shows sheet/web/map sources, Copy/Stop/New chat, page-aware suggestions and a "Viewing: project" chip; accessible keyboard interaction.
 - `components/assistant/assistant-markdown.tsx`: safe Markdown → React renderer (headings, lists, bold/italic, code, links via `lib/assistant/links.ts`), `dir="auto"` for Urdu.
 - `components/ui.tsx`: shared `StatusBadge`, `ProgressBar`, `SectionHeading`, `EmptyState`, `KpiCard`, `ChartCard` and a milestone-data note. `MilestonePlaceholder` is a data-absence notice, not an implemented milestone timeline.
+- `components/info-tip.tsx`: ⓘ button with a portalled, viewport-clamped explanation popover (tap/click, Escape, outside tap); used by `ChartCard` (`help` prop), `KpiCard` (`help`/`helpAnchor`) and the register toolbar.
+- `components/in-short.tsx`, `components/welcome-card.tsx`: plain-language summary box and first-visit orientation card (dismissal stored in `localStorage`, client-only so it never flashes).
+- `app/guide/page.tsx`: the "How to read this dashboard" guide. Content comes from `lib/guide-content.ts` (glossary, color guide, chart and KPI help); `EnsureDashboardData` loads sidebar counts on this page.
+- `lib/plain-summary.ts`: `portfolioInShort`, `projectInShort` and `croreLabel` (covered by `tests/plain-language.test.mjs`).
 - `components/motion.tsx`: reusable viewport reveal and chart entrance hooks used to keep animation logic small and localized. `useReveal` + `revealIndex` drive entrance motion for hand-built visuals (bars, heatmap cells, mini charts, rings); `ChartCard` sets `data-reveal` automatically, and the matching CSS lives in the "Entrance motion" block of `app/globals.css`. Keep motion gestures unconditional (MotionConfig handles reduced motion) so server and client markup match.
 
 ## Portfolio

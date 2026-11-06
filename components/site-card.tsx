@@ -44,9 +44,9 @@ export function SiteCard({
         <ProgressBar value={site.overallProgress} compact />
         <div className="card-figures">
           <span>Approved <strong>{formatMillions(site.approvedCost)}</strong></span>
-          <span>Utilized <strong>{formatMillions(site.utilized)}</strong></span>
+          <span>Spent <strong>{formatMillions(site.utilized)}</strong></span>
         </div>
-        <div className="card-spark"><span>Funding by year</span><FundingSparkbars years={site.fiscalYears} /></div>
+        <div className="card-spark"><span>Money by year</span><FundingSparkbars years={site.fiscalYears} /></div>
         <div className="site-card-footer">
           <StatusBadge status={hasSpend ? "Spend recorded" : "No spend yet"} tone={hasSpend ? "green" : "gold"} />
           <Link href={`/sites/${site.id}`} className="text-link">View details <ArrowUpRight size={14} /></Link>

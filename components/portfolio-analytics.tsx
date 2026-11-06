@@ -27,6 +27,7 @@ import {
   type YearMeasure,
 } from "@/lib/analytics";
 import { ATTENTION_COLOR, AXIS_TICK, GRID_STROKE, PRIMARY_COLOR, TOOLTIP_LABEL_STYLE, TOOLTIP_STYLE, heatCellStyle } from "@/lib/chart-theme";
+import { CHART_HELP } from "@/lib/guide-content";
 import { getUnspentRelease } from "@/lib/portfolio-filters";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState } from "@/components/ui";
@@ -43,7 +44,7 @@ function heatValue(value: number): string {
 }
 
 const yearMeasures: { id: YearMeasure; label: string }[] = [
-  { id: "utilized", label: "Utilized" },
+  { id: "utilized", label: "Spent" },
   { id: "release", label: "Released" },
   { id: "allocation", label: "Allocated" },
 ];
@@ -52,7 +53,7 @@ const fundingMeasures: { id: FundingMeasure; label: string }[] = [
   { id: "approved", label: "Approved cost" },
   { id: "allocated", label: "Allocated" },
   { id: "released", label: "Released" },
-  { id: "utilized", label: "Utilized" },
+  { id: "utilized", label: "Spent" },
 ];
 
 function CompactTooltip({
@@ -84,8 +85,9 @@ function DistrictFundingChart({ sites, onSelectDistrict }: { sites: Site[]; onSe
   const canFilter = Boolean(onSelectDistrict) && rows.length > 1;
   return (
     <ChartCard
-      title="Funding by district"
-      description={`Top eight districts for the selected funding measure.${canFilter ? " Select a bar to filter the page." : ""}`}
+      title="Money by district"
+      description={`The eight districts with the most money for the chosen measure.${canFilter ? " Select a bar to show only that district." : ""}`}
+      help={CHART_HELP.districtFunding}
       action={
         <label className="chart-select-wrap">
           <span className="sr-only">Funding measure</span>
@@ -136,7 +138,7 @@ function DistrictFundingChart({ sites, onSelectDistrict }: { sites: Site[]; onSe
           rows={rows.map((row) => [row.district, formatMillions(row[measure]), row.projects])}
         />
       )}
-      <p className="chart-footnote">All values in PKR millions · Largest amounts shown</p>
+      <p className="chart-footnote">Millions of rupees (Rs 10m = 1 crore) · the eight largest districts</p>
     </ChartCard>
   );
 }
@@ -186,7 +188,7 @@ function ProgressDistributionChart({ sites }: { sites: Site[] }) {
   const { ref, isInView, animate } = useChartEntrance();
   const distribution = useMemo(() => summarizeProgressBands(sites), [sites]);
   return (
-    <ChartCard title="Financial progress distribution" description="How many projects fall into each expenditure band (% of approved cost spent)." className="analysis-chart-card progress-distribution-card">
+    <ChartCard title="How much projects have spent" description="Number of projects by share of their approved budget spent (%)." className="analysis-chart-card progress-distribution-card" help={CHART_HELP.progressBands}>
       {sites.length ? (
         <>
           <div ref={ref} className="distribution-chart" role="img" aria-label="Number of projects by financial progress range">
@@ -208,7 +210,7 @@ function ProgressDistributionChart({ sites }: { sites: Site[] }) {
               </BarChart>
             </ResponsiveContainer>}
           </div>
-          <div className="distribution-legend"><i /><span>Projects with no expenditure recorded</span></div>
+          <div className="distribution-legend"><i /><span>Projects that have not spent anything yet</span></div>
           <ChartDataTable
             caption="Projects by financial progress range"
             headers={["Financial progress", "Projects"]}
@@ -254,28 +256,28 @@ function PortfolioSignals({ sites }: { sites: Site[] }) {
   const signals = [
     {
       icon: <Wallet size={16} />,
-      label: "Allocated, not yet spent",
+      label: "Set aside but not spent yet",
       value: formatMillions(unspentAllocation, 0),
       detail: `${formatPercent(summary.totalAllocated ? unspentAllocation / summary.totalAllocated : 0)} of allocated funds`,
       tone: "gold",
     },
     {
       icon: <MapPinned size={16} />,
-      label: "Highest recorded expenditure",
+      label: "District that spent the most",
       value: topDistrict?.district ?? "—",
       detail: topDistrict ? `${formatMillions(topDistrict.utilized, 0)} · ${topDistrict.projects} projects` : "No expenditure reported",
       tone: "green",
     },
     {
       icon: <Layers3 size={16} />,
-      label: "Approved, not yet allocated",
+      label: "Approved but not set aside yet",
       value: formatMillions(unallocatedApproval, 0),
       detail: `${formatPercent(summary.totalApproved ? unallocatedApproval / summary.totalApproved : 0)} of approved cost`,
       tone: "neutral",
     },
     {
       icon: summary.awaitingSpend ? <ArrowDownRight size={16} /> : <ArrowUpRight size={16} />,
-      label: "Projects with no expenditure",
+      label: "Projects that have not spent yet",
       value: `${summary.awaitingSpend}`,
       detail: `of ${summary.siteCount} projects`,
       tone: summary.awaitingSpend ? "gold" : "green",
@@ -309,9 +311,10 @@ function UnspentReleaseWatchlist({ sites, wide }: { sites: Site[]; wide: boolean
   const total = useMemo(() => sites.reduce((sum, site) => sum + getUnspentRelease(site), 0), [sites]);
   return (
     <ChartCard
-      title="Released, not yet spent"
-      description={`Projects holding the most released funds without recorded expenditure · ${formatMillions(total, 0)} in total.`}
+      title="Money handed over but not spent"
+      description={`Projects holding the most money that was released to them but not spent yet · ${formatMillions(total, 0)} in total.`}
       className={`analysis-chart-card watchlist-card${wide ? " watchlist-card-wide" : ""}`}
+      help={CHART_HELP.watchlist}
     >
       {rows.length ? (
         <ol className="watchlist">
@@ -322,12 +325,12 @@ function UnspentReleaseWatchlist({ sites, wide }: { sites: Site[]; wide: boolean
                 <strong>{formatMillions(unspent)}</strong>
               </div>
               <div className="watchlist-bar" aria-hidden="true"><i style={{ width: `${largest ? (unspent / largest) * 100 : 0}%` }} /></div>
-              <span className="watchlist-meta">{site.district} · {formatPercent(site.released ? unspent / site.released : 0, 0)} of {formatMillions(site.released)} released is unspent</span>
+              <span className="watchlist-meta">{site.district} · {formatPercent(site.released ? unspent / site.released : 0, 0)} of the {formatMillions(site.released)} handed over is not spent</span>
             </li>
           ))}
         </ol>
       ) : <EmptyState title="No unspent releases" description="Every released rupee in this selection has recorded expenditure." />}
-      <p className="chart-footnote">Unspent release = released − utilized, per project · PKR millions</p>
+      <p className="chart-footnote">Not spent = handed over − spent, per project · millions of rupees</p>
     </ChartCard>
   );
 }
@@ -340,7 +343,8 @@ function CostConcentrationCard({ sites }: { sites: Site[] }) {
   ];
   return (
     <ChartCard
-      title="Where the approved cost sits"
+      title="Biggest projects by budget"
+      help={CHART_HELP.concentration}
       description={concentration.total > 0
         ? `The ${concentration.top.length} largest projects hold ${formatPercent(concentration.topShare, 0)} of ${formatMillions(concentration.total, 0)} approved.`
         : "No approved cost recorded."}
@@ -373,7 +377,7 @@ function CostConcentrationCard({ sites }: { sites: Site[] }) {
           </ol>
         </>
       ) : <EmptyState title="No approved cost" description="Approved costs are needed to show concentration." />}
-      <p className="chart-footnote">Share of total approved cost · PKR millions</p>
+      <p className="chart-footnote">Share of the total approved budget · millions of rupees</p>
     </ChartCard>
   );
 }
@@ -385,8 +389,9 @@ function DistrictYearHeatmap({ sites, onSelectDistrict }: { sites: Site[]; onSel
   const canFilter = Boolean(onSelectDistrict) && matrix.rows.length > 1;
   return (
     <ChartCard
-      title="District funding over time"
-      description={`${measureLabel} by district and fiscal year; darker cells mean more money.${canFilter ? " Select a district to filter the page." : ""}`}
+      title="Money by district and year"
+      help={CHART_HELP.heatmap}
+      description={`${measureLabel} by district and budget year; darker cells mean more money.${canFilter ? " Select a district to show only that district." : ""}`}
       action={
         <label className="chart-select-wrap">
           <span className="sr-only">Heatmap measure</span>
@@ -436,7 +441,7 @@ function DistrictYearHeatmap({ sites, onSelectDistrict }: { sites: Site[]; onSel
         <span>Less</span>
         {[0.02, 0.1, 0.25, 0.45, 0.7, 1].map((share) => <i key={share} style={{ background: heatCellStyle(share, 1).background }} />)}
         <span>More</span>
-        <small>PKR millions · square-root scale so smaller districts stay visible</small>
+        <small>Millions of rupees · small amounts still show as light green</small>
       </div>
     </ChartCard>
   );
@@ -450,7 +455,7 @@ export function PortfolioAnalytics({ sites, onSelectDistrict }: { sites: Site[];
         <div>
           <p className="eyebrow">PORTFOLIO ANALYTICS</p>
           <h2 id="analytics-title">A closer look at delivery</h2>
-          <p className="section-description">Explore funding concentration, district patterns over time and recorded financial progress.</p>
+          <p className="section-description">Which districts and projects hold the money, how it changed by year, and how much has been spent. Tap ⓘ on any chart for a simple explanation.</p>
         </div>
         <span className="analytics-source-note"><CircleAlert size={13} /> Financial data only</span>
       </div>
@@ -463,7 +468,7 @@ export function PortfolioAnalytics({ sites, onSelectDistrict }: { sites: Site[];
         <ProgressDistributionChart sites={sites} />
         {hasCategories && <CostConcentrationCard sites={sites} />}
       </div>
-      {!hasCategories && <p className="chart-footnote">The source sheet has no project-type labels, so a type comparison is not shown.</p>}
+      {!hasCategories && <p className="chart-footnote">The project records have no project-type labels, so a comparison by type is not shown.</p>}
     </section>
   );
 }

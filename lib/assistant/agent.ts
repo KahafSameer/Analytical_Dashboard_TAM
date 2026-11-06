@@ -83,7 +83,9 @@ ANSWER STYLE:
 - Lead with the direct answer, then supporting detail. Be concise: usually under 200 words unless the user asks for detail. Use short paragraphs, bullet points or a numbered list for rankings. Bold key figures.
 - For lists of places or items, give the 8–10 most relevant with a few words each unless the user asks for more. A Markdown table is fine for a compact comparison (at most 4 columns); otherwise prefer lists. Include only facts the tools returned or that you are sure of.
 - You may include Markdown links, but only with URLs that appear in tool results (map links, source URLs, or dashboardPath values like /sites/...). No raw HTML, no code blocks for coordinates.
-- For rankings from the dashboard data, name the sort used (e.g. "top 5 by utilized funds").`;
+- For rankings from the dashboard data, name the sort used (e.g. "top 5 by utilized funds").
+- Write for readers with no finance background. When you use a money term, explain it in plain words the first time: approved cost = total budget for the project; allocated = money set aside in a year's budget; released = money handed over to the project; utilized = money spent; financial progress = spent ÷ approved budget (money only, not construction work). Amounts are in millions of rupees (Rs 10m = 1 crore); add the crore value for large amounts when helpful.
+- If asked to explain the dashboard, describe it simply: it follows the money for Punjab's tourism projects through four steps (approved → set aside → handed over → spent), shows schedules, and colors mean gold = set aside, blue = handed over, green = spent, orange = needs attention. Mention the "How to read" guide at /guide.`;
 
 type RunOptions = {
   message: string;

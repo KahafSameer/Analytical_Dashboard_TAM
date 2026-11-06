@@ -72,6 +72,19 @@ export function DashboardDataProvider({ children }: { children: ReactNode }) {
   return <DashboardDataContext.Provider value={value}>{children}</DashboardDataContext.Provider>;
 }
 
+/**
+ * For pages that do not load dashboard data themselves (e.g. /guide): fetch it once so the
+ * sidebar counts and the "Updated …" label are filled in instead of showing zero.
+ */
+export function EnsureDashboardData() {
+  const { data, refresh } = useDashboardData();
+  const hasData = Boolean(data);
+  useEffect(() => {
+    if (!hasData) void refresh();
+  }, [hasData, refresh]);
+  return null;
+}
+
 export function useDashboardData() {
   const context = useContext(DashboardDataContext);
   if (!context) throw new Error("useDashboardData must be used inside DashboardDataProvider");

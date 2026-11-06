@@ -17,16 +17,18 @@ import { StatusBadge } from "@/components/ui";
 import { FundingSparkbars, ProgressRing, SparkLegend } from "@/components/funding-sparkbars";
 import { ProjectProgressPanel } from "@/components/project-progress-panel";
 import { useMediaQuery } from "@/components/use-media-query";
+import { InfoTip } from "@/components/info-tip";
+import { KPI_HELP } from "@/lib/guide-content";
 
 type View = "table" | "cards";
 
 /** Columns with a sort key get a sortable header; district and released remain in the Sort menu. */
 const columns: { key: ProjectSortKey | null; label: string; numeric?: boolean; className: string }[] = [
   { key: "name", label: "Project", className: "col-project" },
-  { key: null, label: "Funding by year", className: "col-trend" },
+  { key: null, label: "Money by year", className: "col-trend" },
   { key: "approvedCost", label: "Approved", numeric: true, className: "col-approved" },
-  { key: "utilized", label: "Utilized", numeric: true, className: "col-utilized" },
-  { key: "unspentRelease", label: "Unspent", numeric: true, className: "col-unspent-release" },
+  { key: "utilized", label: "Spent", numeric: true, className: "col-utilized" },
+  { key: "unspentRelease", label: "Not spent", numeric: true, className: "col-unspent-release" },
   { key: "overallProgress", label: "Progress", numeric: true, className: "col-progress" },
   { key: null, label: "Details", className: "col-action" },
 ];
@@ -34,11 +36,11 @@ const columns: { key: ProjectSortKey | null; label: string; numeric?: boolean; c
 const sortLabels: Record<ProjectSortKey, string> = {
   name: "Name",
   district: "District",
-  approvedCost: "Approved cost",
-  released: "Released",
-  utilized: "Utilized",
-  unspentRelease: "Unspent release",
-  overallProgress: "Financial progress",
+  approvedCost: "Approved budget",
+  released: "Handed over",
+  utilized: "Money spent",
+  unspentRelease: "Handed over, not spent",
+  overallProgress: "Share of budget spent",
 };
 
 const PAGE_SIZE: Record<View, number> = { table: 15, cards: 12 };
@@ -89,7 +91,10 @@ export function ProjectRegister({ sites, asOf }: { sites: Site[]; asOf: string }
     <div className="register">
       <div className="register-toolbar">
         <div className="register-summary">
-          <span className="register-count"><strong>{sites.length}</strong> project{sites.length === 1 ? "" : "s"} · amounts in PKR millions</span>
+          <span className="register-count">
+            <strong>{sites.length}</strong> project{sites.length === 1 ? "" : "s"} · amounts in millions of rupees
+            <InfoTip title="What the columns mean" label="What do the columns mean?" guideAnchor="glossary">{KPI_HELP.registerColumns}</InfoTip>
+          </span>
           <SparkLegend />
         </div>
         <div className="register-controls">
@@ -162,10 +167,10 @@ export function ProjectRegister({ sites, asOf }: { sites: Site[]; asOf: string }
                           {site.utilized === 0 && <StatusBadge status="No spend yet" tone="gold" />}
                         </span>
                       </th>
-                      <td className="cell-trend" data-label="Funding by year"><FundingSparkbars years={site.fiscalYears} /></td>
-                      <td className="num cell-approved" data-label="Approved">{amount(site.approvedCost)}</td>
-                      <td className="num cell-utilized" data-label="Utilized">{amount(site.utilized)}</td>
-                      <td className={`num cell-unspent${unspent >= MIN_DISPLAYED_AMOUNT ? " is-attention" : ""}`} data-label="Unspent release">
+                      <td className="cell-trend" data-label="Money by year"><FundingSparkbars years={site.fiscalYears} /></td>
+                      <td className="num cell-approved" data-label="Approved budget">{amount(site.approvedCost)}</td>
+                      <td className="num cell-utilized" data-label="Spent">{amount(site.utilized)}</td>
+                      <td className={`num cell-unspent${unspent >= MIN_DISPLAYED_AMOUNT ? " is-attention" : ""}`} data-label="Not spent">
                         {unspent >= MIN_DISPLAYED_AMOUNT ? amount(unspent) : "—"}
                       </td>
                       <td className="num cell-ring">

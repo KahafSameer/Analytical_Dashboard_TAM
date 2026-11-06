@@ -3,6 +3,7 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { formatMillions } from "@/lib/analytics";
 import { AXIS_TICK, GRID_STROKE, SERIES_COLORS, TOOLTIP_LABEL_STYLE, TOOLTIP_STYLE, formatAxisMillions } from "@/lib/chart-theme";
+import { CHART_HELP } from "@/lib/guide-content";
 import type { FiscalYear } from "@/lib/types";
 import { ChartCard } from "@/components/ui";
 import { useChartEntrance } from "@/components/motion";
@@ -10,13 +11,13 @@ import { useChartEntrance } from "@/components/motion";
 const SERIES = [
   { key: "allocation", label: "Allocated", color: SERIES_COLORS.allocation },
   { key: "release", label: "Released", color: SERIES_COLORS.release },
-  { key: "utilized", label: "Utilized", color: SERIES_COLORS.utilized },
+  { key: "utilized", label: "Spent", color: SERIES_COLORS.utilized },
 ] as const;
 
 export function PortfolioFundingChart({ data }: { data: FiscalYear[] }) {
   const { ref, isInView, animate } = useChartEntrance();
   return (
-    <ChartCard title="Funding by fiscal year" description="Allocated, released and utilized for the projects shown · PKR millions">
+    <ChartCard title="Money by budget year" description="Set aside, handed over and spent each year (July–June) · millions of rupees" help={CHART_HELP.fiscalYears}>
       <div className="chart-legend" aria-hidden="true">
         {SERIES.map((series) => <span key={series.key}><i className="legend-dot" style={{ backgroundColor: series.color }} /> {series.label}</span>)}
       </div>
@@ -43,7 +44,7 @@ export function PortfolioFundingChart({ data }: { data: FiscalYear[] }) {
         <div className="chart-data-table-scroll">
           <table>
             <caption className="sr-only">Portfolio funding by fiscal year, PKR millions</caption>
-            <thead><tr><th scope="col">Fiscal year</th><th scope="col">Allocated</th><th scope="col">Released</th><th scope="col">Utilized</th></tr></thead>
+            <thead><tr><th scope="col">Budget year</th><th scope="col">Allocated</th><th scope="col">Released</th><th scope="col">Spent</th></tr></thead>
             <tbody>{data.map((year) => (
               <tr key={year.label}><th scope="row">{year.label}</th><td>{formatMillions(year.allocation)}</td><td>{formatMillions(year.release)}</td><td>{formatMillions(year.utilized)}</td></tr>
             ))}</tbody>

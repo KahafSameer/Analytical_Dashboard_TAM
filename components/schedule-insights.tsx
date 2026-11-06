@@ -35,6 +35,7 @@ import {
   summarizeSchedule,
   type ScheduleState,
 } from "@/lib/schedule";
+import { CHART_HELP } from "@/lib/guide-content";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState } from "@/components/ui";
 import { Reveal, revealIndex, useChartEntrance } from "@/components/motion";
@@ -101,8 +102,9 @@ function SpendGapList({ summary }: { summary: ReturnType<typeof summarizeSchedul
   return (
     <ChartCard
       title="Spending behind the calendar"
-      description="Started projects where the share of time elapsed most exceeds the share of approved cost spent."
+      description="Started projects where much more time has passed than money has been spent."
       className="analysis-chart-card gap-card"
+      help={CHART_HELP.spendingGap}
     >
       <div className="gap-legend" aria-hidden="true">
         <span><i style={{ backgroundColor: TIME_COLOR }} />Time elapsed</span>
@@ -157,7 +159,7 @@ function CompletionTimeline({ summary, today }: { summary: ReturnType<typeof sum
   const { ref, isInView, animate } = useChartEntrance();
   const buckets = useMemo(() => getCompletionTimeline(summary, today), [summary, today]);
   return (
-    <ChartCard title="Planned completions" description="Projects by planned end date, split by whether that date has passed." className="analysis-chart-card">
+    <ChartCard title="When projects are due to finish" description="Projects by planned finish date, split by whether that date has already passed." className="analysis-chart-card" help={CHART_HELP.completions}>
       {buckets.length ? (
         <>
           <div className="gap-legend" aria-hidden="true">
@@ -247,9 +249,10 @@ function SizeProgressScatter({ sites, today }: { sites: Site[]; today: Date }) {
 
   return (
     <ChartCard
-      title="Project size vs financial progress"
-      description="Each dot is a project: approved cost (log scale) against share spent, colored by schedule status. Select a dot to open the project."
+      title="Project size vs money spent"
+      description="Each dot is a project: further right = bigger budget, higher = more of it spent. Select a dot to open the project."
       className="analysis-chart-card scatter-card"
+      help={CHART_HELP.sizeProgress}
     >
       {points.length ? (
         <>
@@ -329,7 +332,7 @@ export function ScheduleInsights({ sites, asOf }: { sites: Site[]; asOf: string 
         <div>
           <p className="eyebrow">SCHEDULE & DELIVERY</p>
           <h2 id="schedule-title">Time elapsed vs money spent</h2>
-          <p className="section-description">Gestation periods from the sheet, compared with financial progress as of {formatScheduleDate(today)}.</p>
+          <p className="section-description">Each project&apos;s planned start and finish dates, compared with how much of its budget has been spent (as of {formatScheduleDate(today)}).</p>
         </div>
         <span className="analytics-source-note"><CalendarClock size={13} /> {summary.withSchedule} of {sites.length} projects have dates</span>
       </div>
@@ -343,7 +346,7 @@ export function ScheduleInsights({ sites, asOf }: { sites: Site[]; asOf: string 
           </div>
         </>
       ) : (
-        <EmptyState title="No gestation periods in the sheet" description="Add start and end dates (e.g. “01 Jul 2024 - 30 Jun 2027”) to compare time elapsed with spending." />
+        <EmptyState title="No planned dates yet" description="The project records have no start and finish dates (e.g. “01 Jul 2024 - 30 Jun 2027”), so time passed can't be compared with spending." />
       )}
     </section>
   );

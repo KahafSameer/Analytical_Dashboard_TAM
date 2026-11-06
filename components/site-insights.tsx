@@ -10,6 +10,7 @@ import { describeScheduleState, formatScheduleDate, getScheduleStatus, reference
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState, ProgressBar, StatusBadge } from "@/components/ui";
 import { revealIndex } from "@/components/motion";
+import { CHART_HELP } from "@/lib/guide-content";
 
 const TIME_COLOR = "#8ea0b4";
 const STATE_BADGE: Record<ScheduleState, { label: string; tone: "green" | "gold" | "neutral" }> = {
@@ -32,10 +33,11 @@ function ScheduleCard({ site, today }: { site: Site; today: Date }) {
   const gap = status.spendGap;
   return (
     <ChartCard
-      title="Schedule vs spend"
-      description="Planned period from the sheet, compared with the share of approved cost spent."
+      title="Time passed vs money spent"
+      description="Planned start and finish dates, compared with the share of the budget spent."
       action={<StatusBadge status={badge.label} tone={badge.tone} />}
       className="detail-analytics-card schedule-card"
+      help={CHART_HELP.schedule}
     >
       <div className="schedule-timeline" aria-hidden="true">
         <div className="schedule-timeline-track">
@@ -81,8 +83,9 @@ function BenchmarkCard({ site, sites }: { site: Site; sites: Site[] }) {
   return (
     <ChartCard
       title="How it compares"
-      description={districtProjects > 1 ? "This project against its district and the whole portfolio (amount-weighted)." : "This project against the whole portfolio (it is the only project in its district)."}
+      description={districtProjects > 1 ? "This project against the average of its district and of all projects." : "This project against the average of all projects (it is the only project in its district)."}
       className="detail-analytics-card benchmark-card"
+      help={CHART_HELP.compare}
     >
       <div className="gap-legend" aria-hidden="true">
         {series.filter((entry) => entry.key !== "district" || districtProjects > 1).map((entry) => <span key={entry.key}><i style={{ backgroundColor: entry.color }} />{entry.label}</span>)}

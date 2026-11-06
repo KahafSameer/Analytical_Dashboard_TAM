@@ -12,6 +12,7 @@ import {
   useTransform,
 } from "motion/react";
 import { useEffect, useRef } from "react";
+import { InfoTip } from "@/components/info-tip";
 
 export function StatusBadge({
   status,
@@ -98,6 +99,8 @@ export function KpiCard({
   icon,
   trend,
   accent = false,
+  help,
+  helpAnchor,
 }: {
   label: string;
   value: string;
@@ -105,6 +108,9 @@ export function KpiCard({
   icon: ReactNode;
   trend?: "up" | "down";
   accent?: boolean;
+  /** Plain-language explanation behind an ⓘ button. */
+  help?: string;
+  helpAnchor?: string;
 }) {
   const valueRef = useRef<HTMLSpanElement>(null);
   const hasCounted = useRef(false);
@@ -143,7 +149,7 @@ export function KpiCard({
       transition={{ duration: reduceMotion ? 0.15 : 0.38, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="kpi-top">
-        <span className="kpi-label">{label}</span>
+        <span className="kpi-label">{label}{help && <InfoTip title={label} guideAnchor={helpAnchor}>{help}</InfoTip>}</span>
         <span className="kpi-icon">{icon}</span>
       </div>
       <div className="kpi-value">
@@ -188,12 +194,15 @@ export function ChartCard({
   children,
   action,
   className = "",
+  help,
 }: {
   title: string;
   description?: string;
   children: ReactNode;
   action?: ReactNode;
   className?: string;
+  /** Plain-language "how to read this chart" behind an ⓘ button next to the title. */
+  help?: string;
 }) {
   const reduceMotion = useReducedMotion();
   // Hand-built bars, cells and rings inside the card animate in when it scrolls into view.
@@ -211,7 +220,7 @@ export function ChartCard({
     >
       <div className="chart-card-heading">
         <div>
-          <h3>{title}</h3>
+          <h3>{title}{help && <InfoTip title={title} label={`How to read “${title}”`} guideAnchor="colors">{help}</InfoTip>}</h3>
           {description && <p>{description}</p>}
         </div>
         {action}

@@ -9,6 +9,7 @@ import { AssistantWidget } from "@/components/assistant/assistant-widget";
 import {
   Activity,
   BarChart3,
+  BookOpen,
   CalendarClock,
   Command,
   FileText,
@@ -25,6 +26,7 @@ const navigation = [
   { label: "Analytics", href: "/#portfolio-analytics", icon: BarChart3 },
   { label: "Schedule", href: "/#schedule", icon: CalendarClock },
   { label: "Export", href: "/#report-export", icon: FileText },
+  { label: "How to read", href: "/guide", icon: BookOpen },
 ];
 
 export function DashboardShell({ children, siteCount }: { children: React.ReactNode; siteCount: number }) {
@@ -59,7 +61,7 @@ function DashboardShellContent({ children, siteCount }: { children: React.ReactN
         <div className="sidebar-label">WORKSPACE</div>
         <nav className="sidebar-nav" aria-label="Primary navigation">
           {navigation.map(({ label, href, icon: Icon }) => {
-            const active = href === "/" ? pathname === "/" : href.includes("sites") && pathname.startsWith("/sites");
+            const active = href === "/" ? pathname === "/" : href === "/guide" ? pathname === "/guide" : href.includes("sites") && pathname.startsWith("/sites");
             return (
               <Link
                 href={href}

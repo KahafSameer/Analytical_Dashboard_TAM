@@ -17,6 +17,7 @@ import {
 } from "recharts";
 import { formatMillions, formatPercent } from "@/lib/analytics";
 import { AXIS_TICK, GRID_STROKE, SERIES_COLORS, TOOLTIP_LABEL_STYLE, TOOLTIP_STYLE, formatAxisMillions } from "@/lib/chart-theme";
+import { CHART_HELP } from "@/lib/guide-content";
 import { getAllocationComposition, getCumulativeFunding, getFiscalYearRates } from "@/lib/site-analytics";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState } from "@/components/ui";
@@ -29,9 +30,10 @@ function FundingCompositionChart({ site }: { site: Site }) {
 
   return (
     <ChartCard
-      title="Allocation utilization"
-      description="Reported expenditure compared with allocated funds."
+      title="How much of the set-aside money is spent"
+      description="Money spent compared with money set aside for this project."
       className="detail-analytics-card"
+      help={CHART_HELP.allocationDonut}
     >
       {displayTotal > 0 ? (
         <>
@@ -79,9 +81,10 @@ function CumulativeFundingChart({ site }: { site: Site }) {
 
   return (
     <ChartCard
-      title="Cumulative funding movement"
-      description="Running total of allocation, release and expenditure by fiscal year."
+      title="Running totals over the years"
+      description="Total money set aside, handed over and spent up to each year."
       className="detail-analytics-card"
+      help={CHART_HELP.cumulative}
     >
       {hasData ? (
         <>
@@ -95,14 +98,14 @@ function CumulativeFundingChart({ site }: { site: Site }) {
                 <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value, name) => [formatMillions(Number(value)), name]} labelStyle={TOOLTIP_LABEL_STYLE} />
                 <Line type="linear" dataKey="allocation" name="Allocated" stroke={SERIES_COLORS.allocation} strokeWidth={2} dot={{ r: 4, strokeWidth: 2, fill: "#fff" }} activeDot={{ r: 5 }} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
                 <Line type="linear" dataKey="released" name="Released" stroke={SERIES_COLORS.release} strokeWidth={2} strokeDasharray="5 4" dot={{ r: 4, strokeWidth: 2, fill: "#fff" }} activeDot={{ r: 5 }} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
-                <Line type="linear" dataKey="utilized" name="Utilized" stroke={SERIES_COLORS.utilized} strokeWidth={2.4} dot={{ r: 4, strokeWidth: 2, fill: "#fff" }} activeDot={{ r: 5 }} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
+                <Line type="linear" dataKey="utilized" name="Spent" stroke={SERIES_COLORS.utilized} strokeWidth={2.4} dot={{ r: 4, strokeWidth: 2, fill: "#fff" }} activeDot={{ r: 5 }} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
               </LineChart>
             </ResponsiveContainer>}
           </div>
           <div className="detail-analytics-legend">
             <span><i className="legend-gold" />Allocated</span>
             <span><i className="legend-release" />Released</span>
-            <span><i className="legend-utilized" />Utilized</span>
+            <span><i className="legend-utilized" />Spent</span>
           </div>
         </>
       ) : (
@@ -119,9 +122,10 @@ function AnnualExecutionChart({ site }: { site: Site }) {
 
   return (
     <ChartCard
-      title="Annual funding execution"
-      description="Release and expenditure as a share of each year’s allocation."
+      title="Each year: share handed over and spent"
+      description="What share of each year's set-aside money was handed over and spent."
       className="detail-analytics-card detail-execution-card"
+      help={CHART_HELP.annualExecution}
     >
       {data.length ? (
         <>
@@ -144,14 +148,14 @@ function AnnualExecutionChart({ site }: { site: Site }) {
                   formatter={(value, name) => [`${formatPercent(Number(value) / 100)} of annual allocation`, name]}
                   labelStyle={TOOLTIP_LABEL_STYLE}
                 />
-                <Bar dataKey="releaseRate" name="Released / allocated" fill={SERIES_COLORS.release} radius={[0, 4, 4, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
-                <Bar dataKey="utilizationRate" name="Utilized / allocated" fill={SERIES_COLORS.utilized} radius={[0, 4, 4, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
+                <Bar dataKey="releaseRate" name="Handed over" fill={SERIES_COLORS.release} radius={[0, 4, 4, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
+                <Bar dataKey="utilizationRate" name="Spent" fill={SERIES_COLORS.utilized} radius={[0, 4, 4, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
               </BarChart>
             </ResponsiveContainer>}
           </div>
           <div className="detail-analytics-legend">
-            <span><i className="legend-release" />Released / allocated</span>
-            <span><i className="legend-utilized" />Utilized / allocated</span>
+            <span><i className="legend-release" />Handed over (share of that year&apos;s set-aside money)</span>
+            <span><i className="legend-utilized" />Spent (share of that year&apos;s set-aside money)</span>
           </div>
           <p className="detail-chart-footnote">Rates may exceed 100% where reported releases or spending exceed allocation.</p>
         </>

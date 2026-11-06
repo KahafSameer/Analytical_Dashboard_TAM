@@ -18,10 +18,10 @@ const ratio = (numerator: number, denominator: number) => (denominator > 0 ? num
 
 function MoneyFlow({ site }: { site: Site }) {
   const stages = [
-    { label: "Approved cost", value: site.approvedCost, color: NEUTRAL_COLOR, note: "Total project approval" },
-    { label: "Allocated", value: site.allocated, color: SERIES_COLORS.allocation, share: ratio(site.allocated, site.approvedCost), of: "of approved" },
-    { label: "Released", value: site.released, color: SERIES_COLORS.release, share: ratio(site.released, site.allocated), of: "of allocation" },
-    { label: "Utilized", value: site.utilized, color: SERIES_COLORS.utilized, share: ratio(site.utilized, site.released), of: "of release" },
+    { label: "Approved cost", value: site.approvedCost, color: NEUTRAL_COLOR, note: "Total budget for the project" },
+    { label: "Allocated", value: site.allocated, color: SERIES_COLORS.allocation, share: ratio(site.allocated, site.approvedCost), of: "of the approved budget set aside" },
+    { label: "Released", value: site.released, color: SERIES_COLORS.release, share: ratio(site.released, site.allocated), of: "of the set-aside money handed over" },
+    { label: "Spent", value: site.utilized, color: SERIES_COLORS.utilized, share: ratio(site.utilized, site.released), of: "of the money handed over" },
   ];
   const unspent = getUnspentRelease(site);
   return (
@@ -42,7 +42,7 @@ function MoneyFlow({ site }: { site: Site }) {
         ))}
       </ul>
       {unspent >= 0.05 && (
-        <p className="flow-callout"><CircleAlert size={13} /> {formatMillions(unspent)} released but not yet spent</p>
+        <p className="flow-callout"><CircleAlert size={13} /> {formatMillions(unspent)} handed over but not spent yet</p>
       )}
     </section>
   );
@@ -53,11 +53,11 @@ function YearBars({ site }: { site: Site }) {
   const series = [
     { key: "allocation" as const, label: "Allocated", color: SERIES_COLORS.allocation },
     { key: "release" as const, label: "Released", color: SERIES_COLORS.release },
-    { key: "utilized" as const, label: "Utilized", color: SERIES_COLORS.utilized },
+    { key: "utilized" as const, label: "Spent", color: SERIES_COLORS.utilized },
   ];
   return (
     <section className="progress-block" aria-label="Funding by fiscal year">
-      <h4><CalendarClock size={14} /> By fiscal year <span className="progress-block-unit">PKR m</span></h4>
+      <h4><CalendarClock size={14} /> By budget year <span className="progress-block-unit">Rs millions</span></h4>
       {max > 0 ? (
         <div className="year-bars">
           {site.fiscalYears.map((year, yearIndex) => (
@@ -133,7 +133,7 @@ export function ProjectProgressPanel({ site, asOf, id }: { site: Site; asOf: str
       <YearBars site={site} />
       <ScheduleBlock site={site} asOf={asOf} />
       <div className="progress-panel-actions">
-        <span className="progress-panel-note">Financial progress = utilized ÷ approved cost (not physical completion).</span>
+        <span className="progress-panel-note">Progress here means money spent ÷ approved budget — not how much building work is finished.</span>
         <ShareMenu label="Share" getPayload={(pageUrl) => projectSharePayload(site, new URL(`/sites/${site.id}`, pageUrl).toString())} />
         <Link href={`/sites/${site.id}`} className="button button-primary">Open full project <ArrowUpRight size={15} /></Link>
       </div>
