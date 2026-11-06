@@ -1,29 +1,20 @@
 import { Suspense } from "react";
 import { SitesOverview } from "@/components/sites-overview";
-import { DataSourceError, NoProjectsState } from "@/components/data-source-state";
-import { getMasterWorkbook } from "@/lib/site-repository";
-import type { WorkbookResult } from "@/lib/excel";
+import { getDashboardData, getDashboardDataErrorMessage } from "@/lib/google-sheets";
+import type { DashboardData } from "@/lib/types";
 
-export default function HomePage() {
-  let workbook: WorkbookResult;
+export default async function HomePage() {
+  let initialData: DashboardData | null = null;
+  let initialError: string | null = null;
   try {
-    workbook = getMasterWorkbook();
-  } catch {
-    return <DataSourceError />;
+    initialData = await getDashboardData();
+  } catch (error) {
+    initialError = getDashboardDataErrorMessage(error);
   }
-
-  if (!workbook.sites.length) return <NoProjectsState />;
 
   return (
     <Suspense fallback={<div className="loading-page">Loading portfolio…</div>}>
-      <>
-        {workbook.skippedRows > 0 && (
-          <p className="inline-alert" role="status">
-            {workbook.skippedRows} non-empty row{workbook.skippedRows === 1 ? " was" : "s were"} skipped because no valid project name was found.
-          </p>
-        )}
-        <SitesOverview sites={workbook.sites} />
-      </>
+      <SitesOverview initialData={initialData} initialError={initialError} />
     </Suspense>
   );
 }

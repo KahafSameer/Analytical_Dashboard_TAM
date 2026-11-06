@@ -107,6 +107,7 @@ export function KpiCard({
   accent?: boolean;
 }) {
   const valueRef = useRef<HTMLSpanElement>(null);
+  const hasCounted = useRef(false);
   const isInView = useInView(valueRef, { once: true, margin: "30px 0px" });
   const reduceMotion = useReducedMotion();
   const metric = parseMetric(value);
@@ -118,10 +119,14 @@ export function KpiCard({
     if (metric.number === null) return;
     if (reduceMotion) {
       count.set(metric.number);
+      hasCounted.current = true;
       return;
     }
     if (!isInView) return;
-    count.set(0);
+    if (!hasCounted.current) {
+      count.set(0);
+      hasCounted.current = true;
+    }
     const controls = animate(count, metric.number, {
       duration: 0.75,
       ease: [0.22, 1, 0.36, 1],
@@ -131,7 +136,8 @@ export function KpiCard({
   return (
     <motion.article
       className={`kpi-card${accent ? " kpi-card-accent" : ""}`}
-      initial={{ opacity: 0, y: reduceMotion ? 0 : 10 }}
+      // Constant initial values keep SSR and hydration identical; MotionConfig reducedMotion="user" skips the transform.
+      initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: reduceMotion ? 0.15 : 0.38, ease: [0.22, 1, 0.36, 1] }}
@@ -193,7 +199,7 @@ export function ChartCard({
   return (
     <motion.section
       className={`chart-card ${className}`}
-      initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
+      initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.12 }}
       transition={{ duration: reduceMotion ? 0.15 : 0.44, ease: [0.22, 1, 0.36, 1] }}
@@ -215,8 +221,8 @@ export function MilestonePlaceholder() {
     <div className="data-note">
       <div className="data-note-icon"><Clock3 size={18} /></div>
       <div>
-        <p className="data-note-title">Activity milestones aren’t in this workbook</p>
-        <p className="data-note-copy">Import a workbook with activity-level records to add a delivery timeline.</p>
+        <p className="data-note-title">Activity milestones aren’t in this sheet</p>
+        <p className="data-note-copy">Add activity-level records to the source sheet to include a delivery timeline.</p>
       </div>
       <Check size={16} className="data-note-check" />
     </div>

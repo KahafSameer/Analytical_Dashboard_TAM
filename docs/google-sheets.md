@@ -1,29 +1,56 @@
-# Google Sheets
+# Google Sheets integration
 
-## Current implementation status
+## Status and data flow
 
-**Google Sheets is not integrated.** The current application reads one master Excel workbook from the project root using a server-side repository. There is no Google Sheets URL/ID configuration, Sheets API client, OAuth flow, service account, environment variable, synchronization job or write-back behavior.
+Google Sheets is the dashboard's single runtime source of truth. The first worksheet of one master spreadsheet is read through the Google Sheets API v4 by the server-only `lib/google-sheets.ts` repository:
 
-The master workbook is named `Scheme Details for DAT 11-03-2026.xlsx`; it is parsed at runtime into a normalized in-memory model. Google Sheets remains a possible future replacement for the repository, not a current source or mirror.
+```text
+Google Spreadsheet
+    → Google Sheets API (read-only service account)
+    → app/api/dashboard-data (server endpoint)
+    → lib/excel.ts normalizeSheetRows (shared header/row mapper)
+    → normalized Site[] / fiscal years
+    → existing analytics and UI
+```
 
-## Recommended future read-only integration
+The existing Excel parser remains available as an alternate input adapter, but the application routes no longer read the local workbook. The Google Sheet should retain the same first-row headers and project/annual financial columns as the former workbook. The repository reads the first tab automatically and maps its header row into the existing normalized model; it does not depend on a tab name.
 
-Before implementation, select an access model:
+## Spreadsheet setup
 
-1. **Published, intentionally public sheet:** fetch a published CSV from a server-side route only if public exposure is approved. Do not treat an obscure URL as access control.
-2. **Private department sheet:** use server-side Google API credentials and an appropriately scoped service account or OAuth design, after access ownership and permission requirements are agreed.
+1. Create/choose one Google Cloud project and enable **Google Sheets API**.
+2. Create a Google Cloud service account. No downloaded service-account JSON file is needed by this application.
+3. Share the master spreadsheet with `GOOGLE_SERVICE_ACCOUNT_EMAIL` as a **Viewer**.
+4. Configure the environment variables below in local `.env.local` and in Vercel for every required deployment environment.
+5. Redeploy/restart the app after changing environment values.
 
-Keep the sheet API behind a server-side repository/adapter, map sheet records into the existing `Site` model, validate and normalize records, and keep client bundles free of credentials. Define caching, refresh, quota handling and error UI. Preserve one authoritative source rather than introducing an unsynchronized second copy. Never make a private sheet public just to simplify the prototype.
+The first worksheet must have a supported project name header (`Name`, `Project Name`, `Site Name`, or `Scheme Name`) and supported financial total or annual funding headers. Identity, description, district, category, image and fiscal-year header aliases are normalized by `lib/excel.ts`. Missing optional values use the same normalized fallbacks as before; unsupported/missing required headers produce a friendly error instead of fabricated metrics.
 
-## Candidate worksheet schema
+## Authentication and environment
 
-If migrating to Sheets, provide stable project identifiers (`Project ID`, `GS No`), project metadata (`Name`, `Description`, `District`, `Gestation Period`), totals (approval, allocation, release, utilization), financial progress, and annual allocation/release/utilization columns. A normalized `Projects` tab plus a `FiscalYears` tab can support future extension:
+`.env.example` contains placeholders only:
 
-- `Projects`: one row per stable project ID and project metadata.
-- `FiscalYears`: one row per project ID and fiscal-year label, with allocation, release and utilization amounts.
+```dotenv
+GOOGLE_SHEET_ID=
+GOOGLE_SERVICE_ACCOUNT_EMAIL=
+GOOGLE_PRIVATE_KEY=
+```
 
-No such Google Sheets structure is configured or consumed by the application today.
+- `GOOGLE_SHEET_ID`: ID in the spreadsheet URL.
+- `GOOGLE_SERVICE_ACCOUNT_EMAIL`: service account's `client_email`, granted Viewer access to the spreadsheet.
+- `GOOGLE_PRIVATE_KEY`: service account private key from Google Cloud; multiline newlines may be encoded as literal `\n`.
 
-## Configuration
+Credentials are read only inside `lib/google-sheets.ts`, with the narrow `spreadsheets.readonly` OAuth scope. They are never returned by the API endpoint or imported in client bundles. Use Vercel Environment Variables for Preview/Production secrets. Never prefix these variables with `NEXT_PUBLIC_`, commit private keys, or commit a service-account JSON file.
 
-There are **no Google Sheets environment variables** in the project. If integrating a private sheet later, keep credentials only in deployment secrets, document the minimum required scopes, and add `.env.example` with names/placeholders only—never real private keys. Avoid exposing API keys in `NEXT_PUBLIC_*` variables.
+## API endpoint, refresh and cache
+
+`GET /api/dashboard-data` returns normalized `sites`, `sheetName`, `skippedRows`, and `fetchedAt`; it never returns authentication material. Responses use `Cache-Control: no-store`. The dashboard polls once every 30 seconds while the browser tab is visible and only one in-flight request is allowed. KPI, charts, cards and detail pages read the same in-memory client data and update without a page reload.
+
+The server repository coalesces concurrent requests and caches a successful normalized response for 20 seconds per warm serverless instance. The cache is an optimization, not durable storage; Vercel may start multiple instances, and each instance may refresh independently. API calls have a timeout. No long-running job or filesystem persistence is required.
+
+## Failure behavior
+
+Missing environment values, invalid credentials, permission errors, empty sheets and unsupported columns are mapped to safe, user-facing messages. The route returns a generic error response, not raw Google errors or credentials. A background refresh failure preserves the latest client-held data and shows the small stale-data indicator; the next 30-second cycle retries. With no previously loaded data, the page offers a retry action.
+
+## Local development
+
+Copy `.env.example` to `.env.local`, fill in the values using a private credential source, make sure the spreadsheet is shared with the service account, then run `npm run dev`. Do not paste credentials into source code, issues, logs, or Markdown documentation.

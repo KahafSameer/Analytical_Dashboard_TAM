@@ -2,12 +2,12 @@
 
 import { useMemo } from "react";
 import {
-  Area,
-  AreaChart,
   Bar,
   BarChart,
   CartesianGrid,
   Cell,
+  Line,
+  LineChart,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -16,6 +16,7 @@ import {
   YAxis,
 } from "recharts";
 import { formatMillions, formatPercent } from "@/lib/analytics";
+import { AXIS_TICK, GRID_STROKE, SERIES_COLORS, TOOLTIP_LABEL_STYLE, TOOLTIP_STYLE, formatAxisMillions } from "@/lib/chart-theme";
 import { getAllocationComposition, getCumulativeFunding, getFiscalYearRates } from "@/lib/site-analytics";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState } from "@/components/ui";
@@ -41,10 +42,7 @@ function FundingCompositionChart({ site }: { site: Site }) {
                   <Pie data={segments} dataKey="value" nameKey="name" innerRadius="69%" outerRadius="92%" paddingAngle={2} stroke="none" isAnimationActive={animate} animationDuration={800} animationEasing="ease-out">
                     {segments.map((segment) => <Cell key={segment.name} fill={segment.color} />)}
                   </Pie>
-                  <Tooltip
-                    contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 10 }}
-                    formatter={(value) => [formatMillions(Number(value)), ""]}
-                  />
+                  <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value, name) => [formatMillions(Number(value)), name]} />
                 </PieChart>
               </ResponsiveContainer>}
             </div>
@@ -89,29 +87,16 @@ function CumulativeFundingChart({ site }: { site: Site }) {
         <>
           <div ref={ref} className="cumulative-chart" role="img" aria-label="Cumulative allocation, release and expenditure by fiscal year">
             {isInView && <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data} margin={{ top: 9, right: 6, bottom: 1, left: -18 }}>
-                <defs>
-                  <linearGradient id="cumulativeAllocation" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#d4a017" stopOpacity={0.12} />
-                    <stop offset="100%" stopColor="#d4a017" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="cumulativeUtilized" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#0f4c3a" stopOpacity={0.13} />
-                    <stop offset="100%" stopColor="#0f4c3a" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid vertical={false} stroke="#edf0ed" strokeDasharray="3 5" />
-                <XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#718078" }} dy={7} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 8, fill: "#87918a" }} tickFormatter={(value: number) => value >= 1000 ? `${(value / 1000).toFixed(1)}k` : `${value}`} />
-                <Tooltip
-                  contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 10 }}
-                  formatter={(value) => [formatMillions(Number(value)), ""]}
-                  labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
-                />
-                <Area type="monotone" dataKey="allocation" name="Allocation" stroke="#d4a017" fill="url(#cumulativeAllocation)" strokeWidth={1.8} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
-                <Area type="monotone" dataKey="released" name="Released" stroke="#8bab98" fill="transparent" strokeWidth={1.8} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
-                <Area type="monotone" dataKey="utilized" name="Utilized" stroke="#0f4c3a" fill="url(#cumulativeUtilized)" strokeWidth={2.2} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
-              </AreaChart>
+              {/* Straight segments with markers: only a few fiscal years, so no smoothing between them. */}
+              <LineChart data={data} margin={{ top: 9, right: 10, bottom: 1, left: -18 }}>
+                <CartesianGrid vertical={false} stroke={GRID_STROKE} strokeDasharray="3 5" />
+                <XAxis dataKey="label" axisLine={false} tickLine={false} tick={AXIS_TICK} dy={7} padding={{ left: 14, right: 14 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ ...AXIS_TICK, fontSize: 10 }} tickFormatter={formatAxisMillions} />
+                <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value, name) => [formatMillions(Number(value)), name]} labelStyle={TOOLTIP_LABEL_STYLE} />
+                <Line type="linear" dataKey="allocation" name="Allocated" stroke={SERIES_COLORS.allocation} strokeWidth={2} dot={{ r: 4, strokeWidth: 2, fill: "#fff" }} activeDot={{ r: 5 }} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
+                <Line type="linear" dataKey="released" name="Released" stroke={SERIES_COLORS.release} strokeWidth={2} strokeDasharray="5 4" dot={{ r: 4, strokeWidth: 2, fill: "#fff" }} activeDot={{ r: 5 }} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
+                <Line type="linear" dataKey="utilized" name="Utilized" stroke={SERIES_COLORS.utilized} strokeWidth={2.4} dot={{ r: 4, strokeWidth: 2, fill: "#fff" }} activeDot={{ r: 5 }} isAnimationActive={animate} animationDuration={800} animationEasing="ease-out" />
+              </LineChart>
             </ResponsiveContainer>}
           </div>
           <div className="detail-analytics-legend">
@@ -143,24 +128,24 @@ function AnnualExecutionChart({ site }: { site: Site }) {
           <div ref={ref} className="execution-chart" role="img" aria-label="Annual release and expenditure rates relative to allocation">
             {isInView && <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data} layout="vertical" margin={{ top: 6, right: 24, bottom: 1, left: 3 }} barCategoryGap="30%">
-                <CartesianGrid horizontal={false} stroke="#edf0ed" strokeDasharray="3 5" />
+                <CartesianGrid horizontal={false} stroke={GRID_STROKE} strokeDasharray="3 5" />
                 <XAxis
                   type="number"
                   domain={[0, Math.ceil(maxRate / 25) * 25]}
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 8, fill: "#829087" }}
+                  tick={{ ...AXIS_TICK, fontSize: 10 }}
                   tickFormatter={(value: number) => `${value}%`}
                 />
-                <YAxis type="category" dataKey="label" width={58} axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: "#65736a" }} />
+                <YAxis type="category" dataKey="label" width={58} axisLine={false} tickLine={false} tick={AXIS_TICK} />
                 <Tooltip
                   cursor={{ fill: "#f5f8f5" }}
-                  contentStyle={{ borderRadius: 9, border: "1px solid #e6ebe7", boxShadow: "0 8px 26px rgba(24,44,33,.08)", fontSize: 10 }}
+                  contentStyle={TOOLTIP_STYLE}
                   formatter={(value, name) => [`${formatPercent(Number(value) / 100)} of annual allocation`, name]}
-                  labelStyle={{ color: "#1f2937", fontWeight: 600, marginBottom: 4 }}
+                  labelStyle={TOOLTIP_LABEL_STYLE}
                 />
-                <Bar dataKey="releaseRate" name="Released / allocated" fill="#8bab98" radius={[0, 3, 3, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
-                <Bar dataKey="utilizationRate" name="Utilized / allocated" fill="#0f4c3a" radius={[0, 3, 3, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
+                <Bar dataKey="releaseRate" name="Released / allocated" fill={SERIES_COLORS.release} radius={[0, 4, 4, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
+                <Bar dataKey="utilizationRate" name="Utilized / allocated" fill={SERIES_COLORS.utilized} radius={[0, 4, 4, 0]} maxBarSize={12} isAnimationActive={animate} animationDuration={750} animationEasing="ease-out" />
               </BarChart>
             </ResponsiveContainer>}
           </div>
@@ -171,7 +156,7 @@ function AnnualExecutionChart({ site }: { site: Site }) {
           <p className="detail-chart-footnote">Rates may exceed 100% where reported releases or spending exceed allocation.</p>
         </>
       ) : (
-        <EmptyState title="No annual allocation to compare" description="Annual execution rates appear when the workbook reports fiscal-year allocations." />
+        <EmptyState title="No annual allocation to compare" description="Annual execution rates appear when the sheet reports fiscal-year allocations." />
       )}
     </ChartCard>
   );
