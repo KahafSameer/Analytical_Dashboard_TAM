@@ -30,7 +30,7 @@ import { ATTENTION_COLOR, AXIS_TICK, GRID_STROKE, PRIMARY_COLOR, TOOLTIP_LABEL_S
 import { getUnspentRelease } from "@/lib/portfolio-filters";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState } from "@/components/ui";
-import { Reveal, useChartEntrance } from "@/components/motion";
+import { Reveal, revealIndex, useChartEntrance } from "@/components/motion";
 
 const palette = ["#1f7a55", "#4d8fc4", "#c9971a", "#7d5ba6", "#d0632f", "#3a9e9a", "#9c7b3c", "#6b7f8e"];
 /** Rank order for concentration segments: one hue, dark (largest) → light. */
@@ -315,8 +315,8 @@ function UnspentReleaseWatchlist({ sites, wide }: { sites: Site[]; wide: boolean
     >
       {rows.length ? (
         <ol className="watchlist">
-          {rows.map(({ site, unspent }) => (
-            <li key={site.id}>
+          {rows.map(({ site, unspent }, index) => (
+            <li key={site.id} style={revealIndex(index)}>
               <div className="watchlist-head">
                 <Link href={`/sites/${site.id}`} className="watchlist-name">{site.name}</Link>
                 <strong>{formatMillions(unspent)}</strong>
@@ -349,8 +349,8 @@ function CostConcentrationCard({ sites }: { sites: Site[] }) {
       {concentration.total > 0 ? (
         <>
           <div className="concentration-bar" role="img" aria-label={`Largest ${concentration.top.length} projects hold ${formatPercent(concentration.topShare, 0)} of approved cost`}>
-            {segments.map((segment) => (
-              <i key={segment.key} style={{ width: `${segment.share * 100}%`, backgroundColor: segment.color }} title={`${segment.label}: ${formatPercent(segment.share)}`} />
+            {segments.map((segment, index) => (
+              <i key={segment.key} style={{ ...revealIndex(index), width: `${segment.share * 100}%`, backgroundColor: segment.color }} title={`${segment.label}: ${formatPercent(segment.share)}`} />
             ))}
           </div>
           <ol className="concentration-list">
@@ -414,7 +414,7 @@ function DistrictYearHeatmap({ sites, onSelectDistrict }: { sites: Site[]; onSel
               </tr>
             </thead>
             <tbody>
-              {matrix.rows.map((row) => (
+              {matrix.rows.map((row, rowIndex) => (
                 <tr key={row.district}>
                   <th scope="row">
                     {canFilter
@@ -423,7 +423,7 @@ function DistrictYearHeatmap({ sites, onSelectDistrict }: { sites: Site[]; onSel
                     <small>{row.projects} project{row.projects === 1 ? "" : "s"}</small>
                   </th>
                   {row.values.map((value, index) => (
-                    <td key={matrix.years[index]} style={heatCellStyle(value, matrix.max)}>{value > 0 ? heatValue(value) : "—"}</td>
+                    <td key={matrix.years[index]} style={{ ...revealIndex(Math.min(rowIndex, 12) + index), ...heatCellStyle(value, matrix.max) }}>{value > 0 ? heatValue(value) : "—"}</td>
                   ))}
                   <td className="heatmap-total">{heatValue(row.total)}</td>
                 </tr>

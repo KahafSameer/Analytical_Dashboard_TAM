@@ -37,7 +37,7 @@ import {
 } from "@/lib/schedule";
 import type { Site } from "@/lib/types";
 import { ChartCard, EmptyState } from "@/components/ui";
-import { Reveal, useChartEntrance } from "@/components/motion";
+import { Reveal, revealIndex, useChartEntrance } from "@/components/motion";
 
 const STATE_LABELS: Record<ScheduleState | "unscheduled", string> = {
   "in-progress": "Within planned period",
@@ -110,8 +110,8 @@ function SpendGapList({ summary }: { summary: ReturnType<typeof summarizeSchedul
       </div>
       {laggards.length ? (
         <ol className="gap-list">
-          {laggards.map(({ site, status }) => (
-            <li key={site.id}>
+          {laggards.map(({ site, status }, index) => (
+            <li key={site.id} style={revealIndex(index * 2)}>
               <div className="gap-head">
                 <Link href={`/sites/${site.id}`} className="gap-name">{site.name}</Link>
                 <span className="gap-badge">{formatPercent(status.spendGap, 0)} gap</span>

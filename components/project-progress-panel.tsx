@@ -11,6 +11,7 @@ import type { Site } from "@/lib/types";
 import { StatusBadge } from "@/components/ui";
 import { ShareMenu } from "@/components/share-menu";
 import { shortYearLabel } from "@/components/funding-sparkbars";
+import { revealIndex } from "@/components/motion";
 
 const TIME_COLOR = "#8ea0b4";
 const ratio = (numerator: number, denominator: number) => (denominator > 0 ? numerator / denominator : null);
@@ -27,8 +28,8 @@ function MoneyFlow({ site }: { site: Site }) {
     <section className="progress-block" aria-label="Money flow">
       <h4><Wallet size={14} /> Money flow</h4>
       <ul className="flow-list">
-        {stages.map((stage) => (
-          <li key={stage.label}>
+        {stages.map((stage, index) => (
+          <li key={stage.label} style={revealIndex(index)}>
             <div className="flow-row">
               <span className="flow-label"><i style={{ backgroundColor: stage.color }} />{stage.label}</span>
               <strong>{formatMillions(stage.value)}</strong>
@@ -59,12 +60,12 @@ function YearBars({ site }: { site: Site }) {
       <h4><CalendarClock size={14} /> By fiscal year <span className="progress-block-unit">PKR m</span></h4>
       {max > 0 ? (
         <div className="year-bars">
-          {site.fiscalYears.map((year) => (
+          {site.fiscalYears.map((year, yearIndex) => (
             <div className="year-group" key={year.label}>
               <span className="year-label">{shortYearLabel(year.label)}</span>
               <div className="year-series">
-                {series.map((entry) => (
-                  <div className="year-bar-row" key={entry.key}>
+                {series.map((entry, seriesIndex) => (
+                  <div className="year-bar-row" key={entry.key} style={revealIndex(yearIndex * 2 + seriesIndex)}>
                     <span className="sr-only">{entry.label}</span>
                     <span className="flow-track" aria-hidden="true"><i style={{ width: `${(year[entry.key] / max) * 100}%`, backgroundColor: entry.color }} /></span>
                     <b>{year[entry.key] > 0 ? year[entry.key].toLocaleString("en-PK", { maximumFractionDigits: 1 }) : "—"}</b>
@@ -96,18 +97,18 @@ function ScheduleBlock({ site, asOf }: { site: Site; asOf: string }) {
         <>
           <div className="schedule-mini-dates"><span>{formatScheduleDate(status.start)}</span><span>{formatScheduleDate(status.end)}</span></div>
           <div className="schedule-compare schedule-compare-compact">
-            <div>
+            <div style={revealIndex(1)}>
               <span>Time elapsed</span>
               <span className="gap-track"><i style={{ width: `${status.elapsed * 100}%`, backgroundColor: TIME_COLOR }} /></span>
               <strong>{formatPercent(status.elapsed, 0)}</strong>
             </div>
-            <div>
+            <div style={revealIndex(2)}>
               <span>Money spent</span>
               <span className="gap-track"><i style={{ width: `${Math.min(1, site.overallProgress) * 100}%`, backgroundColor: SCHEDULE_COLORS["in-progress"] }} /></span>
               <strong>{formatPercent(site.overallProgress, 1)}</strong>
             </div>
             {site.currentYearProgress !== undefined && (
-              <div>
+              <div style={revealIndex(3)}>
                 <span>This year</span>
                 <span className="gap-track"><i style={{ width: `${Math.min(1, site.currentYearProgress) * 100}%`, backgroundColor: SERIES_COLORS.release }} /></span>
                 <strong>{formatPercent(site.currentYearProgress, 0)}</strong>

@@ -5,7 +5,7 @@ import { ArrowDown, CircleAlert } from "lucide-react";
 import { formatMillions, formatPercent, getFundingPipeline, type PipelineStageId } from "@/lib/analytics";
 import { NEUTRAL_COLOR, SERIES_COLORS } from "@/lib/chart-theme";
 import type { Site } from "@/lib/types";
-import { Reveal } from "@/components/motion";
+import { Reveal, revealIndex, useReveal } from "@/components/motion";
 
 const STAGE_COLORS: Record<PipelineStageId, string> = {
   approved: NEUTRAL_COLOR,
@@ -17,11 +17,12 @@ const STAGE_COLORS: Record<PipelineStageId, string> = {
 /** Approved → allocated → released → utilized, with the conversion between each stage. */
 export function FundingPipeline({ sites }: { sites: Site[] }) {
   const stages = useMemo(() => getFundingPipeline(sites), [sites]);
+  const { ref, revealState } = useReveal<HTMLElement>();
   const released = stages[2].value;
   const utilized = stages[3].value;
   return (
     <Reveal className="funding-note-reveal">
-      <section className="chart-card pipeline-card" aria-labelledby="pipeline-title">
+      <section ref={ref} data-reveal={revealState} className="chart-card pipeline-card" aria-labelledby="pipeline-title">
         <div className="chart-card-heading">
           <div>
             <h3 id="pipeline-title">Funding pipeline</h3>
@@ -37,7 +38,7 @@ export function FundingPipeline({ sites }: { sites: Site[] }) {
                   <span><strong>{formatPercent(stage.ofPrevious)}</strong> {stage.verb}</span>
                 </li>
               )}
-              <li className="pipeline-stage">
+              <li className="pipeline-stage" style={revealIndex(index * 2)}>
                 <div className="pipeline-row">
                   <span className="pipeline-label"><i style={{ backgroundColor: STAGE_COLORS[stage.id] }} />{stage.label}</span>
                   <strong>{formatMillions(stage.value, 0)}</strong>
